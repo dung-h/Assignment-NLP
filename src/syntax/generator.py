@@ -1,0 +1,13 @@
+TEMPLATES = [
+    'Môn NLP có bao nhiêu tín chỉ?',
+    'Tuần 3 học gì?',
+    'Chương 4 học vào tuần nào?',
+    'Chương nào nói về CFG?',
+    'Chương 12 nói về gì?',
+    'Bài tập lớn có phần parser không?',
+    'Có được dùng LLM/RAG không?',
+    'Tài liệu tham khảo về statistical NLP là gì?',
+    'L.O.2.5 là gì?',
+    'Ai dạy môn NLP?',
+]
+def generate(limit=10000): return TEMPLATES[:limit]

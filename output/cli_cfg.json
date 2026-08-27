@@ -1,0 +1,42 @@
+{
+  "input": "Chương nào nói về CFG?",
+  "person_1_parser_result": {
+    "valid": true,
+    "sentence_type": "WH_QUESTION",
+    "query_frame": "ASK_CHAPTER_BY_TOPIC",
+    "slots": {
+      "topic": [
+        "CFG"
+      ]
+    },
+    "tree": "(S (SENTENCE_TYPE WH_QUESTION) (QUERY_FRAME ASK_CHAPTER_BY_TOPIC) (TOPIC CFG))"
+  },
+  "person_2_semantic_query": {
+    "intent": "GET_TOPIC",
+    "entities": {
+      "topic": [
+        "CFG"
+      ]
+    },
+    "attribute": "chapter",
+    "answer_mode": "LIST"
+  },
+  "context_state": {
+    "focus_entities": [
+      {
+        "type": "topic",
+        "id": "CFG"
+      }
+    ]
+  },
+  "person_3_retrieval_result": {
+    "status": "FOUND",
+    "values": [
+      "CH03"
+    ],
+    "sources": [
+      "topics:CH03"
+    ]
+  },
+  "answer": "Nội dung này được tìm thấy ở: CH03."
+}

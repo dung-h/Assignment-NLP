@@ -1,0 +1,5 @@
+Môn CO3085 có 3 tín chỉ.
+context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies
+Nội dung này được tìm thấy ở: CH03.
+Có. Nguồn: regulations:LLM_RAG.
+Tôi không tìm thấy thông tin giảng viên trong dữ liệu môn học hiện tại.

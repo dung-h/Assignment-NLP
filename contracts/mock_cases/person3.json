@@ -1,0 +1,21 @@
+{
+  "input_semantic_query": {
+    "intent": "GET_TOPIC",
+    "entities": {
+      "topic": [
+        "CFG"
+      ]
+    },
+    "attribute": "chapter",
+    "answer_mode": "LIST"
+  },
+  "expected_retrieval": {
+    "status": "FOUND",
+    "values": [
+      "CH03"
+    ],
+    "sources": [
+      "topics:CH03"
+    ]
+  }
+}

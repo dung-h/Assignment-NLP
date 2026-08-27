@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SemanticQuery",
+  "type": "object",
+  "required": [
+    "intent",
+    "entities",
+    "attribute",
+    "answer_mode"
+  ],
+  "properties": {
+    "intent": {
+      "type": "string"
+    },
+    "entities": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "attribute": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "answer_mode": {
+      "type": "string",
+      "enum": [
+        "VALUE",
+        "LIST",
+        "BOOLEAN"
+      ]
+    }
+  }
+}

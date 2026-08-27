@@ -1,0 +1,5 @@
+{"intent": "GET_COURSE_INFO", "entities": {"course": ["CO3085"]}, "attribute": "credits", "answer_mode": "VALUE"}
+{"intent": "GET_SCHEDULE", "entities": {"week": ["WEEK_03"]}, "attribute": "topics", "answer_mode": "LIST"}
+{"intent": "GET_TOPIC", "entities": {"topic": ["CFG"]}, "attribute": "chapter", "answer_mode": "LIST"}
+{"intent": "GET_RULE", "entities": {"regulation": ["LLM_RAG"]}, "attribute": "permission", "answer_mode": "BOOLEAN"}
+{"intent": "GET_INSTRUCTOR", "entities": {"course": ["CO3085"]}, "attribute": "name", "answer_mode": "LIST"}

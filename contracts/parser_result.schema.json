@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ParserResult",
+  "type": "object",
+  "required": [
+    "valid",
+    "sentence_type",
+    "query_frame",
+    "slots",
+    "tree"
+  ],
+  "properties": {
+    "valid": {
+      "type": "boolean"
+    },
+    "sentence_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "WH_QUESTION",
+        "YES_NO_QUESTION",
+        "IMPERATIVE_REQUEST",
+        null
+      ]
+    },
+    "query_frame": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slots": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "tree": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

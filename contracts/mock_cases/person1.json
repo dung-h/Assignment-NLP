@@ -1,0 +1,13 @@
+{
+  "input": "Chương nào nói về CFG?",
+  "expected": {
+    "valid": true,
+    "sentence_type": "WH_QUESTION",
+    "query_frame": "ASK_CHAPTER_BY_TOPIC",
+    "slots": {
+      "topic": [
+        "CFG"
+      ]
+    }
+  }
+}

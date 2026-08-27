@@ -1,0 +1,5 @@
+{"status": "FOUND", "values": [3], "sources": ["course_info:CO3085"]}
+{"status": "FOUND", "values": ["context-free grammar", "grammar and sentence structure", "top-down parsing", "bottom-up chart parsing", "top-down chart parsing", "probabilistic context-free grammar", "dependency grammar", "Stanford dependencies"], "sources": ["schedule:WEEK_03"]}
+{"status": "FOUND", "values": ["CH03"], "sources": ["topics:CH03"]}
+{"status": "FOUND", "values": [true], "sources": ["regulations:LLM_RAG"]}
+{"status": "NOT_FOUND", "values": [], "sources": []}

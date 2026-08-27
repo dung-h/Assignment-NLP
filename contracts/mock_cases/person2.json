@@ -1,0 +1,23 @@
+{
+  "input_parser_result": {
+    "valid": true,
+    "sentence_type": "WH_QUESTION",
+    "query_frame": "ASK_CHAPTER_BY_TOPIC",
+    "slots": {
+      "topic": [
+        "CFG"
+      ]
+    },
+    "tree": "..."
+  },
+  "expected": {
+    "intent": "GET_TOPIC",
+    "entities": {
+      "topic": [
+        "CFG"
+      ]
+    },
+    "attribute": "chapter",
+    "answer_mode": "LIST"
+  }
+}

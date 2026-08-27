@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RetrievalResult",
+  "type": "object",
+  "required": [
+    "status",
+    "values",
+    "sources"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "FOUND",
+        "NOT_FOUND"
+      ]
+    },
+    "values": {
+      "type": "array"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "input": "Ai dạy môn NLP?",
+  "person_1_parser_result": {
+    "valid": true,
+    "sentence_type": "WH_QUESTION",
+    "query_frame": "ASK_INSTRUCTOR",
+    "slots": {
+      "course": [
+        "NLP"
+      ]
+    },
+    "tree": "(S (SENTENCE_TYPE WH_QUESTION) (QUERY_FRAME ASK_INSTRUCTOR) (COURSE NLP))"
+  },
+  "person_2_semantic_query": {
+    "intent": "GET_INSTRUCTOR",
+    "entities": {
+      "course": [
+        "CO3085"
+      ]
+    },
+    "attribute": "name",
+    "answer_mode": "LIST"
+  },
+  "context_state": {
+    "focus_entities": []
+  },
+  "person_3_retrieval_result": {
+    "status": "NOT_FOUND",
+    "values": [],
+    "sources": []
+  },
+  "answer": "Tôi không tìm thấy thông tin giảng viên trong dữ liệu môn học hiện tại."
+}

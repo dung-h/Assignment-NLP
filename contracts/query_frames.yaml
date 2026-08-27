@@ -1,0 +1,38 @@
+version: 1
+frames:
+  ASK_COURSE_ATTRIBUTE: {intent: GET_COURSE_INFO, required: [], optional: [course], attributes: [credits, ects, department, semester, course_type, format, total_course_hours, lecture_hours, major_assignment_hours, self_study_hours, description]}
+  ASK_COURSE_PARTS: {intent: GET_COURSE_INFO, required: [], optional: [course], attribute: parts, answer_mode: LIST}
+  ASK_EXAM_ATTRIBUTE: {intent: GET_COURSE_INFO, required: [exam], optional: [course], attributes: [duration, format, weight]}
+  ASK_INSTRUCTOR: {intent: GET_INSTRUCTOR, required: [], optional: [course], attribute: name, answer_mode: LIST}
+  ASK_INSTRUCTOR_ATTRIBUTE: {intent: GET_INSTRUCTOR, required: [], optional: [course, instructor], attributes: [name, email, office]}
+  ASK_WEEK_CONTENT: {intent: GET_SCHEDULE, required: [week], optional: [], attribute: topics, answer_mode: LIST}
+  ASK_WEEK_OF_CHAPTER: {intent: GET_SCHEDULE, required: [chapter], optional: [], attribute: week, answer_mode: LIST}
+  ASK_WEEK_OF_TOPIC: {intent: GET_SCHEDULE, required: [topic], optional: [], attribute: week, answer_mode: LIST}
+  ASK_WEEK_ACTIVITY: {intent: GET_SCHEDULE, required: [week], optional: [], attribute: activity, answer_mode: VALUE}
+  ASK_WEEK_MILESTONE: {intent: GET_SCHEDULE, required: [week], optional: [], attribute: milestone, answer_mode: VALUE}
+  ASK_MILESTONE_WEEK: {intent: GET_SCHEDULE, required: [], optional: [assignment, assignment_part, deadline], attribute: week, answer_mode: LIST}
+  ASK_CHAPTER_CONTENT: {intent: GET_TOPIC, required: [chapter], optional: [], attribute: summary, answer_mode: VALUE}
+  ASK_CHAPTER_TITLE: {intent: GET_TOPIC, required: [chapter], optional: [], attribute: title, answer_mode: VALUE}
+  ASK_CHAPTER_BY_TOPIC: {intent: GET_TOPIC, required: [topic], optional: [], attribute: chapter, answer_mode: LIST}
+  ASK_TOPIC_OF_CHAPTER: {intent: GET_TOPIC, required: [chapter], optional: [], attribute: topics, answer_mode: LIST}
+  ASK_TOPIC_EXISTENCE_IN_CHAPTER: {intent: GET_TOPIC, required: [topic], optional: [chapter, reference], attribute: contains_topic, answer_mode: BOOLEAN}
+  ASK_PART_OF_CHAPTER: {intent: GET_TOPIC, required: [chapter], optional: [], attribute: part, answer_mode: VALUE}
+  ASK_CHAPTERS_OF_PART: {intent: GET_TOPIC, required: [course_part], optional: [], attribute: chapter, answer_mode: LIST}
+  ASK_ASSIGNMENT_INFO: {intent: GET_ASSIGNMENT, required: [], optional: [assignment], attribute: goal, answer_mode: VALUE}
+  ASK_ASSIGNMENT_PARTS: {intent: GET_ASSIGNMENT, required: [], optional: [assignment], attribute: parts, answer_mode: LIST}
+  ASK_ASSIGNMENT_PART_INFO: {intent: GET_ASSIGNMENT, required: [assignment_part], optional: [assignment], attribute: title, answer_mode: VALUE}
+  ASK_ASSIGNMENT_REQUIREMENTS: {intent: GET_ASSIGNMENT, required: [], optional: [assignment, assignment_part], attribute: requirements, answer_mode: LIST}
+  ASK_ASSIGNMENT_OUTPUTS: {intent: GET_ASSIGNMENT, required: [], optional: [assignment_part, reference], attribute: outputs, answer_mode: LIST}
+  ASK_ASSIGNMENT_COMPONENT_EXISTENCE: {intent: GET_ASSIGNMENT, required: [topic], optional: [assignment, assignment_part, reference], attribute: contains_component, answer_mode: BOOLEAN}
+  ASK_ASSIGNMENT_TEAM_SIZE: {intent: GET_ASSIGNMENT, required: [], optional: [assignment], attribute: team_size, answer_mode: VALUE}
+  ASK_ASSIGNMENT_DEADLINE: {intent: GET_DEADLINE, required: [], optional: [assignment], attribute: date, answer_mode: VALUE}
+  ASK_ASSIGNMENT_PART_DEADLINE: {intent: GET_DEADLINE, required: [assignment_part], optional: [assignment], attribute: date, answer_mode: VALUE}
+  ASK_DEADLINE_INFO: {intent: GET_DEADLINE, required: [deadline], optional: [], attribute: date, answer_mode: VALUE}
+  ASK_RESOURCE_BY_TOPIC: {intent: GET_RESOURCE, required: [topic], optional: [], attribute: resource, answer_mode: LIST}
+  ASK_RESOURCE_BY_CHAPTER: {intent: GET_RESOURCE, required: [], optional: [chapter, reference], attribute: resource, answer_mode: LIST}
+  ASK_RESOURCE_ATTRIBUTE: {intent: GET_RESOURCE, required: [resource], optional: [], attributes: [authors, year, publisher, usage]}
+  ASK_REGULATION: {intent: GET_RULE, required: [regulation], optional: [], attribute: policy_text, answer_mode: VALUE}
+  ASK_PERMISSION: {intent: GET_RULE, required: [regulation], optional: [], attribute: permission, answer_mode: BOOLEAN}
+  ASK_LO_DESCRIPTION: {intent: GET_LO, required: [learning_outcome], optional: [], attribute: description, answer_mode: VALUE}
+  ASK_LO_RELATED_CONTENT: {intent: GET_LO, required: [learning_outcome], optional: [], attribute: related_content, answer_mode: LIST}
+  ASK_CHAPTER_BY_LO: {intent: GET_LO, required: [], optional: [learning_outcome, reference], attribute: chapter, answer_mode: LIST}

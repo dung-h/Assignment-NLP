@@ -1,0 +1,17 @@
+version: 1
+sentence_types: [WH_QUESTION, YES_NO_QUESTION, IMPERATIVE_REQUEST]
+slot_types: [course, course_part, week, chapter, topic, assignment, assignment_part, deadline, resource, regulation, learning_outcome, exam, instructor, reference]
+entity_types: [course, course_part, week, chapter, topic, assignment, assignment_part, deadline, resource, regulation, learning_outcome, exam, instructor]
+answer_modes: [VALUE, LIST, BOOLEAN]
+retrieval_status: [FOUND, NOT_FOUND]
+attributes:
+  course: [name, name_en, semester, credits, ects, course_type, department, format, total_course_hours, lecture_hours, major_assignment_hours, self_study_hours, description, parts, assessment]
+  exam: [duration, format, weight]
+  week: [topics, chapters, activity, milestone]
+  chapter_topic: [title, summary, topics, chapter, week, part, contains_topic]
+  assignment: [title, team_size, domain, goal, parts, requirements, outputs, contains_component]
+  deadline: [date, time, description, week]
+  resource: [title, authors, publisher, year, usage, resource]
+  regulation: [policy_text, permission]
+  learning_outcome: [description, related_content, chapter]
+  instructor: [name, email, office]

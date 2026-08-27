@@ -1,0 +1,208 @@
+[
+  {
+    "input": "Môn NLP có bao nhiêu tín chỉ?",
+    "person_1_parser_result": {
+      "valid": true,
+      "sentence_type": "WH_QUESTION",
+      "query_frame": "ASK_COURSE_ATTRIBUTE",
+      "slots": {
+        "course": [
+          "NLP"
+        ],
+        "attribute_cue": [
+          "bao nhiêu tín chỉ"
+        ]
+      },
+      "tree": "(S (SENTENCE_TYPE WH_QUESTION) (QUERY_FRAME ASK_COURSE_ATTRIBUTE) (COURSE NLP) (ATTRIBUTE_CUE bao nhiêu tín chỉ))"
+    },
+    "person_2_semantic_query": {
+      "intent": "GET_COURSE_INFO",
+      "entities": {
+        "course": [
+          "CO3085"
+        ]
+      },
+      "attribute": "credits",
+      "answer_mode": "VALUE"
+    },
+    "context_state": {
+      "focus_entities": []
+    },
+    "person_3_retrieval_result": {
+      "status": "FOUND",
+      "values": [
+        3
+      ],
+      "sources": [
+        "course_info:CO3085"
+      ]
+    },
+    "answer": "Môn CO3085 có 3 tín chỉ."
+  },
+  {
+    "input": "Tuần 3 học gì?",
+    "person_1_parser_result": {
+      "valid": true,
+      "sentence_type": "WH_QUESTION",
+      "query_frame": "ASK_WEEK_CONTENT",
+      "slots": {
+        "week": [
+          "Tuần 3"
+        ]
+      },
+      "tree": "(S (SENTENCE_TYPE WH_QUESTION) (QUERY_FRAME ASK_WEEK_CONTENT) (WEEK Tuần 3))"
+    },
+    "person_2_semantic_query": {
+      "intent": "GET_SCHEDULE",
+      "entities": {
+        "week": [
+          "WEEK_03"
+        ]
+      },
+      "attribute": "topics",
+      "answer_mode": "LIST"
+    },
+    "context_state": {
+      "focus_entities": []
+    },
+    "person_3_retrieval_result": {
+      "status": "FOUND",
+      "values": [
+        "context-free grammar",
+        "grammar and sentence structure",
+        "top-down parsing",
+        "bottom-up chart parsing",
+        "top-down chart parsing",
+        "probabilistic context-free grammar",
+        "dependency grammar",
+        "Stanford dependencies"
+      ],
+      "sources": [
+        "schedule:WEEK_03"
+      ]
+    },
+    "answer": "context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies"
+  },
+  {
+    "input": "Chương nào nói về CFG?",
+    "person_1_parser_result": {
+      "valid": true,
+      "sentence_type": "WH_QUESTION",
+      "query_frame": "ASK_CHAPTER_BY_TOPIC",
+      "slots": {
+        "topic": [
+          "CFG"
+        ]
+      },
+      "tree": "(S (SENTENCE_TYPE WH_QUESTION) (QUERY_FRAME ASK_CHAPTER_BY_TOPIC) (TOPIC CFG))"
+    },
+    "person_2_semantic_query": {
+      "intent": "GET_TOPIC",
+      "entities": {
+        "topic": [
+          "CFG"
+        ]
+      },
+      "attribute": "chapter",
+      "answer_mode": "LIST"
+    },
+    "context_state": {
+      "focus_entities": [
+        {
+          "type": "topic",
+          "id": "CFG"
+        }
+      ]
+    },
+    "person_3_retrieval_result": {
+      "status": "FOUND",
+      "values": [
+        "CH03"
+      ],
+      "sources": [
+        "topics:CH03"
+      ]
+    },
+    "answer": "Nội dung này được tìm thấy ở: CH03."
+  },
+  {
+    "input": "Có được dùng LLM/RAG không?",
+    "person_1_parser_result": {
+      "valid": true,
+      "sentence_type": "YES_NO_QUESTION",
+      "query_frame": "ASK_PERMISSION",
+      "slots": {
+        "regulation": [
+          "dùng LLM/RAG"
+        ]
+      },
+      "tree": "(S (SENTENCE_TYPE YES_NO_QUESTION) (QUERY_FRAME ASK_PERMISSION) (REGULATION dùng LLM/RAG))"
+    },
+    "person_2_semantic_query": {
+      "intent": "GET_RULE",
+      "entities": {
+        "regulation": [
+          "LLM_RAG"
+        ]
+      },
+      "attribute": "permission",
+      "answer_mode": "BOOLEAN"
+    },
+    "context_state": {
+      "focus_entities": [
+        {
+          "type": "topic",
+          "id": "CFG"
+        }
+      ]
+    },
+    "person_3_retrieval_result": {
+      "status": "FOUND",
+      "values": [
+        true
+      ],
+      "sources": [
+        "regulations:LLM_RAG"
+      ]
+    },
+    "answer": "Có. Nguồn: regulations:LLM_RAG."
+  },
+  {
+    "input": "Ai dạy môn NLP?",
+    "person_1_parser_result": {
+      "valid": true,
+      "sentence_type": "WH_QUESTION",
+      "query_frame": "ASK_INSTRUCTOR",
+      "slots": {
+        "course": [
+          "NLP"
+        ]
+      },
+      "tree": "(S (SENTENCE_TYPE WH_QUESTION) (QUERY_FRAME ASK_INSTRUCTOR) (COURSE NLP))"
+    },
+    "person_2_semantic_query": {
+      "intent": "GET_INSTRUCTOR",
+      "entities": {
+        "course": [
+          "CO3085"
+        ]
+      },
+      "attribute": "name",
+      "answer_mode": "LIST"
+    },
+    "context_state": {
+      "focus_entities": [
+        {
+          "type": "topic",
+          "id": "CFG"
+        }
+      ]
+    },
+    "person_3_retrieval_result": {
+      "status": "NOT_FOUND",
+      "values": [],
+      "sources": []
+    },
+    "answer": "Tôi không tìm thấy thông tin giảng viên trong dữ liệu môn học hiện tại."
+  }
+]
