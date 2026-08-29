@@ -1,5 +1,15 @@
-import argparse, json
+import argparse, json, sys
 from src.assistant import CourseAssistant
+
+
+def _configure_console_encoding():
+    """Keep Vietnamese CLI/demo output usable on Windows consoles and pipes."""
+
+    if sys.platform != "win32":
+        return
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
 
 def build_ui(bot=None):
     import gradio as gr
@@ -22,6 +32,7 @@ def build_ui(bot=None):
     return demo
 
 def main():
+    _configure_console_encoding()
     ap=argparse.ArgumentParser(); ap.add_argument('--cli'); ap.add_argument('--demo',action='store_true'); args=ap.parse_args()
     bot=CourseAssistant()
     if args.cli:
