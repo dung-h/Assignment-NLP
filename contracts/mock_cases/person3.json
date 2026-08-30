@@ -1,21 +1,344 @@
 {
-  "input_semantic_query": {
-    "intent": "GET_TOPIC",
-    "entities": {
-      "topic": [
-        "CFG"
+  "version": 1,
+  "role": "person3",
+  "answer_policy": "Retrieval is exact. Answer text must contain the listed facts; wording is not part of the shared RetrievalResult contract.",
+  "cases": [
+    {
+      "id": "K01",
+      "description": "Find the chapter that covers CFG",
+      "input_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "topic": ["CFG"]
+        },
+        "attribute": "chapter",
+        "answer_mode": "LIST"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": ["CH03"],
+        "sources": ["topics:CH03"]
+      },
+      "answer_must_contain": ["CH03"]
+    },
+    {
+      "id": "K02",
+      "description": "Find all chapters that cover PCFG",
+      "input_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "topic": ["PCFG"]
+        },
+        "attribute": "chapter",
+        "answer_mode": "LIST"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": ["CH03", "CH06"],
+        "sources": ["topics:CH03", "topics:CH06"]
+      },
+      "answer_must_contain": ["CH03", "CH06"]
+    },
+    {
+      "id": "K03",
+      "description": "Supported instructor query with missing sample data",
+      "input_semantic_query": {
+        "intent": "GET_INSTRUCTOR",
+        "entities": {
+          "course": ["CO3085"]
+        },
+        "attribute": "name",
+        "answer_mode": "LIST"
+      },
+      "expected_retrieval": {
+        "status": "NOT_FOUND",
+        "values": [],
+        "sources": []
+      },
+      "expected_answer_exact": "Tôi không tìm thấy thông tin giảng viên trong dữ liệu môn học hiện tại."
+    },
+    {
+      "id": "K04",
+      "description": "Read the course credit value",
+      "input_semantic_query": {
+        "intent": "GET_COURSE_INFO",
+        "entities": {
+          "course": ["CO3085"]
+        },
+        "attribute": "credits",
+        "answer_mode": "VALUE"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": [3],
+        "sources": ["course_info:CO3085"]
+      },
+      "answer_must_contain": ["CO3085", "3", "tín chỉ"]
+    },
+    {
+      "id": "K05",
+      "description": "Read all topics scheduled in week 3",
+      "input_semantic_query": {
+        "intent": "GET_SCHEDULE",
+        "entities": {
+          "week": ["WEEK_03"]
+        },
+        "attribute": "topics",
+        "answer_mode": "LIST"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": [
+          "context-free grammar",
+          "grammar and sentence structure",
+          "top-down parsing",
+          "bottom-up chart parsing",
+          "top-down chart parsing",
+          "probabilistic context-free grammar",
+          "dependency grammar",
+          "Stanford dependencies"
+        ],
+        "sources": ["schedule:WEEK_03"]
+      },
+      "answer_must_contain": [
+        "context-free grammar",
+        "grammar and sentence structure",
+        "top-down parsing",
+        "bottom-up chart parsing",
+        "top-down chart parsing",
+        "probabilistic context-free grammar",
+        "dependency grammar",
+        "Stanford dependencies"
       ]
     },
-    "attribute": "chapter",
-    "answer_mode": "LIST"
-  },
-  "expected_retrieval": {
-    "status": "FOUND",
-    "values": [
-      "CH03"
-    ],
-    "sources": [
-      "topics:CH03"
-    ]
-  }
+    {
+      "id": "K06",
+      "description": "Read the assignment team size",
+      "input_semantic_query": {
+        "intent": "GET_ASSIGNMENT",
+        "entities": {
+          "assignment": ["BTL01"]
+        },
+        "attribute": "team_size",
+        "answer_mode": "VALUE"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": ["3-4 students"],
+        "sources": ["assignments:BTL01"]
+      },
+      "answer_must_contain": ["3-4 students"]
+    },
+    {
+      "id": "K07",
+      "description": "Check whether LLM/RAG is permitted",
+      "input_semantic_query": {
+        "intent": "GET_RULE",
+        "entities": {
+          "regulation": ["LLM_RAG"]
+        },
+        "attribute": "permission",
+        "answer_mode": "BOOLEAN"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": [true],
+        "sources": ["regulations:LLM_RAG"]
+      },
+      "answer_must_contain": ["Có", "regulations:LLM_RAG"]
+    },
+    {
+      "id": "K08",
+      "description": "Deadline query when sample data has no official deadline",
+      "input_semantic_query": {
+        "intent": "GET_DEADLINE",
+        "entities": {
+          "assignment": ["BTL01"]
+        },
+        "attribute": "date",
+        "answer_mode": "VALUE"
+      },
+      "expected_retrieval": {
+        "status": "NOT_FOUND",
+        "values": [],
+        "sources": []
+      },
+      "expected_answer_exact": "Tôi hiểu đây là câu hỏi về deadline, nhưng dữ liệu mẫu hiện tại không có deadline chính thức tương ứng."
+    },
+    {
+      "id": "K09",
+      "description": "Read a learning outcome description",
+      "input_semantic_query": {
+        "intent": "GET_LO",
+        "entities": {
+          "learning_outcome": ["LO2.5"]
+        },
+        "attribute": "description",
+        "answer_mode": "VALUE"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": ["Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu."],
+        "sources": ["course_info:LO2.5"]
+      },
+      "answer_must_contain": ["xác suất", "nhập nhằng"]
+    },
+    {
+      "id": "K10",
+      "description": "Find resources related to statistical NLP",
+      "input_semantic_query": {
+        "intent": "GET_RESOURCE",
+        "entities": {
+          "topic": ["STATISTICAL_NLP"]
+        },
+        "attribute": "resource",
+        "answer_mode": "LIST"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": [
+          "Introduction to Natural Language Processing",
+          "Foundation of Statistical Natural Language Processing"
+        ],
+        "sources": ["resources:RES02", "resources:RES04"]
+      },
+      "answer_must_contain": [
+        "Introduction to Natural Language Processing",
+        "Foundation of Statistical Natural Language Processing"
+      ]
+    },
+    {
+      "id": "K11",
+      "description": "Read all topics of chapter 3",
+      "input_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "chapter": ["CH03"]
+        },
+        "attribute": "topics",
+        "answer_mode": "LIST"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": [
+          "3.1 Context-Free Grammars",
+          "3.1.1 Grammar and sentence structure",
+          "3.1.2 What marks a good grammar",
+          "3.1.3 Top-down parser",
+          "3.1.4 Bottom-up chart parser",
+          "3.1.5 Top-down chart parser",
+          "3.2 Probabilistic Context-Free Grammars",
+          "3.3 Dependency Grammar and Parsing",
+          "3.4 Stanford Dependencies"
+        ],
+        "sources": ["topics:CH03"]
+      },
+      "answer_must_contain": [
+        "3.1 Context-Free Grammars",
+        "3.1.1 Grammar and sentence structure",
+        "3.1.2 What marks a good grammar",
+        "3.1.3 Top-down parser",
+        "3.1.4 Bottom-up chart parser",
+        "3.1.5 Top-down chart parser",
+        "3.2 Probabilistic Context-Free Grammars",
+        "3.3 Dependency Grammar and Parsing",
+        "3.4 Stanford Dependencies"
+      ]
+    },
+    {
+      "id": "K12",
+      "description": "Check whether chapter 4 relates to parsing",
+      "input_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "chapter": ["CH04"],
+          "topic": ["PARSING"]
+        },
+        "attribute": "contains_topic",
+        "answer_mode": "BOOLEAN"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": [true],
+        "sources": ["topics:CH04"]
+      },
+      "answer_must_contain": ["Có", "topics:CH04"]
+    },
+    {
+      "id": "K13",
+      "description": "Read the outputs required by assignment part I",
+      "input_semantic_query": {
+        "intent": "GET_ASSIGNMENT",
+        "entities": {
+          "assignment_part": ["BTL_PART_1"]
+        },
+        "attribute": "outputs",
+        "answer_mode": "LIST"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": [
+          "output/grammar.txt",
+          "output/samples.txt",
+          "output/parse-results.txt"
+        ],
+        "sources": ["assignments:BTL_PART_1"]
+      },
+      "answer_must_contain": [
+        "output/grammar.txt",
+        "output/samples.txt",
+        "output/parse-results.txt"
+      ]
+    },
+    {
+      "id": "K14",
+      "description": "Read the week 8 assignment milestone",
+      "input_semantic_query": {
+        "intent": "GET_SCHEDULE",
+        "entities": {
+          "week": ["WEEK_08"]
+        },
+        "attribute": "milestone",
+        "answer_mode": "VALUE"
+      },
+      "expected_retrieval": {
+        "status": "FOUND",
+        "values": ["BTL checkpoint 1 - grammar and parser"],
+        "sources": ["schedule:WEEK_08"]
+      },
+      "answer_must_contain": ["BTL checkpoint 1 - grammar and parser"]
+    },
+    {
+      "id": "K15",
+      "description": "Unknown chapter ID must not produce fabricated data",
+      "input_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "chapter": ["CH99"]
+        },
+        "attribute": "summary",
+        "answer_mode": "VALUE"
+      },
+      "expected_retrieval": {
+        "status": "NOT_FOUND",
+        "values": [],
+        "sources": []
+      },
+      "answer_must_contain": ["không tìm thấy"]
+    },
+    {
+      "id": "K16",
+      "test_kind": "validation",
+      "description": "Unsupported attribute violates the SemanticQuery contract",
+      "input_semantic_query": {
+        "intent": "GET_SCHEDULE",
+        "entities": {
+          "week": ["WEEK_03"]
+        },
+        "attribute": "unsupported_attribute",
+        "answer_mode": "VALUE"
+      },
+      "expected_error": "InvalidSemanticQuery"
+    }
+  ]
 }

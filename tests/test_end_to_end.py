@@ -27,6 +27,8 @@ def test_context_pronoun():
 def test_unknown():
     o=CourseAssistant().ask('Hôm nay ở TP.HCM có mưa không?')
     assert o['person_2_semantic_query']['intent']=='UNKNOWN'
+    assert 'ngoài phạm vi' in o['answer']
+    assert o['person_3_retrieval_result']=={'status': 'NOT_FOUND', 'values': [], 'sources': []}
 
 def test_ui_builds():
     from app import build_ui
