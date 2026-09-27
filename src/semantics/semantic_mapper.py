@@ -1,6 +1,6 @@
 from src.contracts import SemanticQuery, ContextState
 from .normalizer import canonical, fold
-
+import re
 FRAME_MAP = {
  'ASK_COURSE_ATTRIBUTE': ('GET_COURSE_INFO',None,'VALUE'),
  'ASK_COURSE_PARTS': ('GET_COURSE_INFO','parts','LIST'),
@@ -39,18 +39,54 @@ FRAME_MAP = {
  'ASK_LO_RELATED_CONTENT': ('GET_LO','related_content','LIST'),
  'ASK_CHAPTER_BY_LO': ('GET_LO','chapter','LIST'),
 }
+CONTEXT_TYPES = [
+    'assignment_part', 'learning_outcome', 'chapter', 'topic',
+    'week', 'assignment', 'exam', 'regulation', 'resource',
+]
+def attribute_from_cue(frame, cue):
+    c = fold(cue or '')
+    if not c:
+        return None
 
-def attribute_from_cue(frame,cue):
-    c=fold(cue or '')
-    if frame=='ASK_COURSE_ATTRIBUTE':
-        if 'tin chi' in c: return 'credits'
-        if 'khoa' in c: return 'department'
-        if 'gio tu hoc' in c: return 'self_study_hours'
-    if frame=='ASK_EXAM_ATTRIBUTE':
-        if 'phut' in c: return 'duration'
-        if 'hinh thuc' in c: return 'format'
-        if 'phan tram' in c or 'chiem' in c: return 'weight'
+    if frame == 'ASK_COURSE_ATTRIBUTE':
+        # Check cue dài/cụ thể TRƯỚC, cue ngắn/chung SAU
+        if 'ten tieng anh' in c or 'english name' in c: return 'name_en'
+        if 'tin chi' in c or 'credits' in c: return 'credits'
+        if 'ects' in c: return 'ects'
+        if 'khoa' in c or 'department' in c: return 'department'
+        if 'gio tu hoc' in c or 'self study' in c: return 'self_study_hours'
+        if 'tong gio' in c or 'total hours' in c: return 'total_course_hours'
+        if 'gio ly thuyet' in c or 'lecture hours' in c: return 'lecture_hours'
+        if 'gio bai tap' in c or 'assignment hours' in c: return 'major_assignment_hours'
+        if 'hoc ky' in c or 'semester' in c: return 'semester'
+        if 'loai mon' in c or 'course type' in c: return 'course_type'
+        if 'hinh thuc' in c or 'format' in c: return 'format'
+        if 'mo ta' in c or 'description' in c: return 'description'
+        if 'danh gia' in c or 'assessment' in c: return 'assessment'
+        if 'phan' in c or 'parts' in c: return 'parts'
+        if 'ten' in c or 'goi la' in c or 'name' in c: return 'name'
+
+    if frame == 'ASK_EXAM_ATTRIBUTE':
+        if 'phut' in c or 'thoi luong' in c or 'duration' in c: return 'duration'
+        if 'hinh thuc' in c or 'format' in c: return 'format'
+        if 'phan tram' in c or 'chiem' in c or 'trong so' in c or 'weight' in c: return 'weight'
+
+    if frame == 'ASK_INSTRUCTOR_ATTRIBUTE':
+        if 'email' in c: return 'email'
+        if 'van phong' in c or 'phong' in c or 'office' in c: return 'office'
+        if 'ten' in c or 'name' in c: return 'name'
+        return 'name'  # fallback
+
+    if frame == 'ASK_RESOURCE_ATTRIBUTE':
+        if 'tac gia' in c or 'author' in c: return 'authors'   # ← authors, không author
+        if 'nam' in c or 'year' in c: return 'year'
+        if 'nha xuat ban' in c or 'publisher' in c: return 'publisher'
+        if 'su dung' in c or 'usage' in c: return 'usage'
+        if 'tai lieu' in c or 'resource' in c: return 'resource'
+        return 'title'  # fallback
+
     return None
+
 
 class SemanticMapper:
     def map(self, parsed, context=None):
@@ -74,19 +110,79 @@ class SemanticMapper:
         return q, context
 
     def _resolve_reference(self, raw, context):
-        f=fold(raw)
-        if 'chuong sau' in f:
-            ch=next((x for x in context.focus_entities if x['type']=='chapter'),None)
-            if ch and ch['id'].startswith('CH'):
-                return {'type':'chapter','id':f"CH{int(ch['id'][2:])+1:02d}"}
-        for preferred in ['assignment_part','learning_outcome','chapter','topic']:
-            hit=next((x for x in context.focus_entities if x['type']==preferred),None)
-            if hit: return hit
+        f = fold(raw)
+
+        # 1. "chương sau" / "chương tiếp theo"
+        if any(k in f for k in ['chuong sau', 'chuong tiep', 'chuong ke tiep']):
+            return self._shift_entity(context, 'chapter', +1)
+        # "chương trước"
+        if any(k in f for k in ['chuong truoc', 'chuong truoc do']):
+            return self._shift_entity(context, 'chapter', -1)
+        # "tuần sau"
+        if any(k in f for k in ['tuan sau', 'tuan tiep']):
+            return self._shift_entity(context, 'week', +1)
+        # "tuần trước"
+        if any(k in f for k in ['tuan truoc']):
+            return self._shift_entity(context, 'week', -1)
+        # "phần sau" / "phần trước"
+        if any(k in f for k in ['phan sau', 'phan tiep']):
+            return self._shift_entity(context, 'assignment_part', +1)
+        if any(k in f for k in ['phan truoc']):
+            return self._shift_entity(context, 'assignment_part', -1)
+
+        # 2. Tham chiếu chung ("nó", "phần này", "cái đó")
+        for preferred in ['assignment_part', 'learning_outcome', 'chapter', 'topic', 'week', 'assignment']:
+            hit = next((x for x in context.focus_entities if x['type'] == preferred), None)
+            if hit:
+                return hit
         return context.focus_entities[0] if context.focus_entities else None
 
-    def _update_context(self,q,context):
-        focus=[]
-        for typ in ['assignment_part','learning_outcome','chapter','topic','assignment']:
-            for eid in q.entities.get(typ,[]): focus.append({'type':typ,'id':eid})
-        if focus: context=ContextState(focus)
-        return context
+
+    def _shift_entity(self, context, entity_type, delta):
+        """Dịch entity theo delta (ví dụ chapter +1)."""
+        current = next((x for x in context.focus_entities if x['type'] == entity_type), None)
+        if not current:
+            return None
+        entity_id = current['id']
+        # Parse số từ ID
+        m = re.search(r'(\d+)$', entity_id)
+        if not m:
+            return None
+        number = int(m.group(1)) + delta
+        if number < 1:
+            return None
+        # Format lại ID
+        prefix = entity_id[:m.start()]
+        if entity_type == 'chapter':
+            new_id = f'CH{number:02d}'
+        elif entity_type == 'week':
+            new_id = f'WEEK_{number:02d}'
+        elif entity_type == 'assignment_part':
+            new_id = f'BTL_PART_{number}'
+        else:
+            new_id = f'{prefix}{number}'
+        return {'type': entity_type, 'id': new_id}
+
+    
+
+    def _update_context(self, q, context):
+        """Cập nhật context với focus mới, giữ entity cũ cùng type."""
+        new_focus = []
+        for typ in CONTEXT_TYPES:
+            for eid in q.entities.get(typ, []):
+                new_focus.append({'type': typ, 'id': eid})
+
+        if not new_focus:
+            # Query không có entity → giữ context cũ
+            return context
+
+        # Merge: giữ entity cũ cùng type với entity mới
+        merged = list(new_focus)
+        new_types = {e['type'] for e in new_focus}
+        for old in context.focus_entities:
+            if old['type'] not in new_types:
+                merged.append(old)
+
+        return ContextState(merged)
+
+

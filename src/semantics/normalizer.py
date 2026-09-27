@@ -36,10 +36,13 @@ def canonical(slot, value):
             n=roman.get(m.group(1), int(m.group(1)) if m.group(1).isdigit() else None)
             return f'BTL_PART_{n}'
     if slot=='topic': return TOPIC_ALIASES.get(f, value.upper().replace(' ','_'))
-    if slot=='regulation':
-        for k,v in REG_ALIASES.items():
-            if k in f: return v
-        return value.upper().replace(' ','_')
+    if slot == 'regulation':
+        # Sort alias dài trước để tránh match nhầm alias ngắn
+        ordered = sorted(REG_ALIASES.items(), key=lambda x: len(x[0]), reverse=True)
+        for k, v in ordered:
+            if re.search(rf"(?:^|\s){re.escape(k)}(?:$|\s)", f):
+                return v
+        return value.upper().replace(' ', '_')
     if slot=='learning_outcome':
         m=re.search(r'(\d+(?:\.\d+)?)',f); return 'LO'+m.group(1) if m else value
     if slot=='exam': return f.upper()
