@@ -88,16 +88,21 @@ class AnswerGenerator:
             return "Tài liệu phù hợp: " + "; ".join(values) + "."
         if key == ("GET_TOPIC", "summary", "VALUE"):
             subject = self._query_subject(query)
-            return f"Tóm tắt {subject}: {values[0]}."
+            return f"Tóm tắt {subject}: {self._sentence(values[0])}"
         if key == ("GET_TOPIC", "title", "VALUE"):
             subject = self._query_subject(query)
-            return f"Tên của {subject} là {values[0]}."
+            return f"Tên của {subject} là {self._sentence(values[0])}"
         if key == ("GET_LO", "description", "VALUE"):
             outcome_id = (query.entities.get("learning_outcome") or ["LO"])[0]
-            return f"Mô tả {outcome_id}: {values[0]}."
+            return f"Mô tả {outcome_id}: {self._sentence(values[0])}"
         if query.answer_mode == "LIST":
             return "; ".join(values) + "."
         return str(values[0])
+
+    @staticmethod
+    def _sentence(value):
+        text = str(value).strip()
+        return text if text.endswith((".", "!", "?")) else f"{text}."
 
     @staticmethod
     def _query_subject(query):

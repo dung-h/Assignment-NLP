@@ -1,17 +1,78 @@
 from pathlib import Path
-import json, yaml
+import json
+import sys
+
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from src.assistant import CourseAssistant
 from src.syntax.generator import generate
-ROOT=Path(__file__).resolve().parents[1]
-b=CourseAssistant()
-qs=[x.strip() for x in (ROOT/'input/sentences.txt').read_text(encoding='utf-8').splitlines() if x.strip()]
-rows=[b.ask(q) for q in qs]
-(ROOT/'output/grammar.txt').write_text((ROOT/'data/grammar/grammar_v1.yaml').read_text(encoding='utf-8'),encoding='utf-8')
-(ROOT/'output/samples.txt').write_text('\n'.join(generate())+'\n',encoding='utf-8')
-(ROOT/'output/parse-results.txt').write_text('\n\n'.join((r['person_1_parser_result']['tree'] or '()') for r in rows),encoding='utf-8')
-(ROOT/'output/semantic.txt').write_text('\n'.join(json.dumps(r['person_2_semantic_query'],ensure_ascii=False) for r in rows),encoding='utf-8')
-(ROOT/'output/intent-entity.txt').write_text('\n'.join(f"{r['person_2_semantic_query']['intent']} | {r['person_2_semantic_query']['entities']}" for r in rows),encoding='utf-8')
-(ROOT/'output/query.txt').write_text('\n'.join(json.dumps(r['person_2_semantic_query'],ensure_ascii=False) for r in rows),encoding='utf-8')
-(ROOT/'output/retrieval.txt').write_text('\n'.join(json.dumps(r['person_3_retrieval_result'],ensure_ascii=False) for r in rows),encoding='utf-8')
-(ROOT/'output/answer.txt').write_text('\n'.join(r['answer'] for r in rows)+'\n',encoding='utf-8')
+
+
+def write_output(path, text):
+    path.write_text(text, encoding="utf-8", newline="\n")
+
+
+bot = CourseAssistant()
+queries = [
+    line.strip()
+    for line in (ROOT / "input" / "sentences.txt").read_text(
+        encoding="utf-8"
+    ).splitlines()
+    if line.strip()
+]
+rows = [bot.ask(query) for query in queries]
+
+# One supported two-turn dialogue is exported separately for Part III.  The
+# full context coverage, including failures, is reported in evaluation.txt.
+dialogue_bot = CourseAssistant()
+dialogue_rows = [
+    dialogue_bot.ask("Chương 4 nói về gì?"),
+    dialogue_bot.ask("Nó có liên quan đến parsing không?"),
+]
+write_output(
+    ROOT / "output" / "grammar.txt",
+    (ROOT / "data" / "grammar" / "grammar_v1.yaml").read_text(encoding="utf-8"),
+)
+write_output(ROOT / "output" / "samples.txt", "\n".join(generate()) + "\n")
+write_output(
+    ROOT / "output" / "parse-results.txt",
+    "\n\n".join(row["person_1_parser_result"]["tree"] or "()" for row in rows),
+)
+write_output(
+    ROOT / "output" / "semantic.txt",
+    "\n".join(
+        json.dumps(row["person_2_semantic_query"], ensure_ascii=False)
+        for row in rows
+    ),
+)
+write_output(
+    ROOT / "output" / "intent-entity.txt",
+    "\n".join(
+        f"{row['person_2_semantic_query']['intent']} | "
+        f"{row['person_2_semantic_query']['entities']}"
+        for row in rows
+    ),
+)
+write_output(
+    ROOT / "output" / "query.txt",
+    "\n".join(
+        json.dumps(row["person_2_semantic_query"], ensure_ascii=False)
+        for row in rows
+    ),
+)
+write_output(
+    ROOT / "output" / "retrieval.txt",
+    "\n".join(
+        json.dumps(row["person_3_retrieval_result"], ensure_ascii=False)
+        for row in rows
+    ),
+)
+write_output(ROOT / "output" / "answer.txt", "\n".join(row["answer"] for row in rows) + "\n")
+write_output(
+    ROOT / "output" / "dialogue.txt",
+    json.dumps(dialogue_rows, ensure_ascii=False, indent=2) + "\n",
+)
 print('exported required v0 outputs')

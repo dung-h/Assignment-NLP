@@ -117,6 +117,22 @@ def test_zero_is_a_valid_found_value(person3_runtime):
     assert "không tìm thấy" not in answer.lower()
 
 
+def test_summary_ending_in_period_is_not_double_punctuated(person3_runtime):
+    kb, _, answer_generator = person3_runtime
+    query = SemanticQuery(
+        intent="GET_TOPIC",
+        entities={"chapter": ["CH04"]},
+        attribute="summary",
+        answer_mode="VALUE",
+    )
+    retrieval = RetrievalResult("FOUND", ["A grounded summary."], ["topics:CH04"])
+
+    answer = answer_generator.generate(query, retrieval, kb)
+
+    assert "summary.." not in answer
+    assert "A grounded summary. Nguồn:" in answer
+
+
 def test_unknown_is_not_rendered_by_person3(person3_runtime):
     kb, _, answer_generator = person3_runtime
     query = SemanticQuery(intent="UNKNOWN", entities={}, attribute=None)
