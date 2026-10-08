@@ -72,6 +72,7 @@ class TestCanonicalTopic:
     def test_alias(self):
         assert canonical('topic', 'CFG') == 'CFG'
         assert canonical('topic', 'context-free grammar') == 'CFG'
+        assert canonical('topic', 'hỏi đáp') == 'QUESTION_ANSWERING'
         assert canonical('topic', 'parsing') == 'PARSING'
 
     def test_fallback(self):

@@ -11,6 +11,7 @@ TOPIC_ALIASES = {
  'parsing':'PARSING','parser':'PARSING',
  'semantic grammar':'SEMANTIC_GRAMMAR','reference':'REFERENCE',
  'question answering':'QUESTION_ANSWERING','hoi dap':'QUESTION_ANSWERING',
+ 'hoi đap':'QUESTION_ANSWERING',
  'selectional restriction':'SELECTIONAL_RESTRICTION',
  'statistical nlp':'STATISTICAL_NLP','python nlp':'PYTHON_NLP','rag':'RAG'
 }
