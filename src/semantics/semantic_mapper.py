@@ -1,44 +1,10 @@
+import re
+
 from src.contracts import SemanticQuery, ContextState
 from .normalizer import canonical, fold
-import re
-FRAME_MAP = {
- 'ASK_COURSE_ATTRIBUTE': ('GET_COURSE_INFO',None,'VALUE'),
- 'ASK_COURSE_PARTS': ('GET_COURSE_INFO','parts','LIST'),
- 'ASK_EXAM_ATTRIBUTE': ('GET_COURSE_INFO',None,'VALUE'),
- 'ASK_INSTRUCTOR': ('GET_INSTRUCTOR','name','LIST'),
- 'ASK_INSTRUCTOR_ATTRIBUTE': ('GET_INSTRUCTOR',None,'VALUE'),
- 'ASK_WEEK_CONTENT': ('GET_SCHEDULE','topics','LIST'),
- 'ASK_WEEK_OF_CHAPTER': ('GET_SCHEDULE','week','LIST'),
- 'ASK_WEEK_OF_TOPIC': ('GET_SCHEDULE','week','LIST'),
- 'ASK_WEEK_ACTIVITY': ('GET_SCHEDULE','activity','VALUE'),
- 'ASK_WEEK_MILESTONE': ('GET_SCHEDULE','milestone','VALUE'),
- 'ASK_MILESTONE_WEEK': ('GET_SCHEDULE','week','LIST'),
- 'ASK_CHAPTER_CONTENT': ('GET_TOPIC','summary','VALUE'),
- 'ASK_CHAPTER_TITLE': ('GET_TOPIC','title','VALUE'),
- 'ASK_CHAPTER_BY_TOPIC': ('GET_TOPIC','chapter','LIST'),
- 'ASK_TOPIC_OF_CHAPTER': ('GET_TOPIC','topics','LIST'),
- 'ASK_TOPIC_EXISTENCE_IN_CHAPTER': ('GET_TOPIC','contains_topic','BOOLEAN'),
- 'ASK_PART_OF_CHAPTER': ('GET_TOPIC','part','VALUE'),
- 'ASK_CHAPTERS_OF_PART': ('GET_TOPIC','chapter','LIST'),
- 'ASK_ASSIGNMENT_INFO': ('GET_ASSIGNMENT','goal','VALUE'),
- 'ASK_ASSIGNMENT_PARTS': ('GET_ASSIGNMENT','parts','LIST'),
- 'ASK_ASSIGNMENT_PART_INFO': ('GET_ASSIGNMENT','title','VALUE'),
- 'ASK_ASSIGNMENT_REQUIREMENTS': ('GET_ASSIGNMENT','requirements','LIST'),
- 'ASK_ASSIGNMENT_OUTPUTS': ('GET_ASSIGNMENT','outputs','LIST'),
- 'ASK_ASSIGNMENT_COMPONENT_EXISTENCE': ('GET_ASSIGNMENT','contains_component','BOOLEAN'),
- 'ASK_ASSIGNMENT_TEAM_SIZE': ('GET_ASSIGNMENT','team_size','VALUE'),
- 'ASK_ASSIGNMENT_DEADLINE': ('GET_DEADLINE','date','VALUE'),
- 'ASK_ASSIGNMENT_PART_DEADLINE': ('GET_DEADLINE','date','VALUE'),
- 'ASK_DEADLINE_INFO': ('GET_DEADLINE','date','VALUE'),
- 'ASK_RESOURCE_BY_TOPIC': ('GET_RESOURCE','resource','LIST'),
- 'ASK_RESOURCE_BY_CHAPTER': ('GET_RESOURCE','resource','LIST'),
- 'ASK_RESOURCE_ATTRIBUTE': ('GET_RESOURCE',None,'VALUE'),
- 'ASK_REGULATION': ('GET_RULE','policy_text','VALUE'),
- 'ASK_PERMISSION': ('GET_RULE','permission','BOOLEAN'),
- 'ASK_LO_DESCRIPTION': ('GET_LO','description','VALUE'),
- 'ASK_LO_RELATED_CONTENT': ('GET_LO','related_content','LIST'),
- 'ASK_CHAPTER_BY_LO': ('GET_LO','chapter','LIST'),
-}
+from .semantic_query_validator import InvalidSemanticQuery, SemanticQueryValidator
+
+
 CONTEXT_TYPES = [
     'assignment_part', 'learning_outcome', 'chapter', 'topic',
     'week', 'assignment', 'exam', 'regulation', 'resource',
@@ -50,7 +16,6 @@ def attribute_from_cue(frame, cue):
 
     if frame == 'ASK_COURSE_ATTRIBUTE':
         # Check cue dài/cụ thể TRƯỚC, cue ngắn/chung SAU
-        if 'ten tieng anh' in c or 'english name' in c: return 'name_en'
         if 'tin chi' in c or 'credits' in c: return 'credits'
         if 'ects' in c: return 'ects'
         if 'khoa' in c or 'department' in c: return 'department'
@@ -62,9 +27,6 @@ def attribute_from_cue(frame, cue):
         if 'loai mon' in c or 'course type' in c: return 'course_type'
         if 'hinh thuc' in c or 'format' in c: return 'format'
         if 'mo ta' in c or 'description' in c: return 'description'
-        if 'danh gia' in c or 'assessment' in c: return 'assessment'
-        if 'phan' in c or 'parts' in c: return 'parts'
-        if 'ten' in c or 'goi la' in c or 'name' in c: return 'name'
 
     if frame == 'ASK_EXAM_ATTRIBUTE':
         if 'phut' in c or 'thoi luong' in c or 'duration' in c: return 'duration'
@@ -75,72 +37,110 @@ def attribute_from_cue(frame, cue):
         if 'email' in c: return 'email'
         if 'van phong' in c or 'phong' in c or 'office' in c: return 'office'
         if 'ten' in c or 'name' in c: return 'name'
-        return 'name'  # fallback
 
     if frame == 'ASK_RESOURCE_ATTRIBUTE':
         if 'tac gia' in c or 'author' in c: return 'authors'   # ← authors, không author
         if 'nam' in c or 'year' in c: return 'year'
         if 'nha xuat ban' in c or 'publisher' in c: return 'publisher'
         if 'su dung' in c or 'usage' in c: return 'usage'
-        if 'tai lieu' in c or 'resource' in c: return 'resource'
-        return 'title'  # fallback
 
     return None
 
 
 class SemanticMapper:
+    def __init__(self, validator=None):
+        self.validator = validator or SemanticQueryValidator()
+
+    @staticmethod
+    def _unknown(context):
+        return SemanticQuery('UNKNOWN', {}, None, 'VALUE'), context
+
     def map(self, parsed, context=None):
-        context=context or ContextState()
+        context = context if context is not None else ContextState()
         if not parsed.valid:
-            return SemanticQuery('UNKNOWN',{},None,'VALUE'), context
-        intent, attr, mode = FRAME_MAP[parsed.query_frame]
-        cue=(parsed.slots.get('attribute_cue') or [''])[0]
-        attr=attribute_from_cue(parsed.query_frame,cue) or attr
-        entities={}
+            return self._unknown(context)
+
+        # Intent, attribute and mode have one source of truth: the shared YAML.
+        spec = self.validator.frames.get(parsed.query_frame)
+        if spec is None:
+            return self._unknown(context)
+        attr = spec.get('attribute')
+        if 'attributes' in spec:
+            cue = (parsed.slots.get('attribute_cue') or [''])[0]
+            attr = attribute_from_cue(parsed.query_frame, cue)
+
+        entities = {}
         for slot, vals in parsed.slots.items():
-            if slot=='attribute_cue': continue
-            if slot=='reference':
-                resolved=self._resolve_reference(vals[0],context)
-                if resolved:
-                    entities.setdefault(resolved['type'],[]).append(resolved['id'])
+            if slot in {'attribute_cue', 'reference'}:
                 continue
-            entities[slot]=[canonical(slot,v) for v in vals]
-        q=SemanticQuery(intent,entities,attr,mode)
-        context=self._update_context(q,context)
+            if not isinstance(vals, list) or any(not isinstance(v, str) for v in vals):
+                return self._unknown(context)
+            entities[slot] = [canonical(slot, v) for v in vals]
+
+        allowed_types = set(spec.get('required', [])) | set(spec.get('optional', []))
+        references = parsed.slots.get('reference', [])
+        if 'reference' in parsed.slots and not references:
+            return self._unknown(context)
+        for raw in references:
+            resolved = self._resolve_reference(raw, context, allowed_types)
+            if resolved is None:
+                # An unresolved reference must not become an unfiltered KB query.
+                return self._unknown(context)
+            values = entities.setdefault(resolved['type'], [])
+            if resolved['id'] not in values:
+                values.append(resolved['id'])
+
+        q = SemanticQuery(spec['intent'], entities, attr, spec.get('answer_mode', 'VALUE'))
+        try:
+            if self.validator.validate(q) != parsed.query_frame:
+                return self._unknown(context)
+        except InvalidSemanticQuery:
+            return self._unknown(context)
+
+        context = self._update_context(q, context)
         return q, context
 
-    def _resolve_reference(self, raw, context):
+    def _resolve_reference(self, raw, context, allowed_types=None):
         f = fold(raw)
+        relative_cues = [
+            ('chapter', +1, ['chuong sau', 'chuong tiep', 'chuong ke tiep']),
+            ('chapter', -1, ['chuong truoc']),
+            ('week', +1, ['tuan sau', 'tuan tiep']),
+            ('week', -1, ['tuan truoc']),
+            ('assignment_part', +1, ['phan sau', 'phan tiep']),
+            ('assignment_part', -1, ['phan truoc']),
+        ]
+        for entity_type, delta, cues in relative_cues:
+            if any(cue in f for cue in cues):
+                if allowed_types is not None and entity_type not in allowed_types:
+                    return None
+                return self._shift_entity(context, entity_type, delta)
 
-        # 1. "chương sau" / "chương tiếp theo"
-        if any(k in f for k in ['chuong sau', 'chuong tiep', 'chuong ke tiep']):
-            return self._shift_entity(context, 'chapter', +1)
-        # "chương trước"
-        if any(k in f for k in ['chuong truoc', 'chuong truoc do']):
-            return self._shift_entity(context, 'chapter', -1)
-        # "tuần sau"
-        if any(k in f for k in ['tuan sau', 'tuan tiep']):
-            return self._shift_entity(context, 'week', +1)
-        # "tuần trước"
-        if any(k in f for k in ['tuan truoc']):
-            return self._shift_entity(context, 'week', -1)
-        # "phần sau" / "phần trước"
-        if any(k in f for k in ['phan sau', 'phan tiep']):
-            return self._shift_entity(context, 'assignment_part', +1)
-        if any(k in f for k in ['phan truoc']):
-            return self._shift_entity(context, 'assignment_part', -1)
+        # A named type can refer back to its last focus after a topic switch.
+        for entity_type, cue in [('chapter', 'chuong'), ('week', 'tuan'), ('assignment_part', 'phan')]:
+            if re.search(rf'\b{cue}\b', f):
+                if allowed_types is not None and entity_type not in allowed_types:
+                    return None
+                return self._focus_of_type(context, entity_type)
 
-        # 2. Tham chiếu chung ("nó", "phần này", "cái đó")
-        for preferred in ['assignment_part', 'learning_outcome', 'chapter', 'topic', 'week', 'assignment']:
-            hit = next((x for x in context.focus_entities if x['type'] == preferred), None)
-            if hit:
-                return hit
-        return context.focus_entities[0] if context.focus_entities else None
+        # An untyped pronoun refers to the current focus, not an older entity
+        # selected only because its type happens to fit the new QueryFrame.
+        if not context.focus_entities:
+            return None
+        entity_type = context.focus_entities[0]['type']
+        if allowed_types is not None and entity_type not in allowed_types:
+            return None
+        return self._focus_of_type(context, entity_type)
 
+    @staticmethod
+    def _focus_of_type(context, entity_type):
+        hits = {entity['id']: entity for entity in context.focus_entities if entity['type'] == entity_type}
+        # "This chapter" is ambiguous after a query about multiple chapters.
+        return next(iter(hits.values())) if len(hits) == 1 else None
 
     def _shift_entity(self, context, entity_type, delta):
         """Dịch entity theo delta (ví dụ chapter +1)."""
-        current = next((x for x in context.focus_entities if x['type'] == entity_type), None)
+        current = self._focus_of_type(context, entity_type)
         if not current:
             return None
         entity_id = current['id']
@@ -163,20 +163,18 @@ class SemanticMapper:
             new_id = f'{prefix}{number}'
         return {'type': entity_type, 'id': new_id}
 
-    
-
     def _update_context(self, q, context):
-        """Cập nhật context với focus mới, giữ entity cũ cùng type."""
+        """Put current focus first; retain other types for named references."""
         new_focus = []
         for typ in CONTEXT_TYPES:
-            for eid in q.entities.get(typ, []):
+            for eid in dict.fromkeys(q.entities.get(typ, [])):
                 new_focus.append({'type': typ, 'id': eid})
 
         if not new_focus:
             # Query không có entity → giữ context cũ
             return context
 
-        # Merge: giữ entity cũ cùng type với entity mới
+        # History stays behind new focus; a newer entity replaces its own type.
         merged = list(new_focus)
         new_types = {e['type'] for e in new_focus}
         for old in context.focus_entities:
@@ -184,5 +182,3 @@ class SemanticMapper:
                 merged.append(old)
 
         return ContextState(merged)
-
-
