@@ -9,6 +9,10 @@ class RuleParser:
     def __init__(self, grammar_path=None):
         grammar_path = grammar_path or ROOT/'data/grammar/grammar_v1.yaml'
         self.spec = yaml.safe_load(Path(grammar_path).read_text(encoding='utf-8'))
+        self.rules = [
+            (rule, [re.compile(pattern) for pattern in rule.get('patterns', [])])
+            for rule in self.spec.get('rules', [])
+        ]
 
     @staticmethod
     def _split_values(slot, raw):
@@ -19,10 +23,14 @@ class RuleParser:
         return [x.strip() for x in re.split(r'\s+(?:và|hoặc)\s+|\s*,\s*', raw) if x.strip()]
 
     def parse(self, sentence: str) -> ParserResult:
+        if not isinstance(sentence, str):
+            return ParserResult(False, None, None, {}, None)
         s = sentence.strip()
-        for rule in self.spec['rules']:
-            for pat in rule.get('patterns',[]):
-                m = re.search(pat, s)
+        if not s:
+            return ParserResult(False, None, None, {}, None)
+        for rule, patterns in self.rules:
+            for pattern in patterns:
+                m = pattern.search(s)
                 if not m: continue
                 slots={}
                 for k,v in m.groupdict().items():

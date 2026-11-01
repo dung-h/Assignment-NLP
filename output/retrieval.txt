@@ -3,3 +3,4 @@
 {"status": "FOUND", "values": ["CH03"], "sources": ["topics:CH03"]}
 {"status": "FOUND", "values": [true], "sources": ["regulations:LLM_RAG"]}
 {"status": "NOT_FOUND", "values": [], "sources": []}
+{"status": "NOT_FOUND", "values": [], "sources": []}

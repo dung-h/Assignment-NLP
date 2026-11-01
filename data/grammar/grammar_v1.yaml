@@ -76,14 +76,14 @@ rules:
       - '(?i)tài liệu.*?(?:của|cho)\s*(?P<reference>chương này).*?(?:là gì|nào)?'
   - frame: ASK_LO_DESCRIPTION
     sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<learning_outcome>L\\.?O\\.?\s*\d+(?:\\.\d+)?)\s*(?:là gì|học về gì|nói về gì)']
+    patterns: ['(?i)(?P<learning_outcome>L\.?O\.?\s*\d+(?:\.\d+)?)\s*(?:là gì|học về gì|nói về gì)']
   - frame: ASK_LO_RELATED_CONTENT
     sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<learning_outcome>L\\.?O\\.?\s*\d+(?:\\.\d+)?).*?(?:liên quan đến nội dung nào|liên quan nội dung gì)']
+    patterns: ['(?i)(?P<learning_outcome>L\.?O\.?\s*\d+(?:\.\d+)?).*?(?:liên quan đến nội dung nào|liên quan nội dung gì)']
   - frame: ASK_CHAPTER_BY_LO
     sentence_type: WH_QUESTION
     patterns:
-      - '(?i)(?P<learning_outcome>L\\.?O\\.?\s*\d+(?:\\.\d+)?).*?(?:nằm ở chương nào|thuộc chương nào)'
+      - '(?i)(?P<learning_outcome>L\.?O\.?\s*\d+(?:\.\d+)?).*?(?:nằm ở chương nào|thuộc chương nào)'
       - '(?i)(?P<reference>nội dung này).*?(?:nằm ở chương nào|thuộc chương nào)'
   - frame: ASK_CHAPTER_CONTENT
     sentence_type: IMPERATIVE_REQUEST
