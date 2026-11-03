@@ -19,6 +19,8 @@ class KBIndexes:
     topic_to_weeks: dict[str, list[str]] = field(default_factory=dict)
     course_part_to_chapters: dict[str, list[str]] = field(default_factory=dict)
     topic_to_resources: dict[str, list[str]] = field(default_factory=dict)
+    assignment_part_to_topics: dict[str, list[str]] = field(default_factory=dict)
+    topic_to_assignment_parts: dict[str, list[str]] = field(default_factory=dict)
 
 
 @dataclass

@@ -3,3 +3,4 @@ Tuần 3 học gì?
 Chương nào nói về CFG?
 Có được dùng LLM/RAG không?
 Ai dạy môn NLP?
+Hôm nay ở TP.HCM có mưa không?

@@ -57,6 +57,34 @@ def _part_label(value: object) -> str:
     return re.sub(r"^part\s+(?:i{1,3}|iv|[1-4])\s*-\s*", "", normalized)
 
 
+def _assignment_component_ids(terms: Iterable[str]) -> list[str]:
+    """Derive component relations from source titles and requirements only.
+
+    ``QA`` is the explicit source spelling in assignment Part II's title.
+    This ingestion alias does not normalize user input or hardcode a
+    topic-to-part relationship. Longer, overlapping aliases take priority
+    (PCFG must not also be classified as CFG), while disjoint matches in
+    the same field are all retained.
+    """
+
+    aliases = {fold(alias): topic_id for alias, topic_id in TOPIC_ALIASES.items()}
+    aliases["qa"] = "QUESTION_ANSWERING"
+    ordered_aliases = sorted(aliases.items(), key=lambda item: len(item[0]), reverse=True)
+    result: list[str] = []
+    for term in terms:
+        normalized = fold(term)
+        occupied: list[tuple[int, int]] = []
+        for alias, topic_id in ordered_aliases:
+            for match in re.finditer(rf"(?<!\w){re.escape(alias)}(?!\w)", normalized):
+                start, end = match.span()
+                if any(start < right and end > left for left, right in occupied):
+                    continue
+                occupied.append((start, end))
+                if topic_id not in result:
+                    result.append(topic_id)
+    return result
+
+
 def build_indexes(kb: KnowledgeBase) -> KnowledgeBase:
     """Populate reverse relations from the canonical collections.
 
@@ -72,6 +100,8 @@ def build_indexes(kb: KnowledgeBase) -> KnowledgeBase:
     indexes.topic_to_weeks.clear()
     indexes.course_part_to_chapters.clear()
     indexes.topic_to_resources.clear()
+    indexes.assignment_part_to_topics.clear()
+    indexes.topic_to_assignment_parts.clear()
     kb.topics.clear()
 
     for chapter_id, chapter in kb.chapters.items():
@@ -113,6 +143,14 @@ def build_indexes(kb: KnowledgeBase) -> KnowledgeBase:
     for resource_id, annotation in kb.resource_topic_annotations.items():
         for topic_id in annotation.get("topics", []):
             _append_unique(indexes.topic_to_resources, topic_id, resource_id)
+            kb.topics.setdefault(topic_id, {"id": topic_id, "aliases": []})
+
+    for part_id, part in kb.assignment_parts.items():
+        terms = [part.get("title", ""), *part.get("requirements", [])]
+        topic_ids = _assignment_component_ids(terms)
+        indexes.assignment_part_to_topics[part_id] = topic_ids
+        for topic_id in topic_ids:
+            _append_unique(indexes.topic_to_assignment_parts, topic_id, part_id)
             kb.topics.setdefault(topic_id, {"id": topic_id, "aliases": []})
 
     return kb

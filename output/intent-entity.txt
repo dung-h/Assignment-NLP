@@ -3,3 +3,4 @@ GET_SCHEDULE | {'week': ['WEEK_03']}
 GET_TOPIC | {'topic': ['CFG']}
 GET_RULE | {'regulation': ['LLM_RAG']}
 GET_INSTRUCTOR | {'course': ['CO3085']}
+UNKNOWN | {}

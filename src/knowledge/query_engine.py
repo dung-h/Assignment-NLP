@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from src.contracts import RetrievalResult
-from src.semantics.normalizer import fold
 from src.semantics.semantic_query_validator import SemanticQueryValidator
 
 
@@ -194,28 +193,39 @@ class QueryEngine:
             return self._found(values, sources)
 
         if q.attribute == "contains_component" and "topic" in q.entities:
-            selected_parts = assignment_parts or [
-                part_id
-                for assignment_id in assignment_ids
-                for part_id in self.kb.assignments.get(assignment_id, {}).get(
-                    "parts", []
-                )
-            ]
-            records = [
-                self.kb.assignment_parts[part_id]
-                for part_id in selected_parts
-                if part_id in self.kb.assignment_parts
-            ]
-            blob = fold(" ".join(str(record) for record in records))
-            value = all(
-                fold(topic_id.replace("_", " ")) in blob
-                or (topic_id == "PARSING" and "parser" in blob)
-                for topic_id in q.entities["topic"]
-            )
-            source_id = assignment_ids[0] if assignment_ids else "BTL01"
-            return self._found(value, [f"assignments:{source_id}"])
+            return self._assignment_contains_component(q, assignment_ids, assignment_parts)
 
         return self._not_found()
+
+    def _assignment_contains_component(self, q, assignment_ids, assignment_parts):
+        # A nonexistent target is missing data, not a grounded negative.
+        if any(identifier not in self.kb.assignments for identifier in assignment_ids):
+            return self._not_found()
+
+        selected_parts = self._unique(assignment_parts or [
+            part_id
+            for assignment_id in assignment_ids
+            for part_id in self.kb.assignments[assignment_id].get("parts", [])
+        ])
+        if not selected_parts:
+            return self._not_found()
+
+        components: set[str] = set()
+        for part_id in selected_parts:
+            part = self.kb.assignment_parts.get(part_id)
+            if not part or part_id not in self.kb.indexes.assignment_part_to_topics:
+                return self._not_found()
+            parent_id = part.get("assignment_id")
+            if (
+                parent_id not in assignment_ids
+                or part_id not in self.kb.assignments[parent_id].get("parts", [])
+            ):
+                return self._not_found()
+            components.update(self.kb.indexes.assignment_part_to_topics[part_id])
+
+        value = all(topic_id in components for topic_id in q.entities["topic"])
+        source_ids = selected_parts if assignment_parts else self._unique(assignment_ids)
+        return self._found(value, [f"assignments:{identifier}" for identifier in source_ids])
 
     def _handle_get_deadline(self, q):
         identifiers = []

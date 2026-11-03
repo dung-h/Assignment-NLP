@@ -1,0 +1,404 @@
+version: 1
+scope: grammar_v0
+target_turns: 84
+scope_frames:
+  - ASK_COURSE_ATTRIBUTE
+  - ASK_COURSE_PARTS
+  - ASK_EXAM_ATTRIBUTE
+  - ASK_INSTRUCTOR
+  - ASK_WEEK_CONTENT
+  - ASK_WEEK_OF_CHAPTER
+  - ASK_WEEK_OF_TOPIC
+  - ASK_CHAPTER_CONTENT
+  - ASK_CHAPTER_BY_TOPIC
+  - ASK_TOPIC_OF_CHAPTER
+  - ASK_TOPIC_EXISTENCE_IN_CHAPTER
+  - ASK_ASSIGNMENT_INFO
+  - ASK_ASSIGNMENT_PART_INFO
+  - ASK_ASSIGNMENT_COMPONENT_EXISTENCE
+  - ASK_ASSIGNMENT_OUTPUTS
+  - ASK_ASSIGNMENT_TEAM_SIZE
+  - ASK_ASSIGNMENT_DEADLINE
+  - ASK_REGULATION
+  - ASK_PERMISSION
+  - ASK_RESOURCE_BY_TOPIC
+  - ASK_RESOURCE_BY_CHAPTER
+  - ASK_LO_DESCRIPTION
+  - ASK_LO_RELATED_CONTENT
+  - ASK_CHAPTER_BY_LO
+cases:
+  - id: G001
+    split: development
+    group: independent
+    query: "Môn NLP có bao nhiêu tín chỉ?"
+    provenance: data/raw/course_info.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_COURSE_ATTRIBUTE, tree: non_empty}
+      semantic: {intent: GET_COURSE_INFO, entities: {course: [CO3085]}, attribute: credits, answer_mode: VALUE}
+      retrieval: {status: FOUND, values: [3], sources: [course_info:CO3085]}
+      answer: {contains: ["3 tín chỉ", "course_info:CO3085"]}
+  - id: G002
+    split: held_out
+    group: independent
+    query: "Môn học gồm những phần nào?"
+    provenance: data/raw/course_info.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_COURSE_PARTS, tree: non_empty}
+      semantic: {intent: GET_COURSE_INFO, entities: {}, attribute: parts, answer_mode: LIST}
+      retrieval: {status: FOUND, values_include: ["Part I - Syntactic Processing", "Part II - Semantic Interpretation", "Part III - Context and World Knowledge"], sources: [course_info:CO3085]}
+      answer: {contains: ["Part I - Syntactic Processing", "course_info:CO3085"]}
+  - id: G003
+    split: development
+    group: independent
+    query: "Midterm bao nhiêu phút?"
+    provenance: data/raw/course_info.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_EXAM_ATTRIBUTE, tree: non_empty}
+      semantic: {intent: GET_COURSE_INFO, entities: {exam: [MIDTERM]}, attribute: duration, answer_mode: VALUE}
+      retrieval: {status: FOUND, values: [60], sources: [course_info:CO3085]}
+      answer: {contains: ["60 phút", "course_info:CO3085"]}
+  - id: G004
+    split: held_out
+    group: independent
+    query: "Ai dạy môn NLP?"
+    provenance: data/raw/course_info.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_INSTRUCTOR, tree: non_empty}
+      semantic: {intent: GET_INSTRUCTOR, entities: {course: [CO3085]}, attribute: name, answer_mode: LIST}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["không tìm thấy thông tin giảng viên"]}
+  - id: G005
+    split: development
+    group: independent
+    query: "Tuần 3 học gì?"
+    provenance: data/raw/schedule.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_WEEK_CONTENT, tree: non_empty}
+      semantic: {intent: GET_SCHEDULE, entities: {week: [WEEK_03]}, attribute: topics, answer_mode: LIST}
+      retrieval: {status: FOUND, values_include: ["context-free grammar", "probabilistic context-free grammar"], sources: [schedule:WEEK_03]}
+      answer: {contains: ["context-free grammar", "schedule:WEEK_03"]}
+  - id: G006
+    split: held_out
+    group: independent
+    query: "Chương 4 học vào tuần nào?"
+    provenance: data/raw/schedule.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_WEEK_OF_CHAPTER, tree: non_empty}
+      semantic: {intent: GET_SCHEDULE, entities: {chapter: [CH04]}, attribute: week, answer_mode: LIST}
+      retrieval: {status: FOUND, values: [WEEK_04, WEEK_05], sources: [schedule:WEEK_04, schedule:WEEK_05]}
+      answer: {contains: [WEEK_04, WEEK_05, "schedule:WEEK_04"]}
+  - id: G007
+    split: development
+    group: independent
+    query: "PCFG được học khi nào?"
+    provenance: [data/raw/schedule.txt, data/raw/topics.txt]
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_WEEK_OF_TOPIC, tree: non_empty}
+      semantic: {intent: GET_SCHEDULE, entities: {topic: [PCFG]}, attribute: week, answer_mode: LIST}
+      retrieval: {status: FOUND, values: [WEEK_03, WEEK_07], sources: [schedule:WEEK_03, schedule:WEEK_07]}
+      answer: {contains: [WEEK_03, WEEK_07]}
+  - id: G008
+    split: held_out
+    group: independent
+    query: "Chương 12 nói về gì?"
+    provenance: data/raw/topics.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_CHAPTER_CONTENT, tree: non_empty}
+      semantic: {intent: GET_TOPIC, entities: {chapter: [CH12]}, attribute: summary, answer_mode: VALUE}
+      retrieval: {status: FOUND, values_include: ["The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora."], sources: [topics:CH12]}
+      answer: {contains: ["local discourse context", "topics:CH12"]}
+  - id: G009
+    split: development
+    group: independent
+    query: "Chương nào nói về CFG?"
+    provenance: data/raw/topics.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_CHAPTER_BY_TOPIC, tree: non_empty}
+      semantic: {intent: GET_TOPIC, entities: {topic: [CFG]}, attribute: chapter, answer_mode: LIST}
+      retrieval: {status: FOUND, values: [CH03], sources: [topics:CH03]}
+      answer: {contains: [CH03, "topics:CH03"]}
+  - id: G010
+    split: held_out
+    group: independent
+    query: "Chương 10 có những phương pháp gì?"
+    provenance: data/raw/topics.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_TOPIC_OF_CHAPTER, tree: non_empty}
+      semantic: {intent: GET_TOPIC, entities: {chapter: [CH10]}, attribute: topics, answer_mode: LIST}
+      retrieval: {status: FOUND, values_include: ["10.1 Grammatical relations", "10.4 Semantically driven parsing techniques"], sources: [topics:CH10]}
+      answer: {contains: ["10.1 Grammatical relations", "topics:CH10"]}
+  - id: G011
+    split: development
+    group: independent
+    query: "Chương 11 có question answering không?"
+    provenance: data/raw/topics.txt
+    expected:
+      parser: {valid: true, sentence_type: YES_NO_QUESTION, query_frame: ASK_TOPIC_EXISTENCE_IN_CHAPTER, tree: non_empty}
+      semantic: {intent: GET_TOPIC, entities: {chapter: [CH11], topic: [QUESTION_ANSWERING]}, attribute: contains_topic, answer_mode: BOOLEAN}
+      retrieval: {status: FOUND, values: [true], sources: [topics:CH11]}
+      answer: {contains: ["Có.", "topics:CH11"]}
+  - id: G012
+    split: held_out
+    group: independent
+    query: "Bài tập lớn yêu cầu xây dựng những gì?"
+    provenance: data/raw/assignments.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_INFO, tree: non_empty}
+      semantic: {intent: GET_ASSIGNMENT, entities: {assignment: [BTL01]}, attribute: goal, answer_mode: VALUE}
+      retrieval: {status: FOUND, values_include: ["Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering."], sources: [assignments:BTL01]}
+      answer: {contains: ["pipeline NLP", "assignments:BTL01"]}
+  - id: G013
+    split: development
+    group: independent
+    query: "Phần I của bài tập lớn là gì?"
+    provenance: data/raw/assignments.txt
+    known_failure: {owner: Person 1/2, reason: "Rule ordering and Roman-part normalization currently map this question to the assignment goal instead of BTL_PART_1 title."}
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_PART_INFO, tree: non_empty}
+      semantic: {intent: GET_ASSIGNMENT, entities: {assignment_part: [BTL_PART_1]}, attribute: title, answer_mode: VALUE}
+      retrieval: {status: FOUND, values: ["Grammar and Parser"], sources: [assignments:BTL_PART_1]}
+      answer: {contains: ["Grammar and Parser", "assignments:BTL_PART_1"]}
+  - id: G014
+    split: held_out
+    group: independent
+    query: "Bài tập lớn có phần parser không?"
+    provenance: data/raw/assignments.txt
+    expected:
+      parser: {valid: true, sentence_type: YES_NO_QUESTION, query_frame: ASK_ASSIGNMENT_COMPONENT_EXISTENCE, tree: non_empty}
+      semantic: {intent: GET_ASSIGNMENT, entities: {assignment: [BTL01], topic: [PARSING]}, attribute: contains_component, answer_mode: BOOLEAN}
+      retrieval: {status: FOUND, values: [true], sources: [assignments:BTL01]}
+      answer: {contains: ["Có.", "assignments:BTL01"]}
+  - id: G015
+    split: development
+    group: independent
+    query: "Phần I cần xuất file gì?"
+    provenance: data/raw/assignments.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_OUTPUTS, tree: non_empty}
+      semantic: {intent: GET_ASSIGNMENT, entities: {assignment_part: [BTL_PART_1]}, attribute: outputs, answer_mode: LIST}
+      retrieval: {status: FOUND, values: [output/grammar.txt, output/samples.txt, output/parse-results.txt], sources: [assignments:BTL_PART_1]}
+      answer: {contains: [output/grammar.txt, output/parse-results.txt, "assignments:BTL_PART_1"]}
+  - id: G016
+    split: held_out
+    group: independent
+    query: "BTL bao nhiêu người?"
+    provenance: data/raw/assignments.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_TEAM_SIZE, tree: non_empty}
+      semantic: {intent: GET_ASSIGNMENT, entities: {}, attribute: team_size, answer_mode: VALUE}
+      retrieval: {status: FOUND, values: ["3-4 students"], sources: [assignments:BTL01]}
+      answer: {contains: ["3-4 students", "assignments:BTL01"]}
+  - id: G017
+    split: development
+    group: independent
+    query: "Deadline bài tập lớn khi nào?"
+    provenance: data/raw/assignments.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_DEADLINE, tree: non_empty}
+      semantic: {intent: GET_DEADLINE, entities: {assignment: [BTL01]}, attribute: date, answer_mode: VALUE}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["không có deadline chính thức"], not_contains: ["202"]}
+  - id: G018
+    split: held_out
+    group: independent
+    query: "Quy định về sử dụng AI là gì?"
+    provenance: data/raw/regulations.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_REGULATION, tree: non_empty}
+      semantic: {intent: GET_RULE, entities: {regulation: [AI_USAGE]}, attribute: policy_text, answer_mode: VALUE}
+      retrieval: {status: FOUND, values_include: ["Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo quy định của môn học."], sources: [regulations:AI_USAGE]}
+      answer: {contains: ["khai báo việc sử dụng AI", "regulations:AI_USAGE"]}
+  - id: G019
+    split: development
+    group: independent
+    query: "Có được dùng LLM/RAG không?"
+    provenance: data/raw/regulations.txt
+    expected:
+      parser: {valid: true, sentence_type: YES_NO_QUESTION, query_frame: ASK_PERMISSION, tree: non_empty}
+      semantic: {intent: GET_RULE, entities: {regulation: [LLM_RAG]}, attribute: permission, answer_mode: BOOLEAN}
+      retrieval: {status: FOUND, values: [true], sources: [regulations:LLM_RAG]}
+      answer: {contains: ["Có.", "regulations:LLM_RAG"]}
+  - id: G020
+    split: held_out
+    group: independent
+    query: "Tài liệu về statistical NLP là gì?"
+    provenance: [data/raw/resources.txt, data/annotations/resource_topics.yaml]
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_RESOURCE_BY_TOPIC, tree: non_empty}
+      semantic: {intent: GET_RESOURCE, entities: {topic: [STATISTICAL_NLP]}, attribute: resource, answer_mode: LIST}
+      retrieval: {status: FOUND, values: ["Introduction to Natural Language Processing", "Foundation of Statistical Natural Language Processing"], sources: [resources:RES02, resources:RES04]}
+      answer: {contains: ["Foundation of Statistical Natural Language Processing", "resources:RES04"]}
+  - id: G021
+    split: development
+    group: independent
+    query: "Tài liệu cho chương 3 là gì?"
+    provenance: data/raw/resources.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_RESOURCE_BY_CHAPTER, tree: non_empty}
+      semantic: {intent: GET_RESOURCE, entities: {chapter: [CH03]}, attribute: resource, answer_mode: LIST}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["không tìm thấy thông tin"]}
+  - id: G022
+    split: held_out
+    group: independent
+    query: "L.O.2.5 là gì?"
+    provenance: data/raw/course_info.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_LO_DESCRIPTION, tree: non_empty}
+      semantic: {intent: GET_LO, entities: {learning_outcome: [LO2.5]}, attribute: description, answer_mode: VALUE}
+      retrieval: {status: FOUND, values_include: ["Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu."], sources: [course_info:LO2.5]}
+      answer: {contains: ["LO2.5", "xác suất", "course_info:LO2.5"]}
+  - id: G023
+    split: development
+    group: independent
+    query: "L.O.4.2 liên quan đến nội dung nào?"
+    provenance: data/raw/course_info.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_LO_RELATED_CONTENT, tree: non_empty}
+      semantic: {intent: GET_LO, entities: {learning_outcome: [LO4.2]}, attribute: related_content, answer_mode: LIST}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["không tìm thấy thông tin"]}
+  - id: G024
+    split: held_out
+    group: independent
+    query: "L.O.2.5 nằm ở chương nào?"
+    provenance: data/raw/course_info.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_CHAPTER_BY_LO, tree: non_empty}
+      semantic: {intent: GET_LO, entities: {learning_outcome: [LO2.5]}, attribute: chapter, answer_mode: LIST}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["không tìm thấy thông tin"]}
+  - id: G025
+    split: development
+    group: independent
+    query: "BTL có phần hỏi đáp không?"
+    provenance: data/raw/assignments.txt
+    expected:
+      parser: {valid: true, sentence_type: YES_NO_QUESTION, query_frame: ASK_ASSIGNMENT_COMPONENT_EXISTENCE, tree: non_empty}
+      semantic: {intent: GET_ASSIGNMENT, entities: {assignment: [BTL01], topic: [QUESTION_ANSWERING]}, attribute: contains_component, answer_mode: BOOLEAN}
+      retrieval: {status: FOUND, values: [true], sources: [assignments:BTL01]}
+      answer: {contains: ["Có.", "assignments:BTL01"]}
+  - id: G026
+    split: held_out
+    group: independent
+    query: "Quy định về thư viện ngoài là gì?"
+    provenance: data/raw/regulations.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_REGULATION, tree: non_empty}
+      semantic: {intent: GET_RULE, entities: {regulation: [EXTERNAL_LIBRARIES]}, attribute: policy_text, answer_mode: VALUE}
+      retrieval: {status: FOUND, values_include: ["Được phép sử dụng thư viện công khai nếu tuân thủ yêu cầu của bài tập."], sources: [regulations:EXTERNAL_LIBRARIES]}
+      answer: {contains: ["thư viện công khai", "regulations:EXTERNAL_LIBRARIES"]}
+  - id: G027
+    split: development
+    group: independent
+    query: "Tài liệu liên quan đến Python NLP là gì?"
+    provenance: [data/raw/resources.txt, data/annotations/resource_topics.yaml]
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_RESOURCE_BY_TOPIC, tree: non_empty}
+      semantic: {intent: GET_RESOURCE, entities: {topic: [PYTHON_NLP]}, attribute: resource, answer_mode: LIST}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["không tìm thấy thông tin"]}
+  - id: G028
+    split: held_out
+    group: independent
+    query: "Hôm nay ở TP.HCM có mưa không?"
+    provenance: data/raw/00_README.txt
+    expected:
+      parser: {valid: false, sentence_type: null, query_frame: null, slots: {}, tree: empty}
+      semantic: {intent: UNKNOWN, entities: {}, attribute: null, answer_mode: VALUE}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["ngoài phạm vi Course Assistant"]}
+  - id: G029
+    split: development
+    group: independent
+    query: "Ai là tổng thống của Pháp?"
+    provenance: data/raw/00_README.txt
+    expected:
+      parser: {valid: false, sentence_type: null, query_frame: null, slots: {}, tree: empty}
+      semantic: {intent: UNKNOWN, entities: {}, attribute: null, answer_mode: VALUE}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["ngoài phạm vi Course Assistant"]}
+  - id: G030
+    split: held_out
+    group: independent
+    query: "Hãy giải bài tập xác suất này giúp tôi."
+    provenance: data/raw/00_README.txt
+    expected:
+      parser: {valid: false, sentence_type: null, query_frame: null, slots: {}, tree: empty}
+      semantic: {intent: UNKNOWN, entities: {}, attribute: null, answer_mode: VALUE}
+      retrieval: {status: NOT_FOUND, values: [], sources: []}
+      answer: {contains: ["ngoài phạm vi Course Assistant"]}
+  - id: G031
+    split: development
+    group: context
+    conversation_id: C01
+    turn: 1
+    query: "Chương 4 nói về gì?"
+    provenance: data/raw/topics.txt
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_CHAPTER_CONTENT, tree: non_empty}
+      semantic: {intent: GET_TOPIC, entities: {chapter: [CH04]}, attribute: summary, answer_mode: VALUE}
+      retrieval: {status: FOUND, sources: [topics:CH04]}
+      answer: {contains: ["CH04", "topics:CH04"]}
+  - id: G032
+    split: development
+    group: context
+    conversation_id: C01
+    turn: 2
+    query: "Nó có liên quan đến parsing không?"
+    provenance: data/raw/topics.txt
+    expected:
+      parser: {valid: true, sentence_type: YES_NO_QUESTION, query_frame: ASK_TOPIC_EXISTENCE_IN_CHAPTER, tree: non_empty}
+      semantic: {intent: GET_TOPIC, entities: {chapter: [CH04], topic: [PARSING]}, attribute: contains_topic, answer_mode: BOOLEAN}
+      retrieval: {status: FOUND, values: [true], sources: [topics:CH04]}
+      answer: {contains: ["Có.", "topics:CH04"]}
+  - id: G033
+    split: held_out
+    group: context
+    conversation_id: C02
+    turn: 1
+    query: "Chương 11 có hỏi đáp không?"
+    provenance: data/raw/topics.txt
+    expected:
+      parser: {valid: true, sentence_type: YES_NO_QUESTION, query_frame: ASK_TOPIC_EXISTENCE_IN_CHAPTER, tree: non_empty}
+      semantic: {intent: GET_TOPIC, entities: {chapter: [CH11], topic: [QUESTION_ANSWERING]}, attribute: contains_topic, answer_mode: BOOLEAN}
+      retrieval: {status: FOUND, values: [true], sources: [topics:CH11]}
+      answer: {contains: ["Có.", "topics:CH11"]}
+  - id: G034
+    split: held_out
+    group: context
+    conversation_id: C02
+    turn: 2
+    query: "Còn chương sau?"
+    provenance: data/raw/topics.txt
+    known_failure: {owner: Person 1/2, reason: "No grammar/reference rule currently preserves the prior predicate while advancing CH11 to CH12."}
+    expected:
+      parser: {valid: true, sentence_type: YES_NO_QUESTION, query_frame: ASK_TOPIC_EXISTENCE_IN_CHAPTER, tree: non_empty}
+      semantic: {intent: GET_TOPIC, entities: {chapter: [CH12], topic: [QUESTION_ANSWERING]}, attribute: contains_topic, answer_mode: BOOLEAN}
+      retrieval: {status: FOUND, values: [false], sources: [topics:CH12]}
+      answer: {contains: ["Không.", "topics:CH12"]}
+  - id: G035
+    split: development
+    group: context
+    conversation_id: C03
+    turn: 1
+    query: "BTL có phần parser không?"
+    provenance: data/raw/assignments.txt
+    expected:
+      parser: {valid: true, sentence_type: YES_NO_QUESTION, query_frame: ASK_ASSIGNMENT_COMPONENT_EXISTENCE, tree: non_empty}
+      semantic: {intent: GET_ASSIGNMENT, entities: {assignment: [BTL01], topic: [PARSING]}, attribute: contains_component, answer_mode: BOOLEAN}
+      retrieval: {status: FOUND, values: [true], sources: [assignments:BTL01]}
+      answer: {contains: ["Có.", "assignments:BTL01"]}
+  - id: G036
+    split: development
+    group: context
+    conversation_id: C03
+    turn: 2
+    query: "Phần này cần xuất file gì?"
+    provenance: data/raw/assignments.txt
+    known_failure: {owner: Person 2, reason: "Reference resolution keeps a topic instead of BTL_PART_1, producing an invalid SemanticQuery for outputs."}
+    expected:
+      parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_OUTPUTS, tree: non_empty}
+      semantic: {intent: GET_ASSIGNMENT, entities: {assignment_part: [BTL_PART_1]}, attribute: outputs, answer_mode: LIST}
+      retrieval: {status: FOUND, values: [output/grammar.txt, output/samples.txt, output/parse-results.txt], sources: [assignments:BTL_PART_1]}
+      answer: {contains: [output/grammar.txt, "assignments:BTL_PART_1"]}
