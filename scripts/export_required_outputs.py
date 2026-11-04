@@ -15,7 +15,6 @@ def write_output(path, text):
     path.write_text(text, encoding="utf-8", newline="\n")
 
 
-bot = CourseAssistant()
 queries = [
     line.strip()
     for line in (ROOT / "input" / "sentences.txt").read_text(
@@ -23,15 +22,19 @@ queries = [
     ).splitlines()
     if line.strip()
 ]
-rows = [bot.ask(query) for query in queries]
+# input/sentences.txt is a set of independent questions, not one dialogue.
+rows = [CourseAssistant().ask(query) for query in queries]
 
 # One supported two-turn dialogue is exported separately for Part III.  The
 # full context coverage, including failures, is reported in evaluation.txt.
-dialogue_bot = CourseAssistant()
-dialogue_rows = [
-    dialogue_bot.ask("Chương 4 nói về gì?"),
-    dialogue_bot.ask("Nó có liên quan đến parsing không?"),
-]
+dialogue_rows = []
+for questions in (
+    ['Chương 4 nói về gì?', 'Nó có liên quan đến parsing không?'],
+    ['Chương 11 có hỏi đáp không?', 'Còn chương sau?'],
+    ['Bài tập lớn có phần parser không?', 'Phần này cần xuất file gì?'],
+):
+    dialogue_bot = CourseAssistant()
+    dialogue_rows.append([dialogue_bot.ask(query) for query in questions])
 write_output(
     ROOT / "output" / "grammar.txt",
     (ROOT / "data" / "grammar" / "grammar_v1.yaml").read_text(encoding="utf-8"),
@@ -39,7 +42,7 @@ write_output(
 write_output(ROOT / "output" / "samples.txt", "\n".join(generate()) + "\n")
 write_output(
     ROOT / "output" / "parse-results.txt",
-    "\n\n".join(row["person_1_parser_result"]["tree"] or "()" for row in rows),
+    "\n\n".join(row["person_1_parser_result"]["tree"] or "()" for row in rows) + '\n',
 )
 write_output(
     ROOT / "output" / "semantic.txt",

@@ -1,90 +1,87 @@
-# PERSON 1 owns this file. Ordered rules: first matching rule wins.
-# v0 implements a representative executable subset of the frozen QueryFrame vocabulary.
+# Executable finite phrase grammar shared by parser and generator.
+# Each production alternative is a sequence of symbols or literal phrases.
+version: 2
+start: S
+lexicon:
+  COURSE: {slot: course, pattern: 'NLP|CO3085', examples: ['NLP', 'CO3085']}
+  CREDIT_CUE: {slot: attribute_cue, pattern: 'bao nhiêu tín chỉ|mấy tín chỉ|mấy tín|tín chỉ', examples: ['bao nhiêu tín chỉ', 'mấy tín chỉ']}
+  COURSE_PREFIX: {pattern: 'môn học|môn NLP|môn', examples: ['môn học', 'môn NLP']}
+  EXAM: {slot: exam, pattern: 'midterm|final', examples: ['Midterm', 'Final']}
+  EXAM_CUE: {slot: attribute_cue, pattern: 'bao nhiêu phút|mấy phút|hình thức|bao nhiêu phần trăm|chiếm bao nhiêu', examples: ['bao nhiêu phút', 'mấy phút', 'hình thức', 'chiếm bao nhiêu']}
+  WEEK: {slot: week, pattern: 'tuần\s*\d+', examples: ['Tuần 3', 'Tuần 4', 'Tuần 15']}
+  CHAPTER: {slot: chapter, pattern: 'chương\s*\d+', examples: ['Chương 3', 'Chương 4', 'Chương 11', 'Chương 12']}
+  CHAPTER_LIST: {slot: chapter, pattern: 'chương\s*\d+(?:\s*(?:và|,)\s*chương\s*\d+)*', examples: ['Chương 4', 'Chương 3 và Chương 6']}
+  TOPIC: {slot: topic, pattern: 'PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing', examples: ['CFG', 'PCFG', 'reference', 'question answering', 'semantic grammar']}
+  BOOLEAN_TOPIC: {slot: topic, pattern: 'question answering|hỏi đáp|parsing|PCFG|CFG', examples: ['hỏi đáp', 'parsing', 'PCFG', 'CFG']}
+  COMPONENT: {slot: topic, pattern: 'parser|hỏi đáp|question answering|RAG', examples: ['parser', 'hỏi đáp', 'RAG']}
+  RESOURCE_TOPIC: {slot: topic, pattern: 'statistical NLP|Python NLP|PCFG|CFG', examples: ['statistical NLP', 'Python NLP', 'CFG']}
+  ASSIGNMENT: {slot: assignment, pattern: 'bài tập lớn|BTL', examples: ['Bài tập lớn', 'BTL']}
+  ASSIGNMENT_NAME: {pattern: 'bài tập lớn|BTL', examples: ['bài tập lớn', 'BTL']}
+  PART: {slot: assignment_part, pattern: 'phần\s*(?:IV|III|II|I|[1-4])', examples: ['Phần I', 'Phần II', 'Phần III', 'Phần IV', 'Phần 1']}
+  REGULATION: {slot: regulation, pattern: 'sử dụng AI|AI|source code|LLM/RAG|thư viện ngoài', examples: ['sử dụng AI', 'source code', 'thư viện ngoài', 'LLM/RAG']}
+  PERMISSION: {slot: regulation, pattern: 'dùng LLM/RAG|sử dụng AI|dùng AI|dùng thư viện ngoài|chia sẻ giữa các nhóm', examples: ['dùng LLM/RAG', 'dùng thư viện ngoài', 'chia sẻ giữa các nhóm']}
+  LO: {slot: learning_outcome, pattern: 'L\.?O\.?\s*\d+(?:\.\d+)?', examples: ['L.O.2.5', 'LO4.2']}
+  CHAPTER_REF: {slot: reference, pattern: 'nó|chương này|chương sau|chương trước', examples: ['Nó', 'chương này', 'chương sau']}
+  PART_REF: {slot: reference, pattern: 'phần này', examples: ['Phần này']}
+  CONTENT_REF: {slot: reference, pattern: 'nội dung này', examples: ['Nội dung này']}
+  RELATIVE_REF: {slot: reference, pattern: 'chương sau|chương trước', examples: ['chương sau', 'chương trước']}
+productions:
+  COURSE_SUBJECT: [[COURSE], ['Môn', COURSE]]
+  CREDIT_QUERY: [[COURSE_SUBJECT, 'có', CREDIT_CUE], [COURSE_SUBJECT, CREDIT_CUE]]
+  COURSE_PARTS: [[COURSE_PREFIX, 'gồm những phần nào'], [COURSE_PREFIX, 'có mấy phần'], [COURSE_PREFIX, 'có những phần nào']]
+  EXAM_QUERY: [[EXAM, EXAM_CUE]]
+  INSTRUCTOR_QUERY: [['Ai dạy', COURSE_SUBJECT], ['Giảng viên', COURSE_SUBJECT, 'là ai'], ['Giảng viên là ai'], ['Ai dạy']]
+  WEEK_CONTENT: [[WEEK, 'học gì'], [WEEK, 'học nội dung gì'], [WEEK, 'có nội dung gì']]
+  WEEK_OF_CHAPTER: [[CHAPTER_LIST, 'học vào tuần nào'], [CHAPTER_LIST, 'học tuần mấy'], [CHAPTER_LIST, 'vào tuần nào']]
+  WEEK_OF_TOPIC: [[TOPIC, 'học tuần nào'], [TOPIC, 'học tuần mấy'], [TOPIC, 'được học khi nào'], [TOPIC, 'tuần nào']]
+  CHAPTER_CONTENT: [[CHAPTER, 'nói về gì'], [CHAPTER, 'học gì'], [CHAPTER, 'có nội dung gì']]
+  CHAPTER_IMPERATIVE: [['Cho biết', CHAPTER, 'nói về gì'], ['Hãy cho biết', CHAPTER, 'nội dung']]
+  CHAPTER_BY_TOPIC: [['Chương nào nói về', TOPIC], ['Chương nào học về', TOPIC], ['Chương nào liên quan đến', TOPIC], [TOPIC, 'được học ở đâu'], [TOPIC, 'nằm ở chương nào']]
+  CHAPTER_TOPICS: [[CHAPTER, 'có những phương pháp gì'], [CHAPTER, 'có những chủ đề nào'], [CHAPTER, 'gồm những gì']]
+  TOPIC_TEST: [[CHAPTER_SUBJECT, 'có', BOOLEAN_TOPIC, 'không'], [CHAPTER_SUBJECT, 'có liên quan đến', BOOLEAN_TOPIC, 'không'], [CHAPTER_SUBJECT, 'liên quan đến', BOOLEAN_TOPIC, 'không']]
+  CHAPTER_SUBJECT: [[CHAPTER], [CHAPTER_REF]]
+  PART_INFO: [[PART, 'của', ASSIGNMENT_NAME, 'là gì'], [PART, ASSIGNMENT_NAME, 'là gì'], [PART, 'của', ASSIGNMENT_NAME, 'yêu cầu gì']]
+  ASSIGNMENT_INFO: [[ASSIGNMENT, 'là gì'], [ASSIGNMENT, 'yêu cầu xây dựng những gì'], ['Mục tiêu', ASSIGNMENT, 'là gì'], [ASSIGNMENT, 'có mục tiêu gì']]
+  COMPONENT_TEST: [[ASSIGNMENT, 'có phần', COMPONENT, 'không'], [ASSIGNMENT, 'có', COMPONENT, 'không']]
+  PART_OUTPUTS: [[PART_SUBJECT, 'cần xuất file gì'], [PART_SUBJECT, 'xuất file gì'], [PART_SUBJECT, 'output gì'], [PART_SUBJECT, 'cần output gì']]
+  PART_SUBJECT: [[PART], [PART_REF]]
+  TEAM_SIZE: [[ASSIGNMENT_NAME, 'nhóm mấy người'], [ASSIGNMENT_NAME, 'bao nhiêu người']]
+  DEADLINE_QUERY: [['Deadline', ASSIGNMENT, 'khi nào'], ['Hạn nộp', ASSIGNMENT, 'ngày nào'], ['Hạn nộp', ASSIGNMENT, 'khi nào']]
+  REGULATION_QUERY: [['Quy định về', REGULATION, 'là gì'], ['Quy định', REGULATION, 'như thế nào']]
+  PERMISSION_QUERY: [['Có được', PERMISSION, 'không'], ['Được', PERMISSION, 'không']]
+  RESOURCE_BY_TOPIC: [['Tài liệu về', RESOURCE_TOPIC, 'là gì'], ['Tài liệu tham khảo về', RESOURCE_TOPIC, 'là gì'], ['Tài liệu nào liên quan đến', RESOURCE_TOPIC], ['Tài liệu liên quan đến', RESOURCE_TOPIC, 'là gì'], ['Tài liệu nào nói về', RESOURCE_TOPIC]]
+  RESOURCE_BY_CHAPTER: [['Tài liệu cho', CHAPTER_RESOURCE_SUBJECT, 'là gì'], ['Tài liệu của', CHAPTER_RESOURCE_SUBJECT, 'là gì'], ['Tài liệu nào cho', CHAPTER_RESOURCE_SUBJECT]]
+  CHAPTER_RESOURCE_SUBJECT: [[CHAPTER], [CHAPTER_REF]]
+  LO_DESCRIPTION: [[LO, 'là gì'], [LO, 'học về gì'], [LO, 'nói về gì']]
+  LO_CONTENT: [[LO, 'liên quan đến nội dung nào'], [LO, 'liên quan nội dung gì']]
+  CHAPTER_BY_LO: [[LO_SUBJECT, 'nằm ở chương nào'], [LO_SUBJECT, 'thuộc chương nào']]
+  LO_SUBJECT: [[LO], [CONTENT_REF]]
+  ELLIPSIS: [['Còn', RELATIVE_REF]]
 rules:
-  - frame: ASK_COURSE_ATTRIBUTE
-    sentence_type: WH_QUESTION
-    patterns:
-      - '(?i)(?:môn\s+)?(?P<course>NLP|CO3085).*?(?P<attr>bao nhiêu tín chỉ|mấy tín chỉ|mấy tín|tín chỉ)'
-  - frame: ASK_COURSE_PARTS
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)môn(?: học| NLP)? .*?(?:gồm|có).*?(?:phần nào|mấy phần)']
-  - frame: ASK_EXAM_ATTRIBUTE
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<exam>midterm|final).*?(?P<attr>bao nhiêu phút|mấy phút|hình thức|bao nhiêu phần trăm|chiếm bao nhiêu)']
-  - frame: ASK_INSTRUCTOR
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?:ai dạy|giảng viên).*?(?P<course>NLP|CO3085)', '(?i)(?:ai dạy|giảng viên)']
-  - frame: ASK_WEEK_CONTENT
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<week>tuần\s*\d+).*?(?:học gì|học nội dung gì|có nội dung gì)']
-  - frame: ASK_WEEK_OF_CHAPTER
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<chapter>chương\s*\d+(?:\s*(?:và|,)\s*chương\s*\d+)*) .*?(?:tuần nào|tuần mấy|vào tuần nào)']
-  - frame: ASK_WEEK_OF_TOPIC
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<topic>CFG|PCFG|reference|question answering|selectional restriction|semantic grammar).*?(?:tuần mấy|tuần nào|học khi nào)']
-  - frame: ASK_CHAPTER_CONTENT
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<chapter>chương\s*\d+).*?(?:nói về gì|học gì|nội dung.*?gì)']
-  - frame: ASK_CHAPTER_BY_TOPIC
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)chương nào .*?(?:nói về|học về|liên quan đến)\s*(?P<topic>CFG|PCFG|semantic grammar|reference|question answering|selectional restriction|parsing)']
-  - frame: ASK_CHAPTER_BY_TOPIC
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<topic>PCFG|CFG|semantic grammar|reference|question answering|selectional restriction).*?(?:được học ở đâu|nằm ở chương nào)']
-  - frame: ASK_TOPIC_OF_CHAPTER
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<chapter>chương\s*\d+).*?(?:có những phương pháp gì|có những chủ đề nào|gồm những gì)']
-  - frame: ASK_TOPIC_EXISTENCE_IN_CHAPTER
-    sentence_type: YES_NO_QUESTION
-    patterns:
-      - '(?i)(?P<chapter>chương\s*\d+).*?(?:có|liên quan đến).*?(?P<topic>question answering|hỏi đáp|parsing|CFG|PCFG).*?(?:không|\?)?'
-      - '(?i)(?P<reference>nó|chương này).*?(?:có|liên quan đến).*?(?P<topic>question answering|hỏi đáp|parsing|CFG|PCFG).*?(?:không|\?)?'
-  - frame: ASK_ASSIGNMENT_INFO
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<assignment>bài tập lớn|BTL).*?(?:là gì|mục tiêu.*?gì|yêu cầu xây dựng những gì)']
-  - frame: ASK_ASSIGNMENT_PART_INFO
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<assignment_part>phần\s*(?:I|II|III|IV|1|2|3|4)).*?(?:bài tập lớn|BTL).*?(?:là gì|yêu cầu gì)']
-  - frame: ASK_ASSIGNMENT_COMPONENT_EXISTENCE
-    sentence_type: YES_NO_QUESTION
-    patterns: ['(?i)(?P<assignment>bài tập lớn|BTL).*?(?:có).*?(?P<topic>parser|hỏi đáp|question answering|RAG).*?(?:không|\?)?']
-  - frame: ASK_ASSIGNMENT_OUTPUTS
-    sentence_type: WH_QUESTION
-    patterns:
-      - '(?i)(?P<assignment_part>phần\s*(?:I|II|III|IV|1|2|3|4)).*?(?:xuất file gì|output gì|cần output gì)'
-      - '(?i)(?P<reference>phần này).*?(?:xuất file gì|output gì|cần output gì)'
-  - frame: ASK_ASSIGNMENT_TEAM_SIZE
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?:bài tập lớn|BTL).*?(?:nhóm mấy người|bao nhiêu người)']
-  - frame: ASK_ASSIGNMENT_DEADLINE
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?:deadline|hạn nộp).*?(?P<assignment>bài tập lớn|BTL).*?(?:khi nào|ngày nào)?']
-  - frame: ASK_REGULATION
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)quy định.*?(?P<regulation>sử dụng AI|AI|source code|LLM/RAG|thư viện ngoài).*?(?:là gì|như thế nào)?']
-  - frame: ASK_PERMISSION
-    sentence_type: YES_NO_QUESTION
-    patterns: ['(?i)có được .*?(?P<regulation>dùng LLM/RAG|sử dụng AI|dùng AI|dùng thư viện ngoài|chia sẻ.*?giữa các nhóm).*?(?:không|\?)?']
-  - frame: ASK_RESOURCE_BY_TOPIC
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)tài liệu.*?(?:về|liên quan đến|nói về)\s*(?P<topic>statistical NLP|Python NLP|CFG|PCFG).*?(?:là gì|nào)?']
-  - frame: ASK_RESOURCE_BY_CHAPTER
-    sentence_type: WH_QUESTION
-    patterns:
-      - '(?i)tài liệu.*?(?:của|cho)\s*(?P<chapter>chương\s*\d+).*?(?:là gì|nào)?'
-      - '(?i)tài liệu.*?(?:của|cho)\s*(?P<reference>chương này).*?(?:là gì|nào)?'
-  - frame: ASK_LO_DESCRIPTION
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<learning_outcome>L\.?O\.?\s*\d+(?:\.\d+)?)\s*(?:là gì|học về gì|nói về gì)']
-  - frame: ASK_LO_RELATED_CONTENT
-    sentence_type: WH_QUESTION
-    patterns: ['(?i)(?P<learning_outcome>L\.?O\.?\s*\d+(?:\.\d+)?).*?(?:liên quan đến nội dung nào|liên quan nội dung gì)']
-  - frame: ASK_CHAPTER_BY_LO
-    sentence_type: WH_QUESTION
-    patterns:
-      - '(?i)(?P<learning_outcome>L\.?O\.?\s*\d+(?:\.\d+)?).*?(?:nằm ở chương nào|thuộc chương nào)'
-      - '(?i)(?P<reference>nội dung này).*?(?:nằm ở chương nào|thuộc chương nào)'
-  - frame: ASK_CHAPTER_CONTENT
-    sentence_type: IMPERATIVE_REQUEST
-    patterns: ['(?i)(?:cho biết|hãy cho biết) .*?(?P<chapter>chương\s*\d+).*?(?:nói về gì|nội dung)']
+  - {frame: ASK_COURSE_ATTRIBUTE, sentence_type: WH_QUESTION, production: CREDIT_QUERY}
+  - {frame: ASK_COURSE_PARTS, sentence_type: WH_QUESTION, production: COURSE_PARTS}
+  - {frame: ASK_EXAM_ATTRIBUTE, sentence_type: WH_QUESTION, production: EXAM_QUERY}
+  - {frame: ASK_INSTRUCTOR, sentence_type: WH_QUESTION, production: INSTRUCTOR_QUERY}
+  - {frame: ASK_WEEK_CONTENT, sentence_type: WH_QUESTION, production: WEEK_CONTENT}
+  - {frame: ASK_WEEK_OF_CHAPTER, sentence_type: WH_QUESTION, production: WEEK_OF_CHAPTER}
+  - {frame: ASK_WEEK_OF_TOPIC, sentence_type: WH_QUESTION, production: WEEK_OF_TOPIC}
+  - {frame: ASK_CHAPTER_CONTENT, sentence_type: WH_QUESTION, production: CHAPTER_CONTENT}
+  - {frame: ASK_CHAPTER_CONTENT, sentence_type: IMPERATIVE_REQUEST, production: CHAPTER_IMPERATIVE}
+  - {frame: ASK_CHAPTER_BY_TOPIC, sentence_type: WH_QUESTION, production: CHAPTER_BY_TOPIC}
+  - {frame: ASK_TOPIC_OF_CHAPTER, sentence_type: WH_QUESTION, production: CHAPTER_TOPICS}
+  - {frame: ASK_TOPIC_EXISTENCE_IN_CHAPTER, sentence_type: YES_NO_QUESTION, production: TOPIC_TEST}
+  - {frame: ASK_ASSIGNMENT_PART_INFO, sentence_type: WH_QUESTION, production: PART_INFO}
+  - {frame: ASK_ASSIGNMENT_INFO, sentence_type: WH_QUESTION, production: ASSIGNMENT_INFO}
+  - {frame: ASK_ASSIGNMENT_COMPONENT_EXISTENCE, sentence_type: YES_NO_QUESTION, production: COMPONENT_TEST}
+  - {frame: ASK_ASSIGNMENT_OUTPUTS, sentence_type: WH_QUESTION, production: PART_OUTPUTS}
+  - {frame: ASK_ASSIGNMENT_TEAM_SIZE, sentence_type: WH_QUESTION, production: TEAM_SIZE}
+  - {frame: ASK_ASSIGNMENT_DEADLINE, sentence_type: WH_QUESTION, production: DEADLINE_QUERY}
+  - {frame: ASK_REGULATION, sentence_type: WH_QUESTION, production: REGULATION_QUERY}
+  - {frame: ASK_PERMISSION, sentence_type: YES_NO_QUESTION, production: PERMISSION_QUERY}
+  - {frame: ASK_RESOURCE_BY_TOPIC, sentence_type: WH_QUESTION, production: RESOURCE_BY_TOPIC}
+  - {frame: ASK_RESOURCE_BY_CHAPTER, sentence_type: WH_QUESTION, production: RESOURCE_BY_CHAPTER}
+  - {frame: ASK_LO_DESCRIPTION, sentence_type: WH_QUESTION, production: LO_DESCRIPTION}
+  - {frame: ASK_LO_RELATED_CONTENT, sentence_type: WH_QUESTION, production: LO_CONTENT}
+  - {frame: ASK_CHAPTER_BY_LO, sentence_type: WH_QUESTION, production: CHAPTER_BY_LO}
+  # Ellipsis is syntactically valid; its frame is inherited by the semantic layer.
+  - {frame: null, sentence_type: WH_QUESTION, production: ELLIPSIS}

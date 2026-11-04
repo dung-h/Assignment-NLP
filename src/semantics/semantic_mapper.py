@@ -1,4 +1,5 @@
 import re
+from copy import deepcopy
 
 from src.contracts import SemanticQuery, ContextState
 from .normalizer import canonical, fold
@@ -55,10 +56,13 @@ class SemanticMapper:
     def _unknown(context):
         return SemanticQuery('UNKNOWN', {}, None, 'VALUE'), context
 
-    def map(self, parsed, context=None):
+    def map(self, parsed, context=None, previous_query=None):
         context = context if context is not None else ContextState()
         if not parsed.valid:
             return self._unknown(context)
+
+        if parsed.query_frame is None:
+            return self._inherit_ellipsis(parsed, context, previous_query)
 
         # Intent, attribute and mode have one source of truth: the shared YAML.
         spec = self.validator.frames.get(parsed.query_frame)
@@ -99,6 +103,24 @@ class SemanticMapper:
 
         context = self._update_context(q, context)
         return q, context
+
+    def _inherit_ellipsis(self, parsed, context, previous):
+        # A syntactic ellipsis contains a reference but no invented predicate.
+        references = parsed.slots.get('reference', [])
+        if previous is None or previous.intent == 'UNKNOWN' or len(references) != 1:
+            return self._unknown(context)
+        if 'chapter' not in previous.entities:
+            return self._unknown(context)
+        resolved = self._resolve_reference(references[0], context, {'chapter'})
+        if resolved is None:
+            return self._unknown(context)
+        query = deepcopy(previous)
+        query.entities['chapter'] = [resolved['id']]
+        try:
+            self.validator.validate(query)
+        except InvalidSemanticQuery:
+            return self._unknown(context)
+        return query, self._update_context(query, context)
 
     def _resolve_reference(self, raw, context, allowed_types=None):
         f = fold(raw)

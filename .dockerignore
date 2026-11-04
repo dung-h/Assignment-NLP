@@ -1,0 +1,11 @@
+.git
+.venv
+**/__pycache__
+.pytest_cache
+dist
+report
+docs
+communication.log
+AGENTS.md
+*.zip
+*.tar.gz

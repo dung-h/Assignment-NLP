@@ -1,18 +1,15 @@
-from pathlib import Path
-import re, yaml
+"""Recognize complete utterances and export their phrase derivation."""
+
+import re
 from nltk.tree import Tree
 from src.contracts import ParserResult
+from .grammar import PhraseGrammar, normalize
 
-ROOT = Path(__file__).resolve().parents[2]
 
 class RuleParser:
     def __init__(self, grammar_path=None):
-        grammar_path = grammar_path or ROOT/'data/grammar/grammar_v1.yaml'
-        self.spec = yaml.safe_load(Path(grammar_path).read_text(encoding='utf-8'))
-        self.rules = [
-            (rule, [re.compile(pattern) for pattern in rule.get('patterns', [])])
-            for rule in self.spec.get('rules', [])
-        ]
+        self.grammar = PhraseGrammar(grammar_path)
+        self.spec = self.grammar.spec
 
     @staticmethod
     def _split_values(slot, raw):
@@ -20,27 +17,20 @@ class RuleParser:
         if slot == 'chapter':
             nums = re.findall(r'(?i)chương\s*(\d+)', raw)
             return [f'Chương {n}' for n in nums] if nums else [raw]
-        return [x.strip() for x in re.split(r'\s+(?:và|hoặc)\s+|\s*,\s*', raw) if x.strip()]
+        return [item.strip() for item in re.split(r'\s+(?:và|hoặc)\s+|\s*,\s*', raw) if item.strip()]
 
-    def parse(self, sentence: str) -> ParserResult:
-        if not isinstance(sentence, str):
+    def parse(self, sentence):
+        if not isinstance(sentence, str) or not sentence.strip():
             return ParserResult(False, None, None, {}, None)
-        s = sentence.strip()
-        if not s:
-            return ParserResult(False, None, None, {}, None)
-        for rule, patterns in self.rules:
-            for pattern in patterns:
-                m = pattern.search(s)
-                if not m: continue
-                slots={}
-                for k,v in m.groupdict().items():
-                    if v is not None and k != 'attr':
-                        slots[k]=self._split_values(k,v)
-                if m.groupdict().get('attr'):
-                    slots['attribute_cue']=[m.group('attr')]
-                children=[]
-                for k, vals in slots.items():
-                    children.append(Tree(k.upper(), vals))
-                tree=Tree('S',[Tree('SENTENCE_TYPE',[rule['sentence_type']]),Tree('QUERY_FRAME',[rule['frame']]),*children])
-                return ParserResult(True, rule['sentence_type'], rule['frame'], slots, tree.pformat(margin=120))
-        return ParserResult(False,None,None,{},None)
+        text = normalize(sentence)
+        for rule, branch, leaves, pattern in self.grammar.rules:
+            match = pattern.fullmatch(text)
+            if match is None:
+                continue
+            derivation, slots = self.grammar.tree(branch, leaves, match, self._split_values)
+            metadata = [Tree('SENTENCE_TYPE', [rule['sentence_type']])]
+            if rule['frame'] is not None:
+                metadata.append(Tree('QUERY_FRAME', [rule['frame']]))
+            tree = Tree('S', [*metadata, derivation])
+            return ParserResult(True, rule['sentence_type'], rule['frame'], slots, tree.pformat(margin=120))
+        return ParserResult(False, None, None, {}, None)

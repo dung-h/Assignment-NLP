@@ -8,9 +8,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.assistant import CourseAssistant
-bot = CourseAssistant()
 rows = [
-    bot.ask(line.strip())
+    CourseAssistant().ask(line.strip())
     for line in (ROOT / "input" / "sentences.txt").read_text(
         encoding="utf-8"
     ).splitlines()

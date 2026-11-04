@@ -1,10 +1,366 @@
+NLP có bao nhiêu tín chỉ?
 Môn NLP có bao nhiêu tín chỉ?
+NLP bao nhiêu tín chỉ?
+Môn NLP bao nhiêu tín chỉ?
+môn học gồm những phần nào?
+môn học có mấy phần?
+môn học có những phần nào?
+Midterm bao nhiêu phút?
+Ai dạy NLP?
+Ai dạy Môn NLP?
+Giảng viên NLP là ai?
+Giảng viên Môn NLP là ai?
+Giảng viên là ai?
+Ai dạy?
 Tuần 3 học gì?
+Tuần 3 học nội dung gì?
+Tuần 3 có nội dung gì?
 Chương 4 học vào tuần nào?
+Chương 4 học tuần mấy?
+Chương 4 vào tuần nào?
+CFG học tuần nào?
+CFG học tuần mấy?
+CFG được học khi nào?
+CFG tuần nào?
+Chương 3 nói về gì?
+Chương 3 học gì?
+Chương 3 có nội dung gì?
+Cho biết Chương 3 nói về gì?
+Hãy cho biết Chương 3 nội dung?
 Chương nào nói về CFG?
-Chương 12 nói về gì?
+Chương nào học về CFG?
+Chương nào liên quan đến CFG?
+CFG được học ở đâu?
+CFG nằm ở chương nào?
+Chương 3 có những phương pháp gì?
+Chương 3 có những chủ đề nào?
+Chương 3 gồm những gì?
+Chương 3 có hỏi đáp không?
+Nó có hỏi đáp không?
+Chương 3 có liên quan đến hỏi đáp không?
+Nó có liên quan đến hỏi đáp không?
+Chương 3 liên quan đến hỏi đáp không?
+Nó liên quan đến hỏi đáp không?
+Phần I của bài tập lớn là gì?
+Phần I bài tập lớn là gì?
+Phần I của bài tập lớn yêu cầu gì?
+Bài tập lớn là gì?
+Bài tập lớn yêu cầu xây dựng những gì?
+Mục tiêu Bài tập lớn là gì?
+Bài tập lớn có mục tiêu gì?
 Bài tập lớn có phần parser không?
+Bài tập lớn có parser không?
+Phần I cần xuất file gì?
+Phần này cần xuất file gì?
+Phần I xuất file gì?
+Phần này xuất file gì?
+Phần I output gì?
+Phần này output gì?
+Phần I cần output gì?
+Phần này cần output gì?
+bài tập lớn nhóm mấy người?
+bài tập lớn bao nhiêu người?
+Deadline Bài tập lớn khi nào?
+Hạn nộp Bài tập lớn ngày nào?
+Hạn nộp Bài tập lớn khi nào?
+Quy định về sử dụng AI là gì?
+Quy định sử dụng AI như thế nào?
 Có được dùng LLM/RAG không?
+Được dùng LLM/RAG không?
+Tài liệu về statistical NLP là gì?
 Tài liệu tham khảo về statistical NLP là gì?
+Tài liệu nào liên quan đến statistical NLP?
+Tài liệu liên quan đến statistical NLP là gì?
+Tài liệu nào nói về statistical NLP?
+Tài liệu cho Chương 3 là gì?
+Tài liệu cho Nó là gì?
+Tài liệu của Chương 3 là gì?
+Tài liệu của Nó là gì?
+Tài liệu nào cho Chương 3?
+Tài liệu nào cho Nó?
 L.O.2.5 là gì?
-Ai dạy môn NLP?
+L.O.2.5 học về gì?
+L.O.2.5 nói về gì?
+L.O.2.5 liên quan đến nội dung nào?
+L.O.2.5 liên quan nội dung gì?
+L.O.2.5 nằm ở chương nào?
+Nội dung này nằm ở chương nào?
+L.O.2.5 thuộc chương nào?
+Nội dung này thuộc chương nào?
+NLP có mấy tín chỉ?
+Môn NLP có mấy tín chỉ?
+NLP mấy tín chỉ?
+Môn NLP mấy tín chỉ?
+môn NLP gồm những phần nào?
+môn NLP có mấy phần?
+môn NLP có những phần nào?
+Midterm mấy phút?
+Ai dạy CO3085?
+Ai dạy Môn CO3085?
+Giảng viên CO3085 là ai?
+Giảng viên Môn CO3085 là ai?
+Tuần 4 học gì?
+Tuần 4 học nội dung gì?
+Tuần 4 có nội dung gì?
+Chương 3 và Chương 6 học vào tuần nào?
+Chương 3 và Chương 6 học tuần mấy?
+Chương 3 và Chương 6 vào tuần nào?
+PCFG học tuần nào?
+PCFG học tuần mấy?
+PCFG được học khi nào?
+PCFG tuần nào?
+Chương 4 nói về gì?
+Chương 4 học gì?
+Chương 4 có nội dung gì?
+Cho biết Chương 4 nói về gì?
+Hãy cho biết Chương 4 nội dung?
+Chương nào nói về PCFG?
+Chương nào học về PCFG?
+Chương nào liên quan đến PCFG?
+PCFG được học ở đâu?
+PCFG nằm ở chương nào?
+Chương 4 có những phương pháp gì?
+Chương 4 có những chủ đề nào?
+Chương 4 gồm những gì?
+Chương 3 có parsing không?
+Nó có parsing không?
+Chương 3 có liên quan đến parsing không?
+Nó có liên quan đến parsing không?
+Chương 3 liên quan đến parsing không?
+Nó liên quan đến parsing không?
+Phần I của BTL là gì?
+Phần I BTL là gì?
+Phần I của BTL yêu cầu gì?
+BTL là gì?
+BTL yêu cầu xây dựng những gì?
+Mục tiêu BTL là gì?
+BTL có mục tiêu gì?
+Bài tập lớn có phần hỏi đáp không?
+Bài tập lớn có hỏi đáp không?
+Phần II cần xuất file gì?
+Phần II xuất file gì?
+Phần II output gì?
+Phần II cần output gì?
+BTL nhóm mấy người?
+BTL bao nhiêu người?
+Deadline BTL khi nào?
+Hạn nộp BTL ngày nào?
+Hạn nộp BTL khi nào?
+Quy định về source code là gì?
+Quy định source code như thế nào?
+Có được dùng thư viện ngoài không?
+Được dùng thư viện ngoài không?
+Tài liệu về Python NLP là gì?
+Tài liệu tham khảo về Python NLP là gì?
+Tài liệu nào liên quan đến Python NLP?
+Tài liệu liên quan đến Python NLP là gì?
+Tài liệu nào nói về Python NLP?
+Tài liệu cho Chương 4 là gì?
+Tài liệu cho chương này là gì?
+Tài liệu của Chương 4 là gì?
+Tài liệu của chương này là gì?
+Tài liệu nào cho Chương 4?
+Tài liệu nào cho chương này?
+LO4.2 là gì?
+LO4.2 học về gì?
+LO4.2 nói về gì?
+LO4.2 liên quan đến nội dung nào?
+LO4.2 liên quan nội dung gì?
+LO4.2 nằm ở chương nào?
+LO4.2 thuộc chương nào?
+CO3085 có bao nhiêu tín chỉ?
+Môn CO3085 có bao nhiêu tín chỉ?
+CO3085 bao nhiêu tín chỉ?
+Môn CO3085 bao nhiêu tín chỉ?
+Midterm hình thức?
+Tuần 15 học gì?
+Tuần 15 học nội dung gì?
+Tuần 15 có nội dung gì?
+reference học tuần nào?
+reference học tuần mấy?
+reference được học khi nào?
+reference tuần nào?
+Chương 11 nói về gì?
+Chương 11 học gì?
+Chương 11 có nội dung gì?
+Cho biết Chương 11 nói về gì?
+Hãy cho biết Chương 11 nội dung?
+Chương nào nói về reference?
+Chương nào học về reference?
+Chương nào liên quan đến reference?
+reference được học ở đâu?
+reference nằm ở chương nào?
+Chương 11 có những phương pháp gì?
+Chương 11 có những chủ đề nào?
+Chương 11 gồm những gì?
+Chương 3 có PCFG không?
+Nó có PCFG không?
+Chương 3 có liên quan đến PCFG không?
+Nó có liên quan đến PCFG không?
+Chương 3 liên quan đến PCFG không?
+Nó liên quan đến PCFG không?
+Phần II của bài tập lớn là gì?
+Phần II bài tập lớn là gì?
+Phần II của bài tập lớn yêu cầu gì?
+Bài tập lớn có phần RAG không?
+Bài tập lớn có RAG không?
+Phần III cần xuất file gì?
+Phần III xuất file gì?
+Phần III output gì?
+Phần III cần output gì?
+Quy định về thư viện ngoài là gì?
+Quy định thư viện ngoài như thế nào?
+Có được chia sẻ giữa các nhóm không?
+Được chia sẻ giữa các nhóm không?
+Tài liệu về CFG là gì?
+Tài liệu tham khảo về CFG là gì?
+Tài liệu nào liên quan đến CFG?
+Tài liệu liên quan đến CFG là gì?
+Tài liệu nào nói về CFG?
+Tài liệu cho Chương 11 là gì?
+Tài liệu cho chương sau là gì?
+Tài liệu của Chương 11 là gì?
+Tài liệu của chương sau là gì?
+Tài liệu nào cho Chương 11?
+Tài liệu nào cho chương sau?
+CO3085 có mấy tín chỉ?
+Môn CO3085 có mấy tín chỉ?
+CO3085 mấy tín chỉ?
+Môn CO3085 mấy tín chỉ?
+Midterm chiếm bao nhiêu?
+question answering học tuần nào?
+question answering học tuần mấy?
+question answering được học khi nào?
+question answering tuần nào?
+Chương 12 nói về gì?
+Chương 12 học gì?
+Chương 12 có nội dung gì?
+Cho biết Chương 12 nói về gì?
+Hãy cho biết Chương 12 nội dung?
+Chương nào nói về question answering?
+Chương nào học về question answering?
+Chương nào liên quan đến question answering?
+question answering được học ở đâu?
+question answering nằm ở chương nào?
+Chương 12 có những phương pháp gì?
+Chương 12 có những chủ đề nào?
+Chương 12 gồm những gì?
+Chương 3 có CFG không?
+Nó có CFG không?
+Chương 3 có liên quan đến CFG không?
+Nó có liên quan đến CFG không?
+Chương 3 liên quan đến CFG không?
+Nó liên quan đến CFG không?
+Phần II của BTL là gì?
+Phần II BTL là gì?
+Phần II của BTL yêu cầu gì?
+BTL có phần parser không?
+BTL có parser không?
+Phần IV cần xuất file gì?
+Phần IV xuất file gì?
+Phần IV output gì?
+Phần IV cần output gì?
+Quy định về LLM/RAG là gì?
+Quy định LLM/RAG như thế nào?
+Tài liệu cho Chương 12 là gì?
+Tài liệu của Chương 12 là gì?
+Tài liệu nào cho Chương 12?
+Final bao nhiêu phút?
+semantic grammar học tuần nào?
+semantic grammar học tuần mấy?
+semantic grammar được học khi nào?
+semantic grammar tuần nào?
+Chương nào nói về semantic grammar?
+Chương nào học về semantic grammar?
+Chương nào liên quan đến semantic grammar?
+semantic grammar được học ở đâu?
+semantic grammar nằm ở chương nào?
+Chương 4 có hỏi đáp không?
+chương này có hỏi đáp không?
+Chương 4 có liên quan đến hỏi đáp không?
+chương này có liên quan đến hỏi đáp không?
+Chương 4 liên quan đến hỏi đáp không?
+chương này liên quan đến hỏi đáp không?
+Phần III của bài tập lớn là gì?
+Phần III bài tập lớn là gì?
+Phần III của bài tập lớn yêu cầu gì?
+BTL có phần hỏi đáp không?
+BTL có hỏi đáp không?
+Phần 1 cần xuất file gì?
+Phần 1 xuất file gì?
+Phần 1 output gì?
+Phần 1 cần output gì?
+Final mấy phút?
+Chương 4 có parsing không?
+chương này có parsing không?
+Chương 4 có liên quan đến parsing không?
+chương này có liên quan đến parsing không?
+Chương 4 liên quan đến parsing không?
+chương này liên quan đến parsing không?
+Phần III của BTL là gì?
+Phần III BTL là gì?
+Phần III của BTL yêu cầu gì?
+BTL có phần RAG không?
+BTL có RAG không?
+Final hình thức?
+Chương 4 có PCFG không?
+chương này có PCFG không?
+Chương 4 có liên quan đến PCFG không?
+chương này có liên quan đến PCFG không?
+Chương 4 liên quan đến PCFG không?
+chương này liên quan đến PCFG không?
+Phần IV của bài tập lớn là gì?
+Phần IV bài tập lớn là gì?
+Phần IV của bài tập lớn yêu cầu gì?
+Final chiếm bao nhiêu?
+Chương 4 có CFG không?
+chương này có CFG không?
+Chương 4 có liên quan đến CFG không?
+chương này có liên quan đến CFG không?
+Chương 4 liên quan đến CFG không?
+chương này liên quan đến CFG không?
+Phần IV của BTL là gì?
+Phần IV BTL là gì?
+Phần IV của BTL yêu cầu gì?
+Chương 11 có hỏi đáp không?
+chương sau có hỏi đáp không?
+Chương 11 có liên quan đến hỏi đáp không?
+chương sau có liên quan đến hỏi đáp không?
+Chương 11 liên quan đến hỏi đáp không?
+chương sau liên quan đến hỏi đáp không?
+Phần 1 của bài tập lớn là gì?
+Phần 1 bài tập lớn là gì?
+Phần 1 của bài tập lớn yêu cầu gì?
+Chương 11 có parsing không?
+chương sau có parsing không?
+Chương 11 có liên quan đến parsing không?
+chương sau có liên quan đến parsing không?
+Chương 11 liên quan đến parsing không?
+chương sau liên quan đến parsing không?
+Phần 1 của BTL là gì?
+Phần 1 BTL là gì?
+Phần 1 của BTL yêu cầu gì?
+Chương 11 có PCFG không?
+chương sau có PCFG không?
+Chương 11 có liên quan đến PCFG không?
+chương sau có liên quan đến PCFG không?
+Chương 11 liên quan đến PCFG không?
+chương sau liên quan đến PCFG không?
+Chương 11 có CFG không?
+chương sau có CFG không?
+Chương 11 có liên quan đến CFG không?
+chương sau có liên quan đến CFG không?
+Chương 11 liên quan đến CFG không?
+chương sau liên quan đến CFG không?
+Chương 12 có hỏi đáp không?
+Chương 12 có liên quan đến hỏi đáp không?
+Chương 12 liên quan đến hỏi đáp không?
+Chương 12 có parsing không?
+Chương 12 có liên quan đến parsing không?
+Chương 12 liên quan đến parsing không?
+Chương 12 có PCFG không?
+Chương 12 có liên quan đến PCFG không?
+Chương 12 liên quan đến PCFG không?
+Chương 12 có CFG không?
+Chương 12 có liên quan đến CFG không?
+Chương 12 liên quan đến CFG không?

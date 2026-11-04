@@ -1,11 +1,13 @@
 """Regression guards for the versioned end-to-end gold evaluation set."""
 
 from __future__ import annotations
+from functools import lru_cache
 
 from src.assistant import CourseAssistant
 from src.evaluation.gold import evaluate_cases, load_gold_cases, summarize
 
 
+@lru_cache(maxsize=1)
 def _results():
     metadata, cases = load_gold_cases()
     return metadata, cases, evaluate_cases(cases, CourseAssistant)
@@ -18,17 +20,24 @@ def test_gold_fixture_covers_every_declared_grammar_frame():
         case.expected.get("parser", {}).get("query_frame")
         for case in cases
         if case.expected.get("parser", {}).get("valid") is True
+        and case.expected['parser'].get('query_frame') is not None
     }
     assert covered == declared
 
 
-def test_gold_fixture_keeps_development_and_held_out_cases_separate():
+def test_gold_has_84_turns_and_two_independent_paraphrases_per_frame():
+    metadata, cases, _ = _results()
+    assert len(cases) == metadata['target_turns'] == 84
+    for frame in metadata['scope_frames']:
+        queries = {case.query for case in cases if case.group == 'independent'
+                   and case.expected['parser']['query_frame'] == frame}
+        assert len(queries) >= 2, frame
+
+
+def test_inspected_gold_cases_are_labelled_as_regression():
     _, cases, _ = _results()
     splits = {case.split for case in cases}
-    assert splits == {"development", "held_out"}
-    assert {case.query for case in cases if case.split == "development"}.isdisjoint(
-        {case.query for case in cases if case.split == "held_out"}
-    )
+    assert splits == {'regression'}
 
 
 def test_all_current_failures_are_explicitly_triaged():

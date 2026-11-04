@@ -1,0 +1,311 @@
+[
+  [
+    {
+      "input": "Chương 4 nói về gì?",
+      "person_1_parser_result": {
+        "valid": true,
+        "sentence_type": "WH_QUESTION",
+        "query_frame": "ASK_CHAPTER_CONTENT",
+        "slots": {
+          "chapter": [
+            "Chương 4"
+          ]
+        },
+        "tree": "(S\n  (SENTENCE_TYPE WH_QUESTION)\n  (QUERY_FRAME ASK_CHAPTER_CONTENT)\n  (CHAPTER_CONTENT (CHAPTER Chương 4) (LITERAL nói về gì)))"
+      },
+      "person_2_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "chapter": [
+            "CH04"
+          ]
+        },
+        "attribute": "summary",
+        "answer_mode": "VALUE"
+      },
+      "context_state": {
+        "focus_entities": [
+          {
+            "type": "chapter",
+            "id": "CH04"
+          }
+        ]
+      },
+      "person_3_retrieval_result": {
+        "status": "FOUND",
+        "values": [
+          "The chapter extends formal grammar with feature systems and augmented grammar. It covers lexicon, parsing with features, augmented transition networks, generalized feature systems and unification grammar."
+        ],
+        "sources": [
+          "topics:CH04"
+        ]
+      },
+      "answer": "Tóm tắt CH04: The chapter extends formal grammar with feature systems and augmented grammar. It covers lexicon, parsing with features, augmented transition networks, generalized feature systems and unification grammar. Nguồn: topics:CH04."
+    },
+    {
+      "input": "Nó có liên quan đến parsing không?",
+      "person_1_parser_result": {
+        "valid": true,
+        "sentence_type": "YES_NO_QUESTION",
+        "query_frame": "ASK_TOPIC_EXISTENCE_IN_CHAPTER",
+        "slots": {
+          "reference": [
+            "Nó"
+          ],
+          "topic": [
+            "parsing"
+          ]
+        },
+        "tree": "(S\n  (SENTENCE_TYPE YES_NO_QUESTION)\n  (QUERY_FRAME ASK_TOPIC_EXISTENCE_IN_CHAPTER)\n  (TOPIC_TEST (CHAPTER_SUBJECT (REFERENCE Nó)) (LITERAL có liên quan đến) (TOPIC parsing) (LITERAL không)))"
+      },
+      "person_2_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "topic": [
+            "PARSING"
+          ],
+          "chapter": [
+            "CH04"
+          ]
+        },
+        "attribute": "contains_topic",
+        "answer_mode": "BOOLEAN"
+      },
+      "context_state": {
+        "focus_entities": [
+          {
+            "type": "chapter",
+            "id": "CH04"
+          },
+          {
+            "type": "topic",
+            "id": "PARSING"
+          }
+        ]
+      },
+      "person_3_retrieval_result": {
+        "status": "FOUND",
+        "values": [
+          true
+        ],
+        "sources": [
+          "topics:CH04"
+        ]
+      },
+      "answer": "Có. Nguồn: topics:CH04."
+    }
+  ],
+  [
+    {
+      "input": "Chương 11 có hỏi đáp không?",
+      "person_1_parser_result": {
+        "valid": true,
+        "sentence_type": "YES_NO_QUESTION",
+        "query_frame": "ASK_TOPIC_EXISTENCE_IN_CHAPTER",
+        "slots": {
+          "chapter": [
+            "Chương 11"
+          ],
+          "topic": [
+            "hỏi đáp"
+          ]
+        },
+        "tree": "(S\n  (SENTENCE_TYPE YES_NO_QUESTION)\n  (QUERY_FRAME ASK_TOPIC_EXISTENCE_IN_CHAPTER)\n  (TOPIC_TEST (CHAPTER_SUBJECT (CHAPTER Chương 11)) (LITERAL có) (TOPIC hỏi đáp) (LITERAL không)))"
+      },
+      "person_2_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "chapter": [
+            "CH11"
+          ],
+          "topic": [
+            "QUESTION_ANSWERING"
+          ]
+        },
+        "attribute": "contains_topic",
+        "answer_mode": "BOOLEAN"
+      },
+      "context_state": {
+        "focus_entities": [
+          {
+            "type": "chapter",
+            "id": "CH11"
+          },
+          {
+            "type": "topic",
+            "id": "QUESTION_ANSWERING"
+          }
+        ]
+      },
+      "person_3_retrieval_result": {
+        "status": "FOUND",
+        "values": [
+          true
+        ],
+        "sources": [
+          "topics:CH11"
+        ]
+      },
+      "answer": "Có. Nguồn: topics:CH11."
+    },
+    {
+      "input": "Còn chương sau?",
+      "person_1_parser_result": {
+        "valid": true,
+        "sentence_type": "WH_QUESTION",
+        "query_frame": null,
+        "slots": {
+          "reference": [
+            "chương sau"
+          ]
+        },
+        "tree": "(S (SENTENCE_TYPE WH_QUESTION) (ELLIPSIS (LITERAL Còn) (REFERENCE chương sau)))"
+      },
+      "person_2_semantic_query": {
+        "intent": "GET_TOPIC",
+        "entities": {
+          "chapter": [
+            "CH12"
+          ],
+          "topic": [
+            "QUESTION_ANSWERING"
+          ]
+        },
+        "attribute": "contains_topic",
+        "answer_mode": "BOOLEAN"
+      },
+      "context_state": {
+        "focus_entities": [
+          {
+            "type": "chapter",
+            "id": "CH12"
+          },
+          {
+            "type": "topic",
+            "id": "QUESTION_ANSWERING"
+          }
+        ]
+      },
+      "person_3_retrieval_result": {
+        "status": "FOUND",
+        "values": [
+          false
+        ],
+        "sources": [
+          "topics:CH12"
+        ]
+      },
+      "answer": "Không. Nguồn: topics:CH12."
+    }
+  ],
+  [
+    {
+      "input": "Bài tập lớn có phần parser không?",
+      "person_1_parser_result": {
+        "valid": true,
+        "sentence_type": "YES_NO_QUESTION",
+        "query_frame": "ASK_ASSIGNMENT_COMPONENT_EXISTENCE",
+        "slots": {
+          "assignment": [
+            "Bài tập lớn"
+          ],
+          "topic": [
+            "parser"
+          ]
+        },
+        "tree": "(S\n  (SENTENCE_TYPE YES_NO_QUESTION)\n  (QUERY_FRAME ASK_ASSIGNMENT_COMPONENT_EXISTENCE)\n  (COMPONENT_TEST (ASSIGNMENT Bài tập lớn) (LITERAL có phần) (TOPIC parser) (LITERAL không)))"
+      },
+      "person_2_semantic_query": {
+        "intent": "GET_ASSIGNMENT",
+        "entities": {
+          "assignment": [
+            "BTL01"
+          ],
+          "topic": [
+            "PARSING"
+          ]
+        },
+        "attribute": "contains_component",
+        "answer_mode": "BOOLEAN"
+      },
+      "context_state": {
+        "focus_entities": [
+          {
+            "type": "assignment_part",
+            "id": "BTL_PART_1"
+          },
+          {
+            "type": "topic",
+            "id": "PARSING"
+          },
+          {
+            "type": "assignment",
+            "id": "BTL01"
+          }
+        ]
+      },
+      "person_3_retrieval_result": {
+        "status": "FOUND",
+        "values": [
+          true
+        ],
+        "sources": [
+          "assignments:BTL01"
+        ]
+      },
+      "answer": "Có. Nguồn: assignments:BTL01."
+    },
+    {
+      "input": "Phần này cần xuất file gì?",
+      "person_1_parser_result": {
+        "valid": true,
+        "sentence_type": "WH_QUESTION",
+        "query_frame": "ASK_ASSIGNMENT_OUTPUTS",
+        "slots": {
+          "reference": [
+            "Phần này"
+          ]
+        },
+        "tree": "(S\n  (SENTENCE_TYPE WH_QUESTION)\n  (QUERY_FRAME ASK_ASSIGNMENT_OUTPUTS)\n  (PART_OUTPUTS (PART_SUBJECT (REFERENCE Phần này)) (LITERAL cần xuất file gì)))"
+      },
+      "person_2_semantic_query": {
+        "intent": "GET_ASSIGNMENT",
+        "entities": {
+          "assignment_part": [
+            "BTL_PART_1"
+          ]
+        },
+        "attribute": "outputs",
+        "answer_mode": "LIST"
+      },
+      "context_state": {
+        "focus_entities": [
+          {
+            "type": "assignment_part",
+            "id": "BTL_PART_1"
+          },
+          {
+            "type": "topic",
+            "id": "PARSING"
+          },
+          {
+            "type": "assignment",
+            "id": "BTL01"
+          }
+        ]
+      },
+      "person_3_retrieval_result": {
+        "status": "FOUND",
+        "values": [
+          "output/grammar.txt",
+          "output/samples.txt",
+          "output/parse-results.txt"
+        ],
+        "sources": [
+          "assignments:BTL_PART_1"
+        ]
+      },
+      "answer": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+    }
+  ]
+]

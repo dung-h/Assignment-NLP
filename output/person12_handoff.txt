@@ -1,0 +1,129 @@
+CÁC CASE CHƯA ĐẠT — NGƯỜI 1 VÀ NGƯỜI 2
+======================================
+
+14 case đã tái hiện: F01–F04 có assertion pytest; F05–F14 mới chạy
+chẩn đoán, chưa bổ sung thành assertion pytest.
+Các case grammar là khoảng trống coverage, không mặc định là yêu cầu
+bắt buộc phải hỗ trợ mọi cách diễn đạt tiếng Việt.
+
+F01 — Hỏi ECTS
+  Input: Môn NLP có bao nhiêu ECTS?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: ASK_COURSE_ATTRIBUTE; course=CO3085; attribute=ects;
+            answer_mode=VALUE. KB có ects=6.
+  Phụ trách: Người 1 — bổ sung cue và production.
+  Test: test_person1_requested_coverage[P1-ECTS].
+
+F02 — Hỏi khoa phụ trách
+  Input: Môn NLP thuộc khoa nào?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: ASK_COURSE_ATTRIBUTE; course=CO3085; attribute=department;
+            answer_mode=VALUE.
+  Phụ trách: Người 1 — bổ sung cấu trúc "thuộc khoa nào".
+  Test: test_person1_requested_coverage[P1-DEPARTMENT].
+
+F03 — Hỏi đồng thời hai topic
+  Input: Chương nào nói về CFG và PCFG?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: ASK_CHAPTER_BY_TOPIC; trích đủ topic=[CFG, PCFG];
+            GET_TOPIC, attribute=chapter, answer_mode=LIST.
+  Phụ trách: Người 1 — hỗ trợ topic list, không bỏ mất topic thứ hai.
+  Test: test_person1_requested_coverage[P1-MULTI-TOPIC].
+  Lưu ý: case này kiểm parsing/mapping; cần thống nhất nghĩa kết hợp
+         hai topic trước khi chốt oracle retrieval/answer.
+
+F04 — Tham chiếu chapter sau câu hỏi về week
+  U1: Tuần 3 học gì?
+  U2: Tài liệu của chương này là gì?
+  Hiện tại: parser nhận U2 là ASK_RESOURCE_BY_CHAPTER, nhưng semantic
+            UNKNOWN vì context chưa có chapter tương ứng với WEEK_03.
+  Mong đợi U2: GET_RESOURCE; chapter=[CH03]; attribute=resource;
+               answer_mode=LIST; retrieval FOUND từ quan hệ có trong KB.
+  Phụ trách: Người 2 + integration/Người 3 — đưa chapter duy nhất từ
+             quan hệ week–chapter vào context; không hardcode CH03.
+  Nguồn: data/raw/dialogues.txt, DIALOGUE 01.
+  Test: test_integration_sample_dialogue01_week_to_chapter_reference.
+
+F05 — Cách hỏi các phần chính của môn học
+  Input: NLP có những phần chính nào?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: ASK_COURSE_PARTS; GET_COURSE_INFO; attribute=parts;
+            answer_mode=LIST.
+  Phụ trách: Người 1 — bổ sung subject/cách diễn đạt này.
+  Nguồn: data/raw/faq.txt, Q2. Bằng chứng: chạy chẩn đoán.
+
+F06 — Features và Augmented Grammar
+  Input: Chương nào học về Features và Augmented Grammar?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: nhận câu hỏi về chapter và các topic tương ứng;
+            câu trả lời có CH04 theo FAQ.
+  Phụ trách: Người 1 — mở rộng lexical coverage; Người 2 kiểm tra
+             canonical mapping các topic khi có ParserResult đúng.
+  Nguồn: data/raw/faq.txt, Q5. Bằng chứng: chạy chẩn đoán.
+
+F07 — Knowledge representation
+  Input: Chương nào học về knowledge representation?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: nhận topic và truy vấn chapter; FAQ chỉ ra CH11.
+  Phụ trách: Người 1 — bổ sung lexical coverage; kiểm tra tiếp
+             canonical mapping và retrieval sau khi parse được.
+  Nguồn: data/raw/faq.txt, Q7. Bằng chứng: chạy chẩn đoán.
+
+F08 — Local discourse context
+  Input: Chương nào học về local discourse context?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: nhận topic và truy vấn chapter; FAQ chỉ ra CH12.
+  Phụ trách: Người 1 — bổ sung lexical coverage; kiểm tra tiếp
+             canonical mapping và retrieval sau khi parse được.
+  Nguồn: data/raw/faq.txt, Q8. Bằng chứng: chạy chẩn đoán.
+
+F09 — Cách hỏi nội dung LO4.2
+  Input: L.O.4.2 liên quan đến nội dung gì?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: nhận LO4.2 và yêu cầu nội dung liên quan; không từ chối
+            chỉ vì dùng "nội dung gì" thay cho "nội dung nào".
+  Phụ trách: Người 1 — bổ sung biến thể production.
+  Nguồn: data/raw/faq.txt, Q9. Bằng chứng: chạy chẩn đoán.
+
+F10 — Cách hỏi nội dung LO2.5
+  Input: L.O.2.5 liên quan đến nội dung gì?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: nhận LO2.5 và yêu cầu nội dung liên quan.
+  Phụ trách: Người 1 — bổ sung biến thể production như F09.
+  Nguồn: data/raw/faq.txt, Q10. Bằng chứng: chạy chẩn đoán.
+
+F11 — Cách hỏi nội dung LO3.3
+  Input: L.O.3.3 liên quan đến nội dung gì?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: nhận LO3.3 và yêu cầu nội dung liên quan.
+  Phụ trách: Người 1 — bổ sung biến thể production như F09.
+  Nguồn: data/raw/faq.txt, Q11. Bằng chứng: chạy chẩn đoán.
+
+F12 — Cách hỏi permission về LLM hoặc RAG
+  Input: Bài tập lớn có thể sử dụng LLM hoặc RAG không?
+  Hiện tại: parser valid=false; semantic UNKNOWN.
+  Mong đợi: nhận câu hỏi permission, map regulation=LLM_RAG
+            và truy vấn permission trong KB.
+  Phụ trách: Người 1 — bổ sung cấu trúc permission; Người 2 kiểm tra
+             mapping cách viết "LLM hoặc RAG" sang canonical regulation.
+  Nguồn: data/raw/faq.txt, Q12. Bằng chứng: chạy chẩn đoán.
+
+F13 — Thời lượng Midterm với cue "kéo dài bao lâu"
+  Input: Midterm kéo dài bao lâu?
+  Hiện tại: parser valid=false. Khi cấp trực tiếp ParserResult đúng
+            frame ASK_EXAM_ATTRIBUTE với exam=[Midterm] và
+            attribute_cue=[kéo dài bao lâu], mapper vẫn trả UNKNOWN.
+  Mong đợi: GET_COURSE_INFO; exam=[MIDTERM]; attribute=duration;
+            answer_mode=VALUE; thời lượng 60 phút theo KB.
+  Phụ trách: Người 1 — nhận câu; Người 2 — map cue sang duration.
+  Nguồn: data/raw/faq.txt, Q14. Bằng chứng: chẩn đoán pipeline và mapper.
+
+F14 — Thời lượng Final với cue "kéo dài bao lâu"
+  Input: Final kéo dài bao lâu?
+  Hiện tại: parser valid=false. Khi cấp trực tiếp ParserResult đúng
+            frame ASK_EXAM_ATTRIBUTE với exam=[Final] và
+            attribute_cue=[kéo dài bao lâu], mapper vẫn trả UNKNOWN.
+  Mong đợi: GET_COURSE_INFO; exam=[FINAL]; attribute=duration;
+            answer_mode=VALUE; thời lượng 90 phút theo KB.
+  Phụ trách: Người 1 — nhận câu; Người 2 — map cue sang duration.
+  Nguồn: data/raw/faq.txt, Q15. Bằng chứng: chẩn đoán pipeline và mapper.

@@ -7,12 +7,14 @@ It is used by both the report exporter and regression tests.
 
 from __future__ import annotations
 
-from collections import Counter, defaultdict
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from copy import deepcopy
 
 import yaml
+from nltk.tree import Tree
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -36,15 +38,15 @@ class GoldCase:
 class CaseResult:
     case: GoldCase
     passed: bool
-    layer_ok: dict[str, bool]
+    layer_ok: dict[str, bool | None]
     failures: tuple[str, ...]
     response: dict[str, Any]
 
 
 def _as_sources(value: Any) -> list[str]:
-    if isinstance(value, str):
+    if isinstance(value, str) and value:
         return [value]
-    if isinstance(value, list) and all(isinstance(item, str) for item in value):
+    if isinstance(value, list) and value and all(isinstance(item, str) and item for item in value):
         return value
     raise ValueError("provenance must be a string or list of strings")
 
@@ -60,6 +62,23 @@ def load_gold_cases(path: Path = DEFAULT_GOLD_PATH) -> tuple[dict[str, Any], lis
     raw_cases = raw.get("cases")
     if not isinstance(raw_cases, list) or not raw_cases:
         raise ValueError("gold fixture must contain a non-empty cases list")
+    # Reuse reviewed oracles for explicit paraphrases; never derive gold from
+    # the assistant's current output. Each extension supplies its raw query.
+    originals = {item['id']: item for item in raw_cases if isinstance(item, dict) and 'id' in item}
+    expanded = list(raw_cases)
+    for extension in raw.get('additional_cases', []):
+        base_id = extension.get('oracle_case')
+        if base_id not in originals or not {'id', 'query'} <= extension.keys():
+            raise ValueError('additional case needs id, query and a baseline oracle_case')
+        item = deepcopy(originals[base_id])
+        item.pop('known_failure', None)
+        for key, value in extension.items():
+            if key not in {'oracle_case', 'expected'}:
+                item[key] = value
+        for layer, override in extension.get('expected', {}).items():
+            item['expected'][layer] = {**item['expected'].get(layer, {}), **override}
+        expanded.append(item)
+    raw_cases = expanded
 
     cases: list[GoldCase] = []
     seen: set[str] = set()
@@ -73,14 +92,21 @@ def load_gold_cases(path: Path = DEFAULT_GOLD_PATH) -> tuple[dict[str, Any], lis
         case_id = item["id"]
         if not isinstance(case_id, str) or not case_id or case_id in seen:
             raise ValueError(f"invalid or duplicate gold case id: {case_id!r}")
-        if item["split"] not in {"development", "held_out"}:
-            raise ValueError(f"{case_id}: split must be development or held_out")
+        if item["split"] not in {"development", "held_out", "regression"}:
+            raise ValueError(f"{case_id}: unsupported split")
+        if not isinstance(item['query'], str) or not item['query'].strip():
+            raise ValueError(f'{case_id}: query must be non-empty')
         if item["group"] not in {"independent", "context"}:
             raise ValueError(f"{case_id}: unsupported group")
         if not isinstance(item["expected"], dict):
             raise ValueError(f"{case_id}: expected must be a mapping")
+        _validate_oracle(case_id, item['expected'])
+        for source in _as_sources(item['provenance']):
+            resolved = (ROOT / source).resolve()
+            if not resolved.is_relative_to(ROOT.resolve()) or not resolved.is_file():
+                raise ValueError(f'{case_id}: invalid provenance {source!r}')
         if item["group"] == "context" and (
-            not item.get("conversation_id") or not isinstance(item.get("turn"), int)
+            not item.get("conversation_id") or type(item.get("turn")) is not int
         ):
             raise ValueError(f"{case_id}: context case needs conversation_id and turn")
         known = item.get("known_failure")
@@ -104,10 +130,49 @@ def load_gold_cases(path: Path = DEFAULT_GOLD_PATH) -> tuple[dict[str, Any], lis
                 turn=item.get("turn"),
             )
         )
+    dialogues = defaultdict(list)
+    for case in cases:
+        if case.group == 'context':
+            dialogues[case.conversation_id].append(case)
+    for conversation_id, turns in dialogues.items():
+        if sorted(case.turn for case in turns) != list(range(1, len(turns) + 1)):
+            raise ValueError(f'{conversation_id}: turns must be unique and contiguous from 1')
+        if len({case.split for case in turns}) != 1:
+            raise ValueError(f'{conversation_id}: a dialogue must stay within one split')
     return raw, cases
 
 
+def _validate_oracle(case_id, expected):
+    required = {
+        'parser': {'valid', 'sentence_type', 'query_frame', 'slots', 'tree'},
+        'semantic': {'intent', 'entities', 'attribute', 'answer_mode'},
+        'retrieval': {'status', 'values', 'sources'},
+        'answer': {'contains'},
+    }
+    for layer, fields in required.items():
+        if not isinstance(expected.get(layer), dict) or not fields <= expected[layer].keys():
+            raise ValueError(f'{case_id}: incomplete {layer} oracle')
+    retrieval = expected['retrieval']
+    if not isinstance(retrieval['values'], list) or not isinstance(retrieval['sources'], list):
+        raise ValueError(f'{case_id}: retrieval oracle requires lists')
+    if retrieval['status'] == 'FOUND':
+        if not retrieval['values'] or not retrieval['sources']:
+            raise ValueError(f'{case_id}: FOUND oracle must have values and sources')
+    elif retrieval['status'] != 'NOT_FOUND' or retrieval['values'] or retrieval['sources']:
+        raise ValueError(f'{case_id}: invalid missing-data oracle')
+    if not expected['answer']['contains']:
+        raise ValueError(f'{case_id}: answer oracle needs at least one required fact')
+    if expected['parser']['tree'] not in {'non_empty', 'empty'}:
+        raise ValueError(f'{case_id}: unsupported tree oracle')
+
+
 def _same(actual: Any, expected: Any) -> bool:
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(expected, dict):
+        return actual.keys() == expected.keys() and all(_same(actual[key], value) for key, value in expected.items())
+    if isinstance(expected, list):
+        return len(actual) == len(expected) and all(_same(left, right) for left, right in zip(actual, expected))
     return actual == expected
 
 
@@ -118,7 +183,17 @@ def _expect_mapping(
     for key, wanted in expected.items():
         if key == "tree":
             tree = actual.get("tree")
-            ok = bool(tree) if wanted == "non_empty" else tree is None
+            ok = tree is None
+            if wanted == 'non_empty':
+                try:
+                    parsed_tree = Tree.fromstring(tree)
+                    ok = parsed_tree.label() == 'S' and bool(parsed_tree.leaves())
+                    for slot, values in actual.get('slots', {}).items():
+                        observed = [leaf for node in parsed_tree.subtrees() if node.label() == slot.upper() for leaf in node.leaves()]
+                        wanted_leaves = [token for value in values for token in value.split()]
+                        ok = ok and observed == wanted_leaves
+                except (ValueError, TypeError, AttributeError):
+                    ok = False
         else:
             ok = _same(actual.get(key), wanted)
         if not ok:
@@ -131,7 +206,7 @@ def _expect_mapping(
 def _expect_retrieval(actual: dict[str, Any], expected: dict[str, Any]) -> list[str]:
     failures: list[str] = []
     for key in ("status", "values", "sources"):
-        if key in expected and actual.get(key) != expected[key]:
+        if key in expected and not _same(actual.get(key), expected[key]):
             failures.append(
                 f"retrieval.{key}: expected {expected[key]!r}; got {actual.get(key)!r}"
             )
@@ -145,6 +220,10 @@ def _expect_retrieval(actual: dict[str, Any], expected: dict[str, Any]) -> list[
 
 def _expect_answer(actual: str, expected: dict[str, Any]) -> list[str]:
     failures: list[str] = []
+    if not isinstance(actual, str):
+        return ['answer: must be a string']
+    if 'exact' in expected and actual != expected['exact']:
+        failures.append('answer: does not match the frozen complete answer')
     for phrase in expected.get("contains", []):
         if phrase not in actual:
             failures.append(f"answer: missing required fact/source {phrase!r}")
@@ -161,7 +240,7 @@ def evaluate_case(assistant: Any, case: GoldCase) -> CaseResult:
         response = assistant.ask(case.query)
     except Exception as exc:  # Keep pipeline errors in the evaluation denominator.
         expected_layers = {
-            layer: False
+            layer: None
             for layer in ("parser", "semantic", "retrieval", "answer")
             if layer in case.expected
         }
@@ -221,8 +300,9 @@ def summarize(results: list[CaseResult]) -> dict[str, Any]:
     for layer in ("parser", "semantic", "retrieval", "answer"):
         applicable = [result for result in results if layer in result.layer_ok]
         layer_counts[layer] = {
-            "passed": sum(result.layer_ok[layer] for result in applicable),
-            "total": len(applicable),
+            "passed": sum(result.layer_ok[layer] is True for result in applicable),
+            "total": sum(result.layer_ok[layer] is not None for result in applicable),
+            "unobserved": sum(result.layer_ok[layer] is None for result in applicable),
         }
     observed_known = [result for result in results if result.case.known_failure and not result.passed]
     stale_known = [result for result in results if result.case.known_failure and result.passed]
@@ -235,7 +315,7 @@ def summarize(results: list[CaseResult]) -> dict[str, Any]:
                 "passed": sum(result.passed for result in results if result.case.split == split),
                 "total": sum(1 for result in results if result.case.split == split),
             }
-            for split in ("development", "held_out")
+            for split in ("regression", "development", "held_out")
         },
         "observed_known_failures": observed_known,
         "stale_known_failures": stale_known,
@@ -254,16 +334,28 @@ def render_report(metadata: dict[str, Any], results: list[CaseResult]) -> str:
         "Method",
         "- Gold cases assert parser, semantic, retrieval and answer facts/sources.",
         "- Every case remains in the denominator; known failures are reported, not hidden.",
+        "- Current cases are regression cases already used during development; no independent held-out claim.",
+        "- Answer scores below measure frozen-template/fact assertions, not independent human review.",
         f"- Fixture target: {metadata.get('target_turns', 'unspecified')} turns; current fixture: {summary['total']} turns.",
         "",
-        "Strict end-to-end accuracy",
+        "Regression end-to-end assertion accuracy",
         f"- Overall: {summary['strict_passed']}/{summary['total']} ({percentage(summary['strict_passed'], summary['total'])})",
     ]
     for split, row in summary["by_split"].items():
         lines.append(f"- {split}: {row['passed']}/{row['total']} ({percentage(row['passed'], row['total'])})")
     lines.extend(["", "Layer metrics"])
     for layer, row in summary["layers"].items():
-        lines.append(f"- {layer}: {row['passed']}/{row['total']} ({percentage(row['passed'], row['total'])})")
+        lines.append(f"- {layer}: {row['passed']}/{row['total']} ({percentage(row['passed'], row['total'])}); unobserved={row['unobserved']}")
+    lines.extend(['', 'Expected outcome breakdown'])
+    for outcome in ('FOUND', 'NOT_FOUND', 'UNKNOWN'):
+        rows = [row for row in results if (
+            'UNKNOWN' if row.case.expected['semantic']['intent'] == 'UNKNOWN'
+            else row.case.expected['retrieval']['status']) == outcome]
+        count = sum(row.passed for row in rows)
+        lines.append(f'- {outcome}: {count}/{len(rows)} ({percentage(count, len(rows))})')
+    followups = [row for row in results if row.case.group == 'context' and row.case.turn > 1]
+    count = sum(row.passed for row in followups)
+    lines.extend(['', f'Context follow-ups: {count}/{len(followups)} ({percentage(count, len(followups))})'])
 
     failures = [result for result in results if not result.passed]
     lines.extend(["", "Observed failures"])

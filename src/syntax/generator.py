@@ -1,28 +1,24 @@
-from pathlib import Path
+"""Bounded, deterministic generation from executable productions."""
 
-from .parser import RuleParser
-
-
-ROOT = Path(__file__).resolve().parents[2]
-
-TEMPLATES = (
-    'Môn NLP có bao nhiêu tín chỉ?',
-    'Tuần 3 học gì?',
-    'Chương 4 học vào tuần nào?',
-    'Chương nào nói về CFG?',
-    'Chương 12 nói về gì?',
-    'Bài tập lớn có phần parser không?',
-    'Có được dùng LLM/RAG không?',
-    'Tài liệu tham khảo về statistical NLP là gì?',
-    'L.O.2.5 là gì?',
-    'Ai dạy môn NLP?',
-)
+from itertools import zip_longest
+from .grammar import PhraseGrammar
 
 
 def generate(limit=10000, grammar_path=None):
-    """Return valid example sentences accepted by the configured grammar."""
-    parser = RuleParser(grammar_path or ROOT / 'data' / 'grammar' / 'grammar_v1.yaml')
-    samples = [sentence for sentence in TEMPLATES if parser.parse(sentence).valid]
-    if len(samples) != len(TEMPLATES):
-        raise ValueError('The sentence generator contains samples rejected by the grammar')
-    return samples[:limit]
+    if not isinstance(limit, int) or isinstance(limit, bool) or limit < 0:
+        raise ValueError('limit must be a non-negative integer')
+    limit = min(limit, 10000)
+    if limit == 0:
+        return []
+    grammar = PhraseGrammar(grammar_path)
+    iterators = [grammar.examples(branch) for rule, branch, _, _ in grammar.rules if rule['frame'] is not None]
+    result, seen = [], set()
+    for batch in zip_longest(*iterators):
+        for sentence in batch:
+            if sentence is None or sentence.casefold() in seen:
+                continue
+            seen.add(sentence.casefold())
+            result.append(sentence)
+            if len(result) >= limit:
+                return result
+    return result

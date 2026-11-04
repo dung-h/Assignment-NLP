@@ -1,0 +1,33 @@
+NLP COURSE ASSISTANT — GOLD EVALUATION v1
+
+Method
+- Gold cases assert parser, semantic, retrieval and answer facts/sources.
+- Every case remains in the denominator; known failures are reported, not hidden.
+- Current cases are regression cases already used during development; no independent held-out claim.
+- Answer scores below measure frozen-template/fact assertions, not independent human review.
+- Fixture target: 84 turns; current fixture: 84 turns.
+
+Regression end-to-end assertion accuracy
+- Overall: 84/84 (100.0%)
+- regression: 84/84 (100.0%)
+- development: 0/0 (n/a)
+- held_out: 0/0 (n/a)
+
+Layer metrics
+- parser: 84/84 (100.0%); unobserved=0
+- semantic: 84/84 (100.0%); unobserved=0
+- retrieval: 84/84 (100.0%); unobserved=0
+- answer: 84/84 (100.0%); unobserved=0
+
+Expected outcome breakdown
+- FOUND: 55/55 (100.0%)
+- NOT_FOUND: 20/20 (100.0%)
+- UNKNOWN: 9/9 (100.0%)
+
+Context follow-ups: 6/6 (100.0%)
+
+Observed failures
+- None.
+
+Provenance
+- Factual expectations are traced in each case to data/raw or a versioned annotation.

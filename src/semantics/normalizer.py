@@ -32,7 +32,7 @@ def canonical(slot, value):
     if slot=='assignment': return 'BTL01' if ('bai tap lon' in f or 'btl' in f) else value
     if slot=='assignment_part':
         roman={'i':1,'ii':2,'iii':3,'iv':4}
-        m=re.search(r'phan\s*(i{1,3}|iv|[1-4])',f)
+        m=re.fullmatch(r'phan\s*(iv|iii|ii|i|[1-4])',f)
         if m:
             n=roman.get(m.group(1), int(m.group(1)) if m.group(1).isdigit() else None)
             return f'BTL_PART_{n}'

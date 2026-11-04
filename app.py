@@ -1,4 +1,4 @@
-import argparse, json, sys
+import argparse, json, sys, os
 from src.assistant import CourseAssistant
 
 
@@ -13,13 +13,14 @@ def _configure_console_encoding():
 
 def build_ui(bot=None):
     import gradio as gr
-    bot = bot or CourseAssistant()
-    def run(q):
-        out=bot.ask(q)
-        return out['answer'], out['person_1_parser_result'], out['person_2_semantic_query'], out['context_state'], out['person_3_retrieval_result']
+    def run(q, session):
+        session = session or bot or CourseAssistant()
+        out=session.ask(q)
+        return out['answer'], out['person_1_parser_result'], out['person_2_semantic_query'], out['context_state'], out['person_3_retrieval_result'], session
     def reset():
-        bot.reset_context(); return 'Đã reset context.', {}, {}, {}, {}
+        return 'Đã reset context.', {}, {}, {}, {}, None
     with gr.Blocks(title='NLP Course Assistant v0') as demo:
+        session = gr.State(None)
         gr.Markdown('# NLP Course Assistant v0\n**Person 1 → Person 2 → Person 3**. UI này cố ý expose toàn bộ contract trung gian.')
         q=gr.Textbox(label='User question',value='Chương nào nói về CFG?')
         with gr.Row(): ask=gr.Button('Ask',variant='primary'); rst=gr.Button('Reset context')
@@ -28,7 +29,7 @@ def build_ui(bot=None):
             p=gr.JSON(label='Person 1 — ParserResult'); s=gr.JSON(label='Person 2 — SemanticQuery')
         with gr.Row():
             c=gr.JSON(label='ContextState'); r=gr.JSON(label='Person 3 — RetrievalResult')
-        ask.click(run,q,[ans,p,s,c,r]); q.submit(run,q,[ans,p,s,c,r]); rst.click(reset,None,[ans,p,s,c,r])
+        ask.click(run,[q,session],[ans,p,s,c,r,session]); q.submit(run,[q,session],[ans,p,s,c,r,session]); rst.click(reset,None,[ans,p,s,c,r,session])
     return demo
 
 def main():
@@ -41,5 +42,5 @@ def main():
         for q in ['Môn NLP có bao nhiêu tín chỉ?','Tuần 3 học gì?','Chương nào nói về CFG?','Có được dùng LLM/RAG không?','Ai dạy môn NLP?']:
             print('\n###',q); print(json.dumps(bot.ask(q),ensure_ascii=False,indent=2))
         return
-    build_ui(bot).launch(server_name='127.0.0.1')
+    build_ui().launch(server_name=os.environ.get('GRADIO_SERVER_NAME', '127.0.0.1'))
 if __name__=='__main__': main()
