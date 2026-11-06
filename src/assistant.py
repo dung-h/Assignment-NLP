@@ -4,7 +4,7 @@ from src.knowledge.loader import KnowledgeBase
 from src.knowledge.query_engine import QueryEngine
 from src.answer.generator import AnswerGenerator, OUT_OF_SCOPE_ANSWER
 from src.contracts import ContextState, RetrievalResult
-from src.knowledge.focus import assignment_focus
+from src.knowledge.focus import assignment_focus, week_chapter_focus
 
 class CourseAssistant:
     def __init__(self):
@@ -26,5 +26,6 @@ class CourseAssistant:
             r=self.query.execute(s)
             a=self.answerer.generate(s,r,self.kb)
             self.context = assignment_focus(s, r, self.kb, self.context)
+            self.context = week_chapter_focus(s, r, self.kb, self.context)
         self._previous_query = s if s.intent != 'UNKNOWN' else None
         return {'input':text,'person_1_parser_result':p.to_dict(),'person_2_semantic_query':s.to_dict(),'context_state':self.context.to_dict(),'person_3_retrieval_result':r.to_dict(),'answer':a}

@@ -1,10 +1,32 @@
-"""Resolve grounded assignment-part focus for the integration shell.
+"""Resolve grounded conversation focus for the integration shell.
 
 This service consumes canonical queries/results only. It leaves semantic
 normalization in Person 2 and uses the same derived relations as retrieval.
 """
 
 from src.contracts import ContextState
+
+
+def week_chapter_focus(query, retrieval, kb, context):
+    """Record the unique chapter of a successfully retrieved week.
+
+    A newly asked week supersedes any previous chapter focus.  Retain the
+    week as the current focus so untyped pronouns do not silently change
+    referent; a named reference such as "chương này" can still find chapter.
+    """
+    if query.intent != 'GET_SCHEDULE' or query.attribute != 'topics' or 'week' not in query.entities:
+        return context
+
+    focus = [item for item in context.focus_entities if item['type'] != 'chapter']
+    week_ids = list(dict.fromkeys(query.entities['week']))
+    if retrieval.status != 'FOUND' or len(week_ids) != 1:
+        return ContextState(focus)
+
+    week = kb.weeks.get(week_ids[0]) or {}
+    chapter_ids = list(dict.fromkeys(week.get('chapter_ids', [])))
+    if len(chapter_ids) == 1:
+        focus.append({'type': 'chapter', 'id': chapter_ids[0]})
+    return ContextState(focus)
 
 
 def assignment_focus(query, retrieval, kb, context):

@@ -68,4 +68,7 @@ def test_integration_sample_dialogue01_week_to_chapter_reference():
         'intent': 'GET_RESOURCE', 'entities': {'chapter': ['CH03']},
         'attribute': 'resource', 'answer_mode': 'LIST',
     }
-    assert actual['person_3_retrieval_result']['status'] == 'FOUND'
+    # No chapter-to-resource relation is present in the current KB.
+    assert actual['person_3_retrieval_result'] == {
+        'status': 'NOT_FOUND', 'values': [], 'sources': [],
+    }
