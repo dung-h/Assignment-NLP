@@ -74,7 +74,12 @@ def test_end_to_end_resolves_week_chapter_without_inventing_resource_relation():
         'intent': 'GET_RESOURCE', 'entities': {'chapter': ['CH03']},
         'attribute': 'resource', 'answer_mode': 'LIST',
     }
-    assert second['person_3_retrieval_result'] == {'status': 'NOT_FOUND', 'values': [], 'sources': []}
+    assert second['person_3_retrieval_result'] == {
+        'status': 'FOUND',
+        'values': ['Natural Language Processing with Python'],
+        'sources': ['topics:CH03', 'annotation:resource_topics:RES05', 'resources:RES05'],
+    }
+    assert 'liên quan theo chủ đề' in second['answer']
 
 
 @pytest.mark.parametrize('chapter_ids', [[], ['CH03', 'CH04']])

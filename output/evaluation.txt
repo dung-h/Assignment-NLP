@@ -20,8 +20,8 @@ Layer metrics
 - answer: 84/84 (100.0%); unobserved=0
 
 Expected outcome breakdown
-- FOUND: 55/55 (100.0%)
-- NOT_FOUND: 20/20 (100.0%)
+- FOUND: 61/61 (100.0%)
+- NOT_FOUND: 14/14 (100.0%)
 - UNKNOWN: 9/9 (100.0%)
 
 Context follow-ups: 6/6 (100.0%)

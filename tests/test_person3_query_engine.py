@@ -49,7 +49,7 @@ def test_not_found_result_is_empty_and_source_free(query_engine):
 def test_resource_by_chapter_does_not_invent_a_relation(query_engine):
     query = SemanticQuery(
         "GET_RESOURCE",
-        {"chapter": ["CH03"]},
+        {"chapter": ["CH04"]},
         "resource",
         "LIST",
     )

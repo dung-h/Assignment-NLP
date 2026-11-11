@@ -4,7 +4,7 @@ version: 2
 start: S
 lexicon:
   COURSE: {slot: course, pattern: 'NLP|CO3085', examples: ['NLP', 'CO3085']}
-  CREDIT_CUE: {slot: attribute_cue, pattern: 'bao nhiêu tín chỉ|mấy tín chỉ|mấy tín|tín chỉ', examples: ['bao nhiêu tín chỉ', 'mấy tín chỉ']}
+  CREDIT_CUE: {slot: attribute_cue, pattern: 'bao nhiêu tín chỉ|mấy tín chỉ|mấy tín|tín chỉ|bao nhiêu ECTS|thuộc khoa nào', examples: ['bao nhiêu tín chỉ', 'mấy tín chỉ', 'bao nhiêu ECTS', 'thuộc khoa nào']}
   COURSE_PREFIX: {pattern: 'môn học|môn NLP|môn', examples: ['môn học', 'môn NLP']}
   EXAM: {slot: exam, pattern: 'midterm|final', examples: ['Midterm', 'Final']}
   EXAM_CUE: {slot: attribute_cue, pattern: 'bao nhiêu phút|mấy phút|hình thức|bao nhiêu phần trăm|chiếm bao nhiêu', examples: ['bao nhiêu phút', 'mấy phút', 'hình thức', 'chiếm bao nhiêu']}
@@ -12,6 +12,7 @@ lexicon:
   CHAPTER: {slot: chapter, pattern: 'chương\s*\d+', examples: ['Chương 3', 'Chương 4', 'Chương 11', 'Chương 12']}
   CHAPTER_LIST: {slot: chapter, pattern: 'chương\s*\d+(?:\s*(?:và|,)\s*chương\s*\d+)*', examples: ['Chương 4', 'Chương 3 và Chương 6']}
   TOPIC: {slot: topic, pattern: 'PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing', examples: ['CFG', 'PCFG', 'reference', 'question answering', 'semantic grammar']}
+  TOPIC_LIST: {slot: topic, pattern: '(?:PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing)(?:\s+và\s+(?:PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing))+', examples: ['CFG và PCFG']}
   BOOLEAN_TOPIC: {slot: topic, pattern: 'question answering|hỏi đáp|parsing|PCFG|CFG', examples: ['hỏi đáp', 'parsing', 'PCFG', 'CFG']}
   COMPONENT: {slot: topic, pattern: 'parser|hỏi đáp|question answering|RAG', examples: ['parser', 'hỏi đáp', 'RAG']}
   RESOURCE_TOPIC: {slot: topic, pattern: 'statistical NLP|Python NLP|PCFG|CFG', examples: ['statistical NLP', 'Python NLP', 'CFG']}
@@ -36,7 +37,7 @@ productions:
   WEEK_OF_TOPIC: [[TOPIC, 'học tuần nào'], [TOPIC, 'học tuần mấy'], [TOPIC, 'được học khi nào'], [TOPIC, 'tuần nào']]
   CHAPTER_CONTENT: [[CHAPTER, 'nói về gì'], [CHAPTER, 'học gì'], [CHAPTER, 'có nội dung gì']]
   CHAPTER_IMPERATIVE: [['Cho biết', CHAPTER, 'nói về gì'], ['Hãy cho biết', CHAPTER, 'nội dung']]
-  CHAPTER_BY_TOPIC: [['Chương nào nói về', TOPIC], ['Chương nào học về', TOPIC], ['Chương nào liên quan đến', TOPIC], [TOPIC, 'được học ở đâu'], [TOPIC, 'nằm ở chương nào']]
+  CHAPTER_BY_TOPIC: [['Chương nào nói về', TOPIC], ['Chương nào nói về', TOPIC_LIST], ['Chương nào học về', TOPIC], ['Chương nào liên quan đến', TOPIC], [TOPIC, 'được học ở đâu'], [TOPIC, 'nằm ở chương nào']]
   CHAPTER_TOPICS: [[CHAPTER, 'có những phương pháp gì'], [CHAPTER, 'có những chủ đề nào'], [CHAPTER, 'gồm những gì']]
   TOPIC_TEST: [[CHAPTER_SUBJECT, 'có', BOOLEAN_TOPIC, 'không'], [CHAPTER_SUBJECT, 'có liên quan đến', BOOLEAN_TOPIC, 'không'], [CHAPTER_SUBJECT, 'liên quan đến', BOOLEAN_TOPIC, 'không']]
   CHAPTER_SUBJECT: [[CHAPTER], [CHAPTER_REF]]

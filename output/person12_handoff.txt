@@ -1,48 +1,11 @@
 CÁC CASE CHƯA ĐẠT — NGƯỜI 1 VÀ NGƯỜI 2
 ======================================
 
-14 case đã tái hiện: F01–F04 có assertion pytest; F05–F14 mới chạy
-chẩn đoán, chưa bổ sung thành assertion pytest.
+10 case F05–F14 đã chạy chẩn đoán, chưa bổ sung thành assertion pytest.
+Các case F01–F04 trước đây đã được sửa và kiểm tra lại. Với câu hỏi nhiều
+chủ đề, kết quả là hợp các chương liên quan; phép giao chưa được biểu diễn.
 Các case grammar là khoảng trống coverage, không mặc định là yêu cầu
 bắt buộc phải hỗ trợ mọi cách diễn đạt tiếng Việt.
-
-F01 — Hỏi ECTS
-  Input: Môn NLP có bao nhiêu ECTS?
-  Hiện tại: parser valid=false; semantic UNKNOWN.
-  Mong đợi: ASK_COURSE_ATTRIBUTE; course=CO3085; attribute=ects;
-            answer_mode=VALUE. KB có ects=6.
-  Phụ trách: Người 1 — bổ sung cue và production.
-  Test: test_person1_requested_coverage[P1-ECTS].
-
-F02 — Hỏi khoa phụ trách
-  Input: Môn NLP thuộc khoa nào?
-  Hiện tại: parser valid=false; semantic UNKNOWN.
-  Mong đợi: ASK_COURSE_ATTRIBUTE; course=CO3085; attribute=department;
-            answer_mode=VALUE.
-  Phụ trách: Người 1 — bổ sung cấu trúc "thuộc khoa nào".
-  Test: test_person1_requested_coverage[P1-DEPARTMENT].
-
-F03 — Hỏi đồng thời hai topic
-  Input: Chương nào nói về CFG và PCFG?
-  Hiện tại: parser valid=false; semantic UNKNOWN.
-  Mong đợi: ASK_CHAPTER_BY_TOPIC; trích đủ topic=[CFG, PCFG];
-            GET_TOPIC, attribute=chapter, answer_mode=LIST.
-  Phụ trách: Người 1 — hỗ trợ topic list, không bỏ mất topic thứ hai.
-  Test: test_person1_requested_coverage[P1-MULTI-TOPIC].
-  Lưu ý: case này kiểm parsing/mapping; cần thống nhất nghĩa kết hợp
-         hai topic trước khi chốt oracle retrieval/answer.
-
-F04 — Tham chiếu chapter sau câu hỏi về week
-  U1: Tuần 3 học gì?
-  U2: Tài liệu của chương này là gì?
-  Hiện tại: parser nhận U2 là ASK_RESOURCE_BY_CHAPTER, nhưng semantic
-            UNKNOWN vì context chưa có chapter tương ứng với WEEK_03.
-  Mong đợi U2: GET_RESOURCE; chapter=[CH03]; attribute=resource;
-               answer_mode=LIST; retrieval FOUND từ quan hệ có trong KB.
-  Phụ trách: Người 2 + integration/Người 3 — đưa chapter duy nhất từ
-             quan hệ week–chapter vào context; không hardcode CH03.
-  Nguồn: data/raw/dialogues.txt, DIALOGUE 01.
-  Test: test_integration_sample_dialogue01_week_to_chapter_reference.
 
 F05 — Cách hỏi các phần chính của môn học
   Input: NLP có những phần chính nào?

@@ -270,19 +270,37 @@ class QueryEngine:
                     self.kb.indexes.topic_to_resources.get(topic_id, [])
                 )
             resource_ids = self._unique(resource_ids)
-            return self._resource_titles(resource_ids)
+            return self._resource_titles(resource_ids, topics)
 
-        # There is no chapter-resource relation in the current source data.
-        # Returning every resource would fabricate a relation.
         if "chapter" in q.entities:
-            return self._not_found()
+            return self._resources_related_to_chapters(q.entities["chapter"])
 
         if "resource" in q.entities:
             return self._resource_attributes(q)
 
         return self._not_found()
 
-    def _resource_titles(self, resource_ids):
+    def _resources_related_to_chapters(self, chapter_ids):
+        """Find related resources via shared topics, retaining each source."""
+        values, sources = [], []
+        for chapter_id in chapter_ids:
+            if chapter_id not in self.kb.chapters:
+                continue
+            for topic_id in self.kb.indexes.chapter_to_topics.get(chapter_id, []):
+                for resource_id in self.kb.indexes.topic_to_resources.get(topic_id, []):
+                    annotation = self.kb.resource_topic_annotations.get(resource_id, {})
+                    resource = self.kb.resources.get(resource_id)
+                    if topic_id not in annotation.get("topics", []) or not resource or not resource.get("title"):
+                        continue
+                    values.append(resource["title"])
+                    sources.extend([
+                        f"topics:{chapter_id}",
+                        f"annotation:resource_topics:{resource_id}",
+                        resource.get("source", f"resources:{resource_id}"),
+                    ])
+        return self._found(self._unique(values), self._unique(sources))
+
+    def _resource_titles(self, resource_ids, topic_ids=()):
         values = []
         sources = []
         for resource_id in resource_ids:
@@ -290,8 +308,13 @@ class QueryEngine:
             if not resource or resource.get("title") is None:
                 continue
             values.append(resource["title"])
+            annotation = self.kb.resource_topic_annotations.get(resource_id, {})
+            if annotation.get("evidence") and any(
+                topic in annotation.get("topics", []) for topic in topic_ids
+            ):
+                sources.append(f"annotation:resource_topics:{resource_id}")
             sources.append(resource.get("source", f"resources:{resource_id}"))
-        return self._found(values, sources)
+        return self._found(values, self._unique(sources))
 
     def _resource_attributes(self, q):
         values = []
@@ -337,5 +360,8 @@ class QueryEngine:
             if value is None:
                 continue
             values.extend(value if isinstance(value, list) else [value])
-            sources.append(outcome.get("source", f"course_info:{outcome_id}"))
-        return self._found(values, sources)
+            if q.attribute in {"chapter", "related_content"} and outcome.get("relation_sources"):
+                sources.extend(outcome["relation_sources"])
+            else:
+                sources.append(outcome.get("source", f"course_info:{outcome_id}"))
+        return self._found(values, self._unique(sources))

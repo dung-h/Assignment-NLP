@@ -31,9 +31,9 @@ class AnswerGenerator:
             return self._not_found_message(query)
 
         if query.answer_mode == "BOOLEAN":
-            if not isinstance(retrieval.values[0], bool):
+            if len(retrieval.values) != 1 or not isinstance(retrieval.values[0], bool):
                 raise AnswerGenerationError(
-                    "BOOLEAN answers require a boolean retrieval value"
+                    "BOOLEAN answers require exactly one boolean retrieval value"
                 )
             answer = "Có." if retrieval.values[0] is True else "Không."
             return self._with_sources(answer, retrieval.sources)
@@ -42,6 +42,10 @@ class AnswerGenerator:
             self._display_value(query, value, kb) for value in retrieval.values
         ]
         answer = self._render_found(query, display_values)
+        if query.intent == "GET_LO" and query.attribute in {"chapter", "related_content"} and any(
+            source.startswith("annotation:lo_chapters:") for source in retrieval.sources
+        ):
+            answer = "Theo đối chiếu tham khảo: " + answer
         return self._with_sources(answer, retrieval.sources)
 
     @staticmethod
@@ -81,10 +85,17 @@ class AnswerGenerator:
         if key == ("GET_COURSE_INFO", "duration", "VALUE") and "exam" in query.entities:
             return f"{query.entities['exam'][0]} có thời lượng {values[0]} phút."
         if key == ("GET_TOPIC", "chapter", "LIST"):
+            if len(query.entities.get("topic", [])) > 1:
+                return "Các chương liên quan đến ít nhất một chủ đề được hỏi: " + ", ".join(values) + "."
             return "Nội dung này được tìm thấy ở: " + ", ".join(values) + "."
         if key == ("GET_SCHEDULE", "week", "LIST"):
             return "Được học ở: " + ", ".join(values) + "."
         if key == ("GET_RESOURCE", "resource", "LIST"):
+            if query.entities.get("chapter"):
+                return (
+                    "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu "
+                    "giảng viên chỉ định): " + "; ".join(values) + "."
+                )
             return "Tài liệu phù hợp: " + "; ".join(values) + "."
         if key == ("GET_TOPIC", "summary", "VALUE"):
             subject = self._query_subject(query)
@@ -95,6 +106,8 @@ class AnswerGenerator:
         if key == ("GET_LO", "description", "VALUE"):
             outcome_id = (query.entities.get("learning_outcome") or ["LO"])[0]
             return f"Mô tả {outcome_id}: {self._sentence(values[0])}"
+        if key == ("GET_LO", "related_content", "LIST"):
+            return self._sentence("; ".join(values))
         if query.answer_mode == "LIST":
             return "; ".join(values) + "."
         return str(values[0])

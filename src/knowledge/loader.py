@@ -169,6 +169,7 @@ class KnowledgeBaseLoader:
         self._parse_learning_outcomes(kb)
         validate_kb(kb)
         self._parse_resource_topic_annotations(kb)
+        self._parse_lo_chapter_annotations(kb)
         build_indexes(kb)
         return kb
 
@@ -530,8 +531,59 @@ class KnowledgeBaseLoader:
                 raise KBValidationError(
                     f"{path.name}: {resource_id} must be TEAM_DERIVED"
                 )
+            evidence = annotation.get("evidence")
+            if evidence is not None and (
+                not isinstance(evidence, dict)
+                or not isinstance(evidence.get("url"), str)
+                or not evidence["url"].startswith("https://")
+                or not isinstance(evidence.get("section"), str)
+                or not evidence["section"].strip()
+            ):
+                raise KBValidationError(
+                    f"{path.name}: {resource_id} has invalid external evidence"
+                )
 
             kb.resource_topic_annotations[resource_id] = annotation
+
+    def _parse_lo_chapter_annotations(self, kb: KnowledgeBaseModel) -> None:
+        """Load optional, reviewable mappings only when source evidence matches."""
+        path = self.annotation_root / "lo_chapters.yaml"
+        if not path.exists():
+            return
+        try:
+            document = yaml.safe_load(path.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError) as exc:
+            raise KBValidationError(f"Cannot read {path.name}: {exc}") from exc
+        if not isinstance(document, dict) or document.get("version") != 1 or not isinstance(document.get("mappings"), list):
+            raise KBValidationError(f"{path.name}: invalid mappings")
+        seen = set()
+        for entry in document["mappings"]:
+            if not isinstance(entry, dict):
+                raise KBValidationError(f"{path.name}: mapping must be an object")
+            lo_id, chapter_id = entry.get("learning_outcome"), entry.get("chapter")
+            pair = (lo_id, chapter_id)
+            if not all(isinstance(value, str) and value for value in pair):
+                raise KBValidationError(f"{path.name}: missing LO or chapter ID")
+            if pair in seen or entry.get("id") != f"{lo_id}_{chapter_id}":
+                raise KBValidationError(f"{path.name}: duplicate or invalid mapping ID")
+            outcome, chapter = kb.learning_outcomes.get(lo_id), kb.chapters.get(chapter_id)
+            if not outcome or not chapter:
+                raise KBValidationError(f"{path.name}: unknown LO or chapter for {entry['id']}")
+            basis = entry.get("basis")
+            if (not isinstance(basis, dict)
+                    or basis.get("learning_outcome_description") != outcome.get("description")
+                    or not isinstance(basis.get("chapter_keyword"), str)
+                    or basis["chapter_keyword"].casefold() not in {str(word).casefold() for word in chapter.get("keywords", [])}
+                    or entry.get("annotation_type") != "TEAM_DERIVED"
+                    or entry.get("status") != "PROVISIONAL"):
+                raise KBValidationError(f"{path.name}: invalid evidence for {entry['id']}")
+            seen.add(pair)
+            outcome.setdefault("chapter", []).append(chapter_id)
+            outcome.setdefault("related_content", []).append(f"{chapter_id}: {chapter['summary']}")
+            sources = outcome.setdefault("relation_sources", [])
+            for source in (f"course_info:{lo_id}", f"topics:{chapter_id}", f"annotation:lo_chapters:{entry['id']}"):
+                if source not in sources:
+                    sources.append(source)
 
     def _parse_learning_outcomes(self, kb: KnowledgeBaseModel) -> None:
         source, _, lines = self._read("course_info.txt")

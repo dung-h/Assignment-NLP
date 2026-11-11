@@ -15,3 +15,15 @@ resource_topics:
       field: usage
       text: "statistical NLP"
     annotation_type: TEAM_DERIVED
+
+  RES05:
+    topics:
+      - CFG
+    basis:
+      field: title
+      text: "Natural Language Processing with Python"
+    evidence:
+      url: "https://www.nltk.org/book_1ed/ch08.html"
+      section: "Chapter 8, Section 3: Context Free Grammar"
+      note: "Đối chiếu thử nghiệm; tài liệu có nội dung liên quan, không khẳng định là tài liệu được chỉ định."
+    annotation_type: TEAM_DERIVED

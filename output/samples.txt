@@ -28,6 +28,7 @@ Chương 3 có nội dung gì?
 Cho biết Chương 3 nói về gì?
 Hãy cho biết Chương 3 nội dung?
 Chương nào nói về CFG?
+Chương nào nói về CFG và PCFG?
 Chương nào học về CFG?
 Chương nào liên quan đến CFG?
 CFG được học ở đâu?
@@ -168,10 +169,10 @@ LO4.2 liên quan đến nội dung nào?
 LO4.2 liên quan nội dung gì?
 LO4.2 nằm ở chương nào?
 LO4.2 thuộc chương nào?
-CO3085 có bao nhiêu tín chỉ?
-Môn CO3085 có bao nhiêu tín chỉ?
-CO3085 bao nhiêu tín chỉ?
-Môn CO3085 bao nhiêu tín chỉ?
+NLP có bao nhiêu ECTS?
+Môn NLP có bao nhiêu ECTS?
+NLP bao nhiêu ECTS?
+Môn NLP bao nhiêu ECTS?
 Midterm hình thức?
 Tuần 15 học gì?
 Tuần 15 học nội dung gì?
@@ -223,10 +224,10 @@ Tài liệu của Chương 11 là gì?
 Tài liệu của chương sau là gì?
 Tài liệu nào cho Chương 11?
 Tài liệu nào cho chương sau?
-CO3085 có mấy tín chỉ?
-Môn CO3085 có mấy tín chỉ?
-CO3085 mấy tín chỉ?
-Môn CO3085 mấy tín chỉ?
+NLP có thuộc khoa nào?
+Môn NLP có thuộc khoa nào?
+NLP thuộc khoa nào?
+Môn NLP thuộc khoa nào?
 Midterm chiếm bao nhiêu?
 question answering học tuần nào?
 question answering học tuần mấy?
@@ -265,6 +266,10 @@ Quy định LLM/RAG như thế nào?
 Tài liệu cho Chương 12 là gì?
 Tài liệu của Chương 12 là gì?
 Tài liệu nào cho Chương 12?
+CO3085 có bao nhiêu tín chỉ?
+Môn CO3085 có bao nhiêu tín chỉ?
+CO3085 bao nhiêu tín chỉ?
+Môn CO3085 bao nhiêu tín chỉ?
 Final bao nhiêu phút?
 semantic grammar học tuần nào?
 semantic grammar học tuần mấy?
@@ -290,6 +295,10 @@ Phần 1 cần xuất file gì?
 Phần 1 xuất file gì?
 Phần 1 output gì?
 Phần 1 cần output gì?
+CO3085 có mấy tín chỉ?
+Môn CO3085 có mấy tín chỉ?
+CO3085 mấy tín chỉ?
+Môn CO3085 mấy tín chỉ?
 Final mấy phút?
 Chương 4 có parsing không?
 chương này có parsing không?
@@ -302,6 +311,10 @@ Phần III BTL là gì?
 Phần III của BTL yêu cầu gì?
 BTL có phần RAG không?
 BTL có RAG không?
+CO3085 có bao nhiêu ECTS?
+Môn CO3085 có bao nhiêu ECTS?
+CO3085 bao nhiêu ECTS?
+Môn CO3085 bao nhiêu ECTS?
 Final hình thức?
 Chương 4 có PCFG không?
 chương này có PCFG không?
@@ -312,6 +325,10 @@ chương này liên quan đến PCFG không?
 Phần IV của bài tập lớn là gì?
 Phần IV bài tập lớn là gì?
 Phần IV của bài tập lớn yêu cầu gì?
+CO3085 có thuộc khoa nào?
+Môn CO3085 có thuộc khoa nào?
+CO3085 thuộc khoa nào?
+Môn CO3085 thuộc khoa nào?
 Final chiếm bao nhiêu?
 Chương 4 có CFG không?
 chương này có CFG không?

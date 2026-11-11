@@ -459,6 +459,10 @@
           {
             "type": "week",
             "id": "WEEK_03"
+          },
+          {
+            "type": "chapter",
+            "id": "CH03"
           }
         ]
       },
@@ -2041,15 +2045,22 @@
         "answer_mode": "LIST"
       },
       "retrieval": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "Natural Language Processing with Python"
+        ],
+        "sources": [
+          "topics:CH03",
+          "annotation:resource_topics:RES05",
+          "resources:RES05"
+        ]
       },
       "answer": {
         "contains": [
-          "không tìm thấy thông tin"
+          "liên quan theo chủ đề",
+          "Natural Language Processing with Python"
         ],
-        "exact": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+        "exact": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
       }
     },
     "actual": {
@@ -2084,14 +2095,22 @@
         ]
       },
       "person_3_retrieval_result": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "Natural Language Processing with Python"
+        ],
+        "sources": [
+          "topics:CH03",
+          "annotation:resource_topics:RES05",
+          "resources:RES05"
+        ]
       },
-      "answer": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+      "answer": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
     },
     "provenance": [
-      "data/raw/resources.txt"
+      "data/raw/resources.txt",
+      "data/raw/topics.txt",
+      "data/annotations/resource_topics.yaml"
     ]
   },
   {
@@ -2231,15 +2250,23 @@
         "answer_mode": "LIST"
       },
       "retrieval": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora."
+        ],
+        "sources": [
+          "course_info:LO4.2",
+          "topics:CH12",
+          "annotation:lo_chapters:LO4.2_CH12"
+        ]
       },
       "answer": {
         "contains": [
-          "không tìm thấy thông tin"
+          "đối chiếu tham khảo",
+          "CH12",
+          "discourse context"
         ],
-        "exact": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+        "exact": "Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."
       }
     },
     "actual": {
@@ -2274,14 +2301,22 @@
         ]
       },
       "person_3_retrieval_result": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora."
+        ],
+        "sources": [
+          "course_info:LO4.2",
+          "topics:CH12",
+          "annotation:lo_chapters:LO4.2_CH12"
+        ]
       },
-      "answer": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+      "answer": "Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."
     },
     "provenance": [
-      "data/raw/course_info.txt"
+      "data/raw/course_info.txt",
+      "data/raw/topics.txt",
+      "data/annotations/lo_chapters.yaml"
     ]
   },
   {
@@ -3350,6 +3385,10 @@
           {
             "type": "week",
             "id": "WEEK_03"
+          },
+          {
+            "type": "chapter",
+            "id": "CH03"
           }
         ]
       },
@@ -4932,15 +4971,22 @@
         "answer_mode": "LIST"
       },
       "retrieval": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "Natural Language Processing with Python"
+        ],
+        "sources": [
+          "topics:CH03",
+          "annotation:resource_topics:RES05",
+          "resources:RES05"
+        ]
       },
       "answer": {
         "contains": [
-          "không tìm thấy thông tin"
+          "liên quan theo chủ đề",
+          "Natural Language Processing with Python"
         ],
-        "exact": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+        "exact": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
       }
     },
     "actual": {
@@ -4975,14 +5021,22 @@
         ]
       },
       "person_3_retrieval_result": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "Natural Language Processing with Python"
+        ],
+        "sources": [
+          "topics:CH03",
+          "annotation:resource_topics:RES05",
+          "resources:RES05"
+        ]
       },
-      "answer": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+      "answer": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
     },
     "provenance": [
-      "data/raw/resources.txt"
+      "data/raw/resources.txt",
+      "data/raw/topics.txt",
+      "data/annotations/resource_topics.yaml"
     ]
   },
   {
@@ -5122,15 +5176,23 @@
         "answer_mode": "LIST"
       },
       "retrieval": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora."
+        ],
+        "sources": [
+          "course_info:LO4.2",
+          "topics:CH12",
+          "annotation:lo_chapters:LO4.2_CH12"
+        ]
       },
       "answer": {
         "contains": [
-          "không tìm thấy thông tin"
+          "đối chiếu tham khảo",
+          "CH12",
+          "discourse context"
         ],
-        "exact": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+        "exact": "Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."
       }
     },
     "actual": {
@@ -5165,14 +5227,22 @@
         ]
       },
       "person_3_retrieval_result": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora."
+        ],
+        "sources": [
+          "course_info:LO4.2",
+          "topics:CH12",
+          "annotation:lo_chapters:LO4.2_CH12"
+        ]
       },
-      "answer": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+      "answer": "Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."
     },
     "provenance": [
-      "data/raw/course_info.txt"
+      "data/raw/course_info.txt",
+      "data/raw/topics.txt",
+      "data/annotations/lo_chapters.yaml"
     ]
   },
   {
@@ -5708,7 +5778,9 @@
       "answer": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
     },
     "provenance": [
-      "data/raw/resources.txt"
+      "data/raw/resources.txt",
+      "data/raw/topics.txt",
+      "data/annotations/resource_topics.yaml"
     ]
   },
   {
@@ -5748,15 +5820,23 @@
         "answer_mode": "LIST"
       },
       "retrieval": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora."
+        ],
+        "sources": [
+          "course_info:LO4.2",
+          "topics:CH12",
+          "annotation:lo_chapters:LO4.2_CH12"
+        ]
       },
       "answer": {
         "contains": [
-          "không tìm thấy thông tin"
+          "đối chiếu tham khảo",
+          "CH12",
+          "discourse context"
         ],
-        "exact": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+        "exact": "Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."
       }
     },
     "actual": {
@@ -5791,14 +5871,22 @@
         ]
       },
       "person_3_retrieval_result": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora."
+        ],
+        "sources": [
+          "course_info:LO4.2",
+          "topics:CH12",
+          "annotation:lo_chapters:LO4.2_CH12"
+        ]
       },
-      "answer": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+      "answer": "Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."
     },
     "provenance": [
-      "data/raw/course_info.txt"
+      "data/raw/course_info.txt",
+      "data/raw/topics.txt",
+      "data/annotations/lo_chapters.yaml"
     ]
   },
   {
@@ -5838,15 +5926,22 @@
         "answer_mode": "LIST"
       },
       "retrieval": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "CH12"
+        ],
+        "sources": [
+          "course_info:LO4.2",
+          "topics:CH12",
+          "annotation:lo_chapters:LO4.2_CH12"
+        ]
       },
       "answer": {
         "contains": [
-          "không tìm thấy thông tin"
+          "đối chiếu tham khảo",
+          "CH12"
         ],
-        "exact": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+        "exact": "Theo đối chiếu tham khảo: CH12. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."
       }
     },
     "actual": {
@@ -5881,14 +5976,22 @@
         ]
       },
       "person_3_retrieval_result": {
-        "status": "NOT_FOUND",
-        "values": [],
-        "sources": []
+        "status": "FOUND",
+        "values": [
+          "CH12"
+        ],
+        "sources": [
+          "course_info:LO4.2",
+          "topics:CH12",
+          "annotation:lo_chapters:LO4.2_CH12"
+        ]
       },
-      "answer": "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."
+      "answer": "Theo đối chiếu tham khảo: CH12. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."
     },
     "provenance": [
-      "data/raw/course_info.txt"
+      "data/raw/course_info.txt",
+      "data/raw/topics.txt",
+      "data/annotations/lo_chapters.yaml"
     ]
   },
   {

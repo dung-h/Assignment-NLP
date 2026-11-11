@@ -58,6 +58,16 @@ def test_person2_with_correct_upstream_input(query, frame, slots, semantic):
     assert actual.to_dict() == semantic
 
 
+@pytest.mark.parametrize('query,frame,slots,semantic', CASES)
+def test_person12_cases_reach_grounded_retrieval(query, frame, slots, semantic):
+    actual = CourseAssistant().ask(query)
+    assert actual['person_2_semantic_query'] == semantic
+    assert actual['person_3_retrieval_result']['status'] == 'FOUND'
+    if len(semantic['entities'].get('topic', [])) > 1:
+        assert actual['person_3_retrieval_result']['values'] == ['CH03', 'CH06']
+        assert 'ít nhất một chủ đề' in actual['answer']
+
+
 def test_integration_sample_dialogue01_week_to_chapter_reference():
     # data/raw/dialogues.txt, DIALOGUE 01 explicitly expects CH03 here.
     bot = CourseAssistant()
@@ -68,7 +78,8 @@ def test_integration_sample_dialogue01_week_to_chapter_reference():
         'intent': 'GET_RESOURCE', 'entities': {'chapter': ['CH03']},
         'attribute': 'resource', 'answer_mode': 'LIST',
     }
-    # No chapter-to-resource relation is present in the current KB.
+    # This is a topic-based relation, not a prescribed reading list.
     assert actual['person_3_retrieval_result'] == {
-        'status': 'NOT_FOUND', 'values': [], 'sources': [],
+        'status': 'FOUND', 'values': ['Natural Language Processing with Python'],
+        'sources': ['topics:CH03', 'annotation:resource_topics:RES05', 'resources:RES05'],
     }

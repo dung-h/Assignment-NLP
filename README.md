@@ -100,13 +100,15 @@ thêm fact. Số unit test pass không phải số câu trả lời đúng.
 
 Tập này đã được dùng trong phát triển, không phải held-out độc lập. Kết quả
 template regression chưa thay thế đánh giá diễn đạt/factual answer bởi người
-review trên tập mới. Thiếu instructor, deadline hoặc quan hệ LO–chapter được
-kỳ vọng trả NOT_FOUND; đó là case đúng khi diễn giải và từ chối đúng.
+review trên tập mới. Thiếu instructor, deadline hoặc quan hệ LO–chapter chưa
+được đối chiếu được kỳ vọng trả NOT_FOUND; đó là case đúng khi diễn giải và
+từ chối đúng. Quan hệ LO4.2–CH12 và tài liệu–CFG là chú giải tham khảo của
+nhóm, không phải quan hệ do giảng viên chỉ định.
 
 ## Bàn giao lỗi/cải tiến Người 1 và Người 2
 
-Đọc `output/person12_handoff.txt` để xem các case chưa đạt, ownership và
-expected/actual. Bộ 84 case gold không bao phủ hết các câu trong dữ liệu mẫu.
+File `output/person12_handoff.txt` ghi nhận các case FAQ còn cần cải thiện.
+Bộ 84 case gold không bao phủ hết các câu trong dữ liệu mẫu.
 Các acceptance case bổ sung nằm ở `tests/test_person12_improvements.py`,
 được thu thập cả trong lượt `pytest` mặc định; không dùng `skip`/`xfail`.
 
@@ -120,14 +122,16 @@ Trong bộ bổ sung, `test_person1_requested_coverage` kiểm grammar/slot;
 `test_person2_with_correct_upstream_input` cấp ParserResult trực tiếp để
 không quy lỗi parser cho mapper. Case integration cuối tái hiện DIALOGUE 01
 trong `data/raw/dialogues.txt`. Ba case grammar là mục tiêu mở rộng coverage,
-không phải khẳng định đề bắt buộc hỗ trợ mọi paraphrase; case DIALOGUE 01 là
-thiếu coverage so với chính hội thoại mẫu đã cung cấp. Vì vậy, gold 84/84
+không phải khẳng định đề bắt buộc hỗ trợ mọi paraphrase; case DIALOGUE 01 kiểm
+tra việc dùng quan hệ tuần–chương để xác định ngữ cảnh. Vì vậy, gold 84/84
 không đồng nghĩa toàn bộ acceptance test hoặc sample dialogue đều đạt.
 
-Lần kiểm tra gần nhất: **239 test pass, 4 fail trên tổng 243**. Bốn failure
-gồm ECTS, department, topic list CFG–PCFG và tham chiếu week–chapter của
-DIALOGUE 01. Các testcase giữ assertion bình thường để thành viên tái hiện
-và sửa lỗi; kết quả gold regression riêng vẫn là **84/84**.
+Lần kiểm tra Windows gần nhất, với thư mục thử nghiệm tách biệt bị loại khỏi
+phạm vi: **267 test đạt** (`python -m pytest -q --ignore=experiments`). Kết quả
+gold regression riêng là **84/84**, không phải đánh giá trên tập độc lập. Các
+case ECTS, department, danh sách CFG–PCFG và tham chiếu week–chapter đã có
+test tích hợp. Với nhiều chủ đề, truy xuất hiện trả các chương liên quan đến
+ít nhất một chủ đề, chưa biểu diễn riêng phép giao hoặc phép hợp trong contract.
 
 ## Docker
 

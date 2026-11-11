@@ -232,12 +232,12 @@ cases:
     split: regression
     group: independent
     query: "Tài liệu cho chương 3 là gì?"
-    provenance: data/raw/resources.txt
+    provenance: [data/raw/resources.txt, data/raw/topics.txt, data/annotations/resource_topics.yaml]
     expected:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_RESOURCE_BY_CHAPTER, slots: {"chapter":["Chương 3"]}, tree: non_empty}
       semantic: {intent: GET_RESOURCE, entities: {chapter: [CH03]}, attribute: resource, answer_mode: LIST}
-      retrieval: {status: NOT_FOUND, values: [], sources: []}
-      answer: {contains: ["không tìm thấy thông tin"], exact: "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."}
+      retrieval: {status: FOUND, values: ["Natural Language Processing with Python"], sources: ["topics:CH03", "annotation:resource_topics:RES05", "resources:RES05"]}
+      answer: {contains: ["liên quan theo chủ đề", "Natural Language Processing with Python"], exact: "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."}
   - id: G022
     split: regression
     group: independent
@@ -252,12 +252,12 @@ cases:
     split: regression
     group: independent
     query: "L.O.4.2 liên quan đến nội dung nào?"
-    provenance: data/raw/course_info.txt
+    provenance: [data/raw/course_info.txt, data/raw/topics.txt, data/annotations/lo_chapters.yaml]
     expected:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_LO_RELATED_CONTENT, slots: {"learning_outcome":["L.O.4.2"]}, tree: non_empty}
       semantic: {intent: GET_LO, entities: {learning_outcome: [LO4.2]}, attribute: related_content, answer_mode: LIST}
-      retrieval: {status: NOT_FOUND, values: [], sources: []}
-      answer: {contains: ["không tìm thấy thông tin"], exact: "Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."}
+      retrieval: {status: FOUND, values: ["CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora."], sources: [course_info:LO4.2, topics:CH12, "annotation:lo_chapters:LO4.2_CH12"]}
+      answer: {contains: ["đối chiếu tham khảo", "CH12", "discourse context"], exact: "Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."}
   - id: G024
     split: regression
     group: independent
@@ -496,7 +496,7 @@ additional_cases:
   - id: "G065"
     oracle_case: "G021"
     query: "Tài liệu cho chương 10 là gì?"
-    expected: {"parser":{"slots":{"chapter":["Chương 10"]}},"semantic":{"entities":{"chapter":["CH10"]}}}
+    expected: {"parser":{"slots":{"chapter":["Chương 10"]}},"semantic":{"entities":{"chapter":["CH10"]}},"retrieval":{"status":"NOT_FOUND","values":[],"sources":[]},"answer":{"contains":["không tìm thấy thông tin"],"exact":"Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại."}}
   - id: "G066"
     oracle_case: "G023"
     query: "LO4.2 liên quan nội dung gì?"
@@ -504,7 +504,8 @@ additional_cases:
   - id: "G067"
     oracle_case: "G024"
     query: "LO4.2 thuộc chương nào?"
-    expected: {"parser":{"slots":{"learning_outcome":["LO4.2"]}},"semantic":{"entities":{"learning_outcome":["LO4.2"]}}}
+    provenance: [data/raw/course_info.txt, data/raw/topics.txt, data/annotations/lo_chapters.yaml]
+    expected: {"parser":{"slots":{"learning_outcome":["LO4.2"]}},"semantic":{"entities":{"learning_outcome":["LO4.2"]}},"retrieval":{"status":"FOUND","values":["CH12"],"sources":["course_info:LO4.2","topics:CH12","annotation:lo_chapters:LO4.2_CH12"]},"answer":{"contains":["đối chiếu tham khảo","CH12"],"exact":"Theo đối chiếu tham khảo: CH12. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12."}}
   - id: "G068"
     oracle_case: "G008"
     query: "Chương 99 nói về gì?"

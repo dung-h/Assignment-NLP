@@ -1,0 +1,11 @@
+version: 1
+# Đối chiếu thử nghiệm để nhóm rà soát; không phải ánh xạ chính thức.
+mappings:
+  - id: LO4.2_CH12
+    learning_outcome: LO4.2
+    chapter: CH12
+    basis:
+      learning_outcome_description: "Ngữ cảnh diễn ngôn cục bộ và sự tham chiếu."
+      chapter_keyword: "discourse context"
+    annotation_type: TEAM_DERIVED
+    status: PROVISIONAL
