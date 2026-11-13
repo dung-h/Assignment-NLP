@@ -1,6 +1,4 @@
 Windows PowerShell — kiểm tra bản gốc, không bao gồm experiments/
 Lệnh: python -m pytest -q --ignore=experiments
-Kết quả: 285 passed in 30.67s
-
-Các phép kiểm tra này không đồng nghĩa 285 câu hỏi độc lập. Tập đánh giá
-84 lượt đã được sử dụng trong quá trình phát triển, không phải tập độc lập.
+Tập đánh giá 84 lượt được sử dụng trong quá trình phát triển, không phải tập
+độc lập.

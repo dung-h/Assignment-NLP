@@ -131,9 +131,7 @@ không phải khẳng định đề bắt buộc hỗ trợ mọi paraphrase; ca
 tra việc dùng quan hệ tuần–chương để xác định ngữ cảnh. Vì vậy, gold 84/84
 không đồng nghĩa toàn bộ acceptance test hoặc sample dialogue đều đạt.
 
-Lần kiểm tra Windows gần nhất, với thư mục thử nghiệm tách biệt bị loại khỏi
-phạm vi: **285 test đạt** (`python -m pytest -q --ignore=experiments`). Kết quả
-gold regression riêng là **84/84**, không phải đánh giá trên tập độc lập. Các
+Kết quả gold regression riêng là **84/84**, không phải đánh giá trên tập độc lập. Các
 case ECTS, department, danh sách CFG–PCFG và tham chiếu week–chapter đã có
 test tích hợp. Với nhiều chủ đề, truy xuất hiện trả các chương liên quan đến
 ít nhất một chủ đề, chưa biểu diễn riêng phép giao hoặc phép hợp trong contract.
