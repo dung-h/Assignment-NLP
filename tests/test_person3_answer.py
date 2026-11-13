@@ -157,3 +157,30 @@ def test_missing_found_value_is_rejected(person3_runtime):
             RetrievalResult("FOUND", [""], ["course_info:CO3085"]),
             kb,
         )
+
+
+@pytest.mark.parametrize(
+    "intent,entities,attribute,heading",
+    [
+        ("GET_SCHEDULE", {"week": ["WEEK_03"]}, "topics", "Nội dung tuần 3"),
+        ("GET_TOPIC", {"chapter": ["CH03"]}, "topics", "Nội dung chương 3"),
+        ("GET_ASSIGNMENT", {"assignment_part": ["BTL_PART_1"]}, "outputs", "Các tệp đầu ra"),
+        ("GET_ASSIGNMENT", {"assignment": ["BTL01"]}, "requirements", "Yêu cầu bài tập lớn"),
+        ("GET_COURSE_INFO", {"course": ["CO3085"]}, "parts", "Các phần của môn học"),
+        ("GET_RESOURCE", {"topic": ["CFG"]}, "resource", "Tài liệu phù hợp"),
+    ],
+)
+def test_list_answers_are_readable_and_keep_every_value(intent, entities, attribute, heading):
+    query = SemanticQuery(intent=intent, entities=entities, attribute=attribute, answer_mode="LIST")
+    retrieval = RetrievalResult("FOUND", ["Nội dung A", "Nội dung B"], ["sample:SOURCE"])
+
+    answer = AnswerGenerator().generate(query, retrieval)
+
+    assert answer == f"{heading}:\n\n- Nội dung A\n- Nội dung B\n\nNguồn: sample:SOURCE."
+
+
+def test_list_heading_does_not_attribute_multiple_weeks_to_only_one():
+    query = SemanticQuery("GET_SCHEDULE", {"week": ["WEEK_03", "WEEK_04"]}, "topics", "LIST")
+    answer = AnswerGenerator().generate(query, RetrievalResult("FOUND", ["A", "B"], ["schedule:WEEK_03", "schedule:WEEK_04"]))
+    assert answer.startswith("Nội dung học:")
+    assert "Nội dung tuần 3" not in answer

@@ -143,7 +143,7 @@
           "Part I - Syntactic Processing",
           "course_info:CO3085"
         ],
-        "exact": "Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III - Context and World Knowledge. Nguồn: course_info:CO3085."
+        "exact": "Các phần của môn học:\n\n- Part I - Syntactic Processing\n- Part II - Semantic Interpretation\n- Part III - Context and World Knowledge\n\nNguồn: course_info:CO3085."
       }
     },
     "actual": {
@@ -175,7 +175,7 @@
           "course_info:CO3085"
         ]
       },
-      "answer": "Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III - Context and World Knowledge. Nguồn: course_info:CO3085."
+      "answer": "Các phần của môn học:\n\n- Part I - Syntactic Processing\n- Part II - Semantic Interpretation\n- Part III - Context and World Knowledge\n\nNguồn: course_info:CO3085."
     },
     "provenance": [
       "data/raw/course_info.txt"
@@ -428,7 +428,7 @@
           "context-free grammar",
           "schedule:WEEK_03"
         ],
-        "exact": "context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies. Nguồn: schedule:WEEK_03."
+        "exact": "Nội dung tuần 3:\n\n- context-free grammar\n- grammar and sentence structure\n- top-down parsing\n- bottom-up chart parsing\n- top-down chart parsing\n- probabilistic context-free grammar\n- dependency grammar\n- Stanford dependencies\n\nNguồn: schedule:WEEK_03."
       }
     },
     "actual": {
@@ -482,7 +482,7 @@
           "schedule:WEEK_03"
         ]
       },
-      "answer": "context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies. Nguồn: schedule:WEEK_03."
+      "answer": "Nội dung tuần 3:\n\n- context-free grammar\n- grammar and sentence structure\n- top-down parsing\n- bottom-up chart parsing\n- top-down chart parsing\n- probabilistic context-free grammar\n- dependency grammar\n- Stanford dependencies\n\nNguồn: schedule:WEEK_03."
     },
     "provenance": [
       "data/raw/schedule.txt"
@@ -947,7 +947,7 @@
           "10.1 Grammatical relations",
           "topics:CH10"
         ],
-        "exact": "10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching; 10.4 Semantically driven parsing techniques. Nguồn: topics:CH10."
+        "exact": "Nội dung chương 10:\n\n- 10.1 Grammatical relations\n- 10.2 Semantic grammars\n- 10.3 Template matching\n- 10.4 Semantically driven parsing techniques\n\nNguồn: topics:CH10."
       }
     },
     "actual": {
@@ -993,7 +993,7 @@
           "topics:CH10"
         ]
       },
-      "answer": "10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching; 10.4 Semantically driven parsing techniques. Nguồn: topics:CH10."
+      "answer": "Nội dung chương 10:\n\n- 10.1 Grammatical relations\n- 10.2 Semantic grammars\n- 10.3 Template matching\n- 10.4 Semantically driven parsing techniques\n\nNguồn: topics:CH10."
     },
     "provenance": [
       "data/raw/topics.txt"
@@ -1164,7 +1164,7 @@
           "pipeline NLP",
           "assignments:BTL01"
         ],
-        "exact": "Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."
+        "exact": "Mục tiêu bài tập lớn: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."
       }
     },
     "actual": {
@@ -1207,7 +1207,7 @@
           "assignments:BTL01"
         ]
       },
-      "answer": "Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."
+      "answer": "Mục tiêu bài tập lớn: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -1263,7 +1263,7 @@
           "Grammar and Parser",
           "assignments:BTL_PART_1"
         ],
-        "exact": "Grammar and Parser Nguồn: assignments:BTL_PART_1."
+        "exact": "Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1."
       }
     },
     "actual": {
@@ -1306,7 +1306,7 @@
           "assignments:BTL_PART_1"
         ]
       },
-      "answer": "Grammar and Parser Nguồn: assignments:BTL_PART_1."
+      "answer": "Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -1484,7 +1484,7 @@
           "output/parse-results.txt",
           "assignments:BTL_PART_1"
         ],
-        "exact": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+        "exact": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
       }
     },
     "actual": {
@@ -1529,7 +1529,7 @@
           "assignments:BTL_PART_1"
         ]
       },
-      "answer": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+      "answer": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -1577,7 +1577,7 @@
           "3-4 students",
           "assignments:BTL01"
         ],
-        "exact": "3-4 students Nguồn: assignments:BTL01."
+        "exact": "Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01."
       }
     },
     "actual": {
@@ -1607,7 +1607,7 @@
           "assignments:BTL01"
         ]
       },
-      "answer": "3-4 students Nguồn: assignments:BTL01."
+      "answer": "Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -1956,7 +1956,7 @@
           "Foundation of Statistical Natural Language Processing",
           "resources:RES04"
         ],
-        "exact": "Tài liệu phù hợp: Introduction to Natural Language Processing; Foundation of Statistical Natural Language Processing. Nguồn: resources:RES02, resources:RES04."
+        "exact": "Tài liệu phù hợp:\n\n- Introduction to Natural Language Processing\n- Foundation of Statistical Natural Language Processing\n\nNguồn: resources:RES02, resources:RES04."
       }
     },
     "actual": {
@@ -2001,7 +2001,7 @@
           "resources:RES04"
         ]
       },
-      "answer": "Tài liệu phù hợp: Introduction to Natural Language Processing; Foundation of Statistical Natural Language Processing. Nguồn: resources:RES02, resources:RES04."
+      "answer": "Tài liệu phù hợp:\n\n- Introduction to Natural Language Processing\n- Foundation of Statistical Natural Language Processing\n\nNguồn: resources:RES02, resources:RES04."
     },
     "provenance": [
       "data/raw/resources.txt",
@@ -2060,7 +2060,7 @@
           "liên quan theo chủ đề",
           "Natural Language Processing with Python"
         ],
-        "exact": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
+        "exact": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định):\n\n- Natural Language Processing with Python\n\nNguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
       }
     },
     "actual": {
@@ -2105,7 +2105,7 @@
           "resources:RES05"
         ]
       },
-      "answer": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
+      "answer": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định):\n\n- Natural Language Processing with Python\n\nNguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
     },
     "provenance": [
       "data/raw/resources.txt",
@@ -3069,7 +3069,7 @@
           "Part I - Syntactic Processing",
           "course_info:CO3085"
         ],
-        "exact": "Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III - Context and World Knowledge. Nguồn: course_info:CO3085."
+        "exact": "Các phần của môn học:\n\n- Part I - Syntactic Processing\n- Part II - Semantic Interpretation\n- Part III - Context and World Knowledge\n\nNguồn: course_info:CO3085."
       }
     },
     "actual": {
@@ -3101,7 +3101,7 @@
           "course_info:CO3085"
         ]
       },
-      "answer": "Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III - Context and World Knowledge. Nguồn: course_info:CO3085."
+      "answer": "Các phần của môn học:\n\n- Part I - Syntactic Processing\n- Part II - Semantic Interpretation\n- Part III - Context and World Knowledge\n\nNguồn: course_info:CO3085."
     },
     "provenance": [
       "data/raw/course_info.txt"
@@ -3354,7 +3354,7 @@
           "context-free grammar",
           "schedule:WEEK_03"
         ],
-        "exact": "context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies. Nguồn: schedule:WEEK_03."
+        "exact": "Nội dung tuần 3:\n\n- context-free grammar\n- grammar and sentence structure\n- top-down parsing\n- bottom-up chart parsing\n- top-down chart parsing\n- probabilistic context-free grammar\n- dependency grammar\n- Stanford dependencies\n\nNguồn: schedule:WEEK_03."
       }
     },
     "actual": {
@@ -3408,7 +3408,7 @@
           "schedule:WEEK_03"
         ]
       },
-      "answer": "context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies. Nguồn: schedule:WEEK_03."
+      "answer": "Nội dung tuần 3:\n\n- context-free grammar\n- grammar and sentence structure\n- top-down parsing\n- bottom-up chart parsing\n- top-down chart parsing\n- probabilistic context-free grammar\n- dependency grammar\n- Stanford dependencies\n\nNguồn: schedule:WEEK_03."
     },
     "provenance": [
       "data/raw/schedule.txt"
@@ -3873,7 +3873,7 @@
           "10.1 Grammatical relations",
           "topics:CH10"
         ],
-        "exact": "10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching; 10.4 Semantically driven parsing techniques. Nguồn: topics:CH10."
+        "exact": "Nội dung chương 10:\n\n- 10.1 Grammatical relations\n- 10.2 Semantic grammars\n- 10.3 Template matching\n- 10.4 Semantically driven parsing techniques\n\nNguồn: topics:CH10."
       }
     },
     "actual": {
@@ -3919,7 +3919,7 @@
           "topics:CH10"
         ]
       },
-      "answer": "10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching; 10.4 Semantically driven parsing techniques. Nguồn: topics:CH10."
+      "answer": "Nội dung chương 10:\n\n- 10.1 Grammatical relations\n- 10.2 Semantic grammars\n- 10.3 Template matching\n- 10.4 Semantically driven parsing techniques\n\nNguồn: topics:CH10."
     },
     "provenance": [
       "data/raw/topics.txt"
@@ -4090,7 +4090,7 @@
           "pipeline NLP",
           "assignments:BTL01"
         ],
-        "exact": "Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."
+        "exact": "Mục tiêu bài tập lớn: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."
       }
     },
     "actual": {
@@ -4133,7 +4133,7 @@
           "assignments:BTL01"
         ]
       },
-      "answer": "Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."
+      "answer": "Mục tiêu bài tập lớn: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -4189,7 +4189,7 @@
           "Grammar and Parser",
           "assignments:BTL_PART_1"
         ],
-        "exact": "Grammar and Parser Nguồn: assignments:BTL_PART_1."
+        "exact": "Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1."
       }
     },
     "actual": {
@@ -4232,7 +4232,7 @@
           "assignments:BTL_PART_1"
         ]
       },
-      "answer": "Grammar and Parser Nguồn: assignments:BTL_PART_1."
+      "answer": "Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -4410,7 +4410,7 @@
           "output/parse-results.txt",
           "assignments:BTL_PART_1"
         ],
-        "exact": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+        "exact": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
       }
     },
     "actual": {
@@ -4455,7 +4455,7 @@
           "assignments:BTL_PART_1"
         ]
       },
-      "answer": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+      "answer": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -4503,7 +4503,7 @@
           "3-4 students",
           "assignments:BTL01"
         ],
-        "exact": "3-4 students Nguồn: assignments:BTL01."
+        "exact": "Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01."
       }
     },
     "actual": {
@@ -4533,7 +4533,7 @@
           "assignments:BTL01"
         ]
       },
-      "answer": "3-4 students Nguồn: assignments:BTL01."
+      "answer": "Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -4882,7 +4882,7 @@
           "Foundation of Statistical Natural Language Processing",
           "resources:RES04"
         ],
-        "exact": "Tài liệu phù hợp: Introduction to Natural Language Processing; Foundation of Statistical Natural Language Processing. Nguồn: resources:RES02, resources:RES04."
+        "exact": "Tài liệu phù hợp:\n\n- Introduction to Natural Language Processing\n- Foundation of Statistical Natural Language Processing\n\nNguồn: resources:RES02, resources:RES04."
       }
     },
     "actual": {
@@ -4927,7 +4927,7 @@
           "resources:RES04"
         ]
       },
-      "answer": "Tài liệu phù hợp: Introduction to Natural Language Processing; Foundation of Statistical Natural Language Processing. Nguồn: resources:RES02, resources:RES04."
+      "answer": "Tài liệu phù hợp:\n\n- Introduction to Natural Language Processing\n- Foundation of Statistical Natural Language Processing\n\nNguồn: resources:RES02, resources:RES04."
     },
     "provenance": [
       "data/raw/resources.txt",
@@ -4986,7 +4986,7 @@
           "liên quan theo chủ đề",
           "Natural Language Processing with Python"
         ],
-        "exact": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
+        "exact": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định):\n\n- Natural Language Processing with Python\n\nNguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
       }
     },
     "actual": {
@@ -5031,7 +5031,7 @@
           "resources:RES05"
         ]
       },
-      "answer": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
+      "answer": "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định):\n\n- Natural Language Processing with Python\n\nNguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."
     },
     "provenance": [
       "data/raw/resources.txt",
@@ -7588,7 +7588,7 @@
           "output/grammar.txt",
           "assignments:BTL_PART_1"
         ],
-        "exact": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+        "exact": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
       }
     },
     "actual": {
@@ -7641,7 +7641,7 @@
           "assignments:BTL_PART_1"
         ]
       },
-      "answer": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+      "answer": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -7697,7 +7697,7 @@
           "Grammar and Parser",
           "assignments:BTL_PART_1"
         ],
-        "exact": "Grammar and Parser Nguồn: assignments:BTL_PART_1."
+        "exact": "Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1."
       }
     },
     "actual": {
@@ -7740,7 +7740,7 @@
           "assignments:BTL_PART_1"
         ]
       },
-      "answer": "Grammar and Parser Nguồn: assignments:BTL_PART_1."
+      "answer": "Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1."
     },
     "provenance": [
       "data/raw/assignments.txt"
@@ -7798,7 +7798,7 @@
           "output/grammar.txt",
           "assignments:BTL_PART_1"
         ],
-        "exact": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+        "exact": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
       }
     },
     "actual": {
@@ -7843,7 +7843,7 @@
           "assignments:BTL_PART_1"
         ]
       },
-      "answer": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+      "answer": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
     },
     "provenance": [
       "data/raw/assignments.txt"

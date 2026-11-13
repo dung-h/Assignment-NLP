@@ -42,7 +42,11 @@ UI Gradio:
 .\.venv\Scripts\python.exe app.py
 ```
 
-Sau đó mở địa chỉ local Gradio in ra terminal. UI hiển thị đồng thời **ParserResult → SemanticQuery → RetrievalResult → Answer**.
+Sau đó mở địa chỉ local Gradio in ra terminal. Khung hội thoại giữ lịch sử hỏi
+đáp; mục **Các bước xử lý câu hỏi gần nhất** giải thích phân tích, ngữ nghĩa
+và truy xuất. Phần mở rộng bên trong hiển thị dữ liệu chi tiết. Với `UNKNOWN`, giao diện
+ghi rõ KB chưa được truy vấn; dữ liệu truy xuất rỗng trong JSON chỉ là phần
+giữ cấu trúc phản hồi. Nút **Bắt đầu lại** xóa lịch sử và ngữ cảnh phiên.
 
 ## Phương pháp và scope
 
@@ -76,10 +80,10 @@ Không dùng LLM để xử lý NLP hoặc tạo câu trả lời trong bản n�
 ## Tái sinh output và đánh giá
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/export_required_outputs.py
+.\.venv\Scripts\python.exe app.py --export-outputs
 .\.venv\Scripts\python.exe scripts/run_samples.py
 .\.venv\Scripts\python.exe scripts/evaluate_gold.py --strict
-.\.venv\Scripts\python.exe scripts/verify_outputs.py
+.\.venv\Scripts\python.exe -m pytest -q --ignore=experiments
 ```
 
 `input/sentences.txt` chứa các câu độc lập; `output/dialogue.txt` chứa các
@@ -93,7 +97,8 @@ exact retrieval và template answer đã freeze; các paraphrase tái sử dụn
 oracle đã review bằng `oracle_case` và override tường minh.
 
 `output/evaluation.txt` báo số đúng/sai theo outcome và context.
-`output/gold_results.json` giữ expected/actual/provenance từng case.
+`output/evaluation_results.json` giữ expected/actual/provenance từng case;
+`output/pipeline_results.json` lưu kết quả pipeline cho các câu đầu vào mẫu.
 `--strict` trả exit code khác 0 khi còn case fail. Evaluator có mutation test
 để phát hiện value/source thừa, sai kiểu boolean, cây hỏng và câu trả lời
 thêm fact. Số unit test pass không phải số câu trả lời đúng.
@@ -127,7 +132,7 @@ tra việc dùng quan hệ tuần–chương để xác định ngữ cảnh. V�
 không đồng nghĩa toàn bộ acceptance test hoặc sample dialogue đều đạt.
 
 Lần kiểm tra Windows gần nhất, với thư mục thử nghiệm tách biệt bị loại khỏi
-phạm vi: **267 test đạt** (`python -m pytest -q --ignore=experiments`). Kết quả
+phạm vi: **285 test đạt** (`python -m pytest -q --ignore=experiments`). Kết quả
 gold regression riêng là **84/84**, không phải đánh giá trên tập độc lập. Các
 case ECTS, department, danh sách CFG–PCFG và tham chiếu week–chapter đã có
 test tích hợp. Với nhiều chủ đề, truy xuất hiện trả các chương liên quan đến
@@ -135,28 +140,38 @@ test tích hợp. Với nhiều chủ đề, truy xuất hiện trả các chư�
 
 ## Docker
 
+Để demo qua Docker, mở PowerShell tại thư mục gốc và bảo đảm Docker Desktop
+đang chạy. Build image rồi chạy giao diện:
+
 ```powershell
-docker build -t nlp-course-assistant .
-docker run --rm -p 7860:7860 nlp-course-assistant
-docker run --rm nlp-course-assistant python -m pytest -q
-docker run --rm nlp-course-assistant python scripts/verify_outputs.py --regenerate
+docker build -t nlp .
+docker run --rm -p 127.0.0.1:7860:7860 nlp
 ```
 
-UI trong container bind `0.0.0.0`; mở `http://localhost:7860` trên máy host.
-Docker phải đang chạy. Nếu chưa kiểm build/run thành công, cần ghi môi trường
-container chưa được xác minh, không suy ra từ việc có Dockerfile.
+Mở `http://localhost:7860` và giữ terminal đang chạy trong khi demo. Nhấn
+`Ctrl+C` ở terminal để dừng container. Để kiểm tra bằng Docker:
+
+```powershell
+docker run --rm nlp python -m pytest -q
+docker run --rm nlp python app.py --export-outputs
+```
+
+UI trong container bind `0.0.0.0`; cổng được công bố riêng trên localhost của
+máy host. Phiên bản thư viện trong `requirements.txt` chỉ được giới hạn tối
+thiểu, vì vậy các lần build khác nhau có thể cài phiên bản khác nhau.
+
+Kịch bản demo gợi ý: hỏi “Chương nào nói về CFG?”, hỏi tiếp trong một phiên
+mới “Tuần 3 học gì?” rồi “Tài liệu của chương này là gì?”, và thử “Ai dạy
+môn NLP?” để minh họa trường hợp thiếu dữ liệu. Có thể hỏi “Midterm kéo dài
+bao lâu?” để minh họa cách diễn đạt chưa được hỗ trợ. Quan hệ tài liệu và
+chương dựa trên chủ đề do nhóm đối chiếu, không khẳng định là tài liệu được
+giảng viên chỉ định.
 
 ## Tạo gói nộp thử
 
-```powershell
-.\.venv\Scripts\python.exe scripts/package_submission.py
-```
-
-Gói nằm trong `dist`, chứa source, data, contracts, test và output; loại
-venv/cache/Git và Markdown nội bộ. Có thể thêm `--include-report` sau khi PDF
-đã được cập nhật, hoặc `--name` để đặt tên theo MSSV thật. Script không ghi
-đè archive đã tồn tại. Báo cáo, thông tin thành viên và video cần hoàn thiện
-theo yêu cầu nộp của lớp.
+Nén các thư mục và file theo yêu cầu đề bài; không đưa `.venv`, cache, Git,
+hoặc tài liệu làm việc nội bộ vào gói nộp. Báo cáo, thông tin thành viên và
+video cần hoàn thiện theo yêu cầu nộp của lớp.
 
 ## Hạn chế
 

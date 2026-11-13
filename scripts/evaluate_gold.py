@@ -37,7 +37,7 @@ def main() -> int:
         'expected': row.case.expected, 'actual': row.response,
         'provenance': row.case.provenance,
     } for row in results]
-    (OUTPUT.parent / 'gold_results.json').write_text(
+    (OUTPUT.parent / 'evaluation_results.json').write_text(
         json.dumps(traces, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n',
     )
     print(f"wrote {OUTPUT.relative_to(ROOT)} from {len(cases)} gold turns")

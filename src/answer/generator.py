@@ -82,6 +82,12 @@ class AnswerGenerator:
         key = (query.intent, query.attribute, query.answer_mode)
         if key == ("GET_COURSE_INFO", "credits", "VALUE"):
             return f"Môn CO3085 có {values[0]} tín chỉ."
+        if key == ("GET_COURSE_INFO", "ects", "VALUE"):
+            return f"Môn CO3085 có {values[0]} ECTS."
+        if key == ("GET_COURSE_INFO", "department", "VALUE"):
+            return f"Môn CO3085 thuộc {self._sentence(values[0])}"
+        if key == ("GET_COURSE_INFO", "parts", "LIST"):
+            return self._list_answer("Các phần của môn học", values)
         if key == ("GET_COURSE_INFO", "duration", "VALUE") and "exam" in query.entities:
             return f"{query.entities['exam'][0]} có thời lượng {values[0]} phút."
         if key == ("GET_TOPIC", "chapter", "LIST"):
@@ -90,13 +96,37 @@ class AnswerGenerator:
             return "Nội dung này được tìm thấy ở: " + ", ".join(values) + "."
         if key == ("GET_SCHEDULE", "week", "LIST"):
             return "Được học ở: " + ", ".join(values) + "."
+        if key == ("GET_SCHEDULE", "topics", "LIST"):
+            weeks = query.entities.get("week", [])
+            heading = "Nội dung học"
+            if len(weeks) == 1 and re.fullmatch(r"WEEK_\d+", weeks[0]):
+                heading = f"Nội dung tuần {self._numeric_suffix(weeks[0])}"
+            return self._list_answer(heading, values)
+        if key == ("GET_TOPIC", "topics", "LIST"):
+            chapters = query.entities.get("chapter", [])
+            heading = "Các chủ đề"
+            if len(chapters) == 1 and re.fullmatch(r"CH\d+", chapters[0]):
+                heading = f"Nội dung chương {self._numeric_suffix(chapters[0])}"
+            return self._list_answer(heading, values)
+        if key == ("GET_ASSIGNMENT", "team_size", "VALUE"):
+            return f"Quy mô nhóm làm bài tập lớn: {self._sentence(values[0])}"
+        if key == ("GET_ASSIGNMENT", "goal", "VALUE"):
+            return f"Mục tiêu bài tập lớn: {self._sentence(values[0])}"
+        if key == ("GET_ASSIGNMENT", "title", "VALUE"):
+            return f"Nội dung phần bài tập lớn: {self._sentence(values[0])}"
+        if query.intent == "GET_ASSIGNMENT" and query.answer_mode == "LIST":
+            headings = {"parts": "Các phần của bài tập lớn",
+                        "requirements": "Yêu cầu bài tập lớn",
+                        "outputs": "Các tệp đầu ra"}
+            if query.attribute in headings:
+                return self._list_answer(headings[query.attribute], values)
         if key == ("GET_RESOURCE", "resource", "LIST"):
             if query.entities.get("chapter"):
-                return (
+                return self._list_answer(
                     "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu "
-                    "giảng viên chỉ định): " + "; ".join(values) + "."
+                    "giảng viên chỉ định)", values
                 )
-            return "Tài liệu phù hợp: " + "; ".join(values) + "."
+            return self._list_answer("Tài liệu phù hợp", values)
         if key == ("GET_TOPIC", "summary", "VALUE"):
             subject = self._query_subject(query)
             return f"Tóm tắt {subject}: {self._sentence(values[0])}"
@@ -111,6 +141,10 @@ class AnswerGenerator:
         if query.answer_mode == "LIST":
             return "; ".join(values) + "."
         return str(values[0])
+
+    @staticmethod
+    def _list_answer(heading, values):
+        return f"{heading}:\n\n" + "\n".join(f"- {value}" for value in values)
 
     @staticmethod
     def _sentence(value):
@@ -160,4 +194,5 @@ class AnswerGenerator:
     def _with_sources(answer, sources):
         if not sources:
             return answer
-        return f"{answer} Nguồn: {', '.join(sources)}."
+        separator = "\n\n" if "\n" in answer else " "
+        return f"{answer}{separator}Nguồn: {', '.join(sources)}."

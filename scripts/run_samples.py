@@ -15,7 +15,7 @@ rows = [
     ).splitlines()
     if line.strip()
 ]
-(ROOT / "output" / "end_to_end_results.json").write_text(
+(ROOT / "output" / "pipeline_results.json").write_text(
     json.dumps(rows, ensure_ascii=False, indent=2),
     encoding="utf-8",
     newline="\n",

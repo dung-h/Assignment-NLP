@@ -47,7 +47,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_COURSE_PARTS, slots: {}, tree: non_empty}
       semantic: {intent: GET_COURSE_INFO, entities: {}, attribute: parts, answer_mode: LIST}
       retrieval: {status: FOUND, values: ["Part I - Syntactic Processing","Part II - Semantic Interpretation","Part III - Context and World Knowledge"], sources: [course_info:CO3085]}
-      answer: {contains: ["Part I - Syntactic Processing", "course_info:CO3085"], exact: "Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III - Context and World Knowledge. Nguồn: course_info:CO3085."}
+      answer: {contains: ["Part I - Syntactic Processing", "course_info:CO3085"], exact: "Các phần của môn học:\n\n- Part I - Syntactic Processing\n- Part II - Semantic Interpretation\n- Part III - Context and World Knowledge\n\nNguồn: course_info:CO3085."}
   - id: G003
     split: regression
     group: independent
@@ -77,7 +77,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_WEEK_CONTENT, slots: {"week":["Tuần 3"]}, tree: non_empty}
       semantic: {intent: GET_SCHEDULE, entities: {week: [WEEK_03]}, attribute: topics, answer_mode: LIST}
       retrieval: {status: FOUND, values: ["context-free grammar","grammar and sentence structure","top-down parsing","bottom-up chart parsing","top-down chart parsing","probabilistic context-free grammar","dependency grammar","Stanford dependencies"], sources: [schedule:WEEK_03]}
-      answer: {contains: ["context-free grammar", "schedule:WEEK_03"], exact: "context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies. Nguồn: schedule:WEEK_03."}
+      answer: {contains: ["context-free grammar", "schedule:WEEK_03"], exact: "Nội dung tuần 3:\n\n- context-free grammar\n- grammar and sentence structure\n- top-down parsing\n- bottom-up chart parsing\n- top-down chart parsing\n- probabilistic context-free grammar\n- dependency grammar\n- Stanford dependencies\n\nNguồn: schedule:WEEK_03."}
   - id: G006
     split: regression
     group: independent
@@ -127,7 +127,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_TOPIC_OF_CHAPTER, slots: {"chapter":["Chương 10"]}, tree: non_empty}
       semantic: {intent: GET_TOPIC, entities: {chapter: [CH10]}, attribute: topics, answer_mode: LIST}
       retrieval: {status: FOUND, values: ["10.1 Grammatical relations","10.2 Semantic grammars","10.3 Template matching","10.4 Semantically driven parsing techniques"], sources: [topics:CH10]}
-      answer: {contains: ["10.1 Grammatical relations", "topics:CH10"], exact: "10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching; 10.4 Semantically driven parsing techniques. Nguồn: topics:CH10."}
+      answer: {contains: ["10.1 Grammatical relations", "topics:CH10"], exact: "Nội dung chương 10:\n\n- 10.1 Grammatical relations\n- 10.2 Semantic grammars\n- 10.3 Template matching\n- 10.4 Semantically driven parsing techniques\n\nNguồn: topics:CH10."}
   - id: G011
     split: regression
     group: independent
@@ -147,7 +147,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_INFO, slots: {"assignment":["Bài tập lớn"]}, tree: non_empty}
       semantic: {intent: GET_ASSIGNMENT, entities: {assignment: [BTL01]}, attribute: goal, answer_mode: VALUE}
       retrieval: {status: FOUND, values: ["Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering."], sources: [assignments:BTL01]}
-      answer: {contains: ["pipeline NLP", "assignments:BTL01"], exact: "Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."}
+      answer: {contains: ["pipeline NLP", "assignments:BTL01"], exact: "Mục tiêu bài tập lớn: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01."}
   - id: G013
     split: regression
     group: independent
@@ -157,7 +157,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_PART_INFO, slots: {"assignment_part":["Phần I"]}, tree: non_empty}
       semantic: {intent: GET_ASSIGNMENT, entities: {assignment_part: [BTL_PART_1]}, attribute: title, answer_mode: VALUE}
       retrieval: {status: FOUND, values: ["Grammar and Parser"], sources: [assignments:BTL_PART_1]}
-      answer: {contains: ["Grammar and Parser", "assignments:BTL_PART_1"], exact: "Grammar and Parser Nguồn: assignments:BTL_PART_1."}
+      answer: {contains: ["Grammar and Parser", "assignments:BTL_PART_1"], exact: "Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1."}
   - id: G014
     split: regression
     group: independent
@@ -177,7 +177,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_OUTPUTS, slots: {"assignment_part":["Phần I"]}, tree: non_empty}
       semantic: {intent: GET_ASSIGNMENT, entities: {assignment_part: [BTL_PART_1]}, attribute: outputs, answer_mode: LIST}
       retrieval: {status: FOUND, values: [output/grammar.txt, output/samples.txt, output/parse-results.txt], sources: [assignments:BTL_PART_1]}
-      answer: {contains: [output/grammar.txt, output/parse-results.txt, "assignments:BTL_PART_1"], exact: "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."}
+      answer: {contains: [output/grammar.txt, output/parse-results.txt, "assignments:BTL_PART_1"], exact: "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."}
   - id: G016
     split: regression
     group: independent
@@ -187,7 +187,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_TEAM_SIZE, slots: {}, tree: non_empty}
       semantic: {intent: GET_ASSIGNMENT, entities: {}, attribute: team_size, answer_mode: VALUE}
       retrieval: {status: FOUND, values: ["3-4 students"], sources: [assignments:BTL01]}
-      answer: {contains: ["3-4 students", "assignments:BTL01"], exact: "3-4 students Nguồn: assignments:BTL01."}
+      answer: {contains: ["3-4 students", "assignments:BTL01"], exact: "Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01."}
   - id: G017
     split: regression
     group: independent
@@ -227,7 +227,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_RESOURCE_BY_TOPIC, slots: {"topic":["statistical NLP"]}, tree: non_empty}
       semantic: {intent: GET_RESOURCE, entities: {topic: [STATISTICAL_NLP]}, attribute: resource, answer_mode: LIST}
       retrieval: {status: FOUND, values: ["Introduction to Natural Language Processing", "Foundation of Statistical Natural Language Processing"], sources: [resources:RES02, resources:RES04]}
-      answer: {contains: ["Foundation of Statistical Natural Language Processing", "resources:RES04"], exact: "Tài liệu phù hợp: Introduction to Natural Language Processing; Foundation of Statistical Natural Language Processing. Nguồn: resources:RES02, resources:RES04."}
+      answer: {contains: ["Foundation of Statistical Natural Language Processing", "resources:RES04"], exact: "Tài liệu phù hợp:\n\n- Introduction to Natural Language Processing\n- Foundation of Statistical Natural Language Processing\n\nNguồn: resources:RES02, resources:RES04."}
   - id: G021
     split: regression
     group: independent
@@ -237,7 +237,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_RESOURCE_BY_CHAPTER, slots: {"chapter":["Chương 3"]}, tree: non_empty}
       semantic: {intent: GET_RESOURCE, entities: {chapter: [CH03]}, attribute: resource, answer_mode: LIST}
       retrieval: {status: FOUND, values: ["Natural Language Processing with Python"], sources: ["topics:CH03", "annotation:resource_topics:RES05", "resources:RES05"]}
-      answer: {contains: ["liên quan theo chủ đề", "Natural Language Processing with Python"], exact: "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định): Natural Language Processing with Python. Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."}
+      answer: {contains: ["liên quan theo chủ đề", "Natural Language Processing with Python"], exact: "Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định):\n\n- Natural Language Processing with Python\n\nNguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05."}
   - id: G022
     split: regression
     group: independent
@@ -399,7 +399,7 @@ cases:
       parser: {valid: true, sentence_type: WH_QUESTION, query_frame: ASK_ASSIGNMENT_OUTPUTS, slots: {"reference":["Phần này"]}, tree: non_empty}
       semantic: {intent: GET_ASSIGNMENT, entities: {assignment_part: [BTL_PART_1]}, attribute: outputs, answer_mode: LIST}
       retrieval: {status: FOUND, values: [output/grammar.txt, output/samples.txt, output/parse-results.txt], sources: [assignments:BTL_PART_1]}
-      answer: {contains: [output/grammar.txt, "assignments:BTL_PART_1"], exact: "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."}
+      answer: {contains: [output/grammar.txt, "assignments:BTL_PART_1"], exact: "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."}
 
 # Explicit regression extensions reuse reviewed factual oracles, never runtime outputs.
 additional_cases:

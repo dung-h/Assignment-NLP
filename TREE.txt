@@ -30,7 +30,8 @@
 ./output/cli_cfg.json
 ./output/cli_instructor.json
 ./output/demo_run.txt
-./output/end_to_end_results.json
+./output/pipeline_results.json
+./output/evaluation_results.json
 ./output/grammar.txt
 ./output/intent-entity.txt
 ./output/parse-results.txt
@@ -40,12 +41,13 @@
 ./output/semantic.txt
 ./pytest.ini
 ./requirements.txt
-./scripts/export_required_outputs.py
 ./scripts/run_samples.py
 ./src/__init__.py
 ./src/answer/__init__.py
+./src/answer/export.py
 ./src/answer/generator.py
 ./src/assistant.py
+./src/output_export.py
 ./src/contracts.py
 ./src/knowledge/__init__.py
 ./src/knowledge/loader.py

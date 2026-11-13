@@ -90,7 +90,7 @@
         "schedule:WEEK_03"
       ]
     },
-    "answer": "context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies. Nguồn: schedule:WEEK_03."
+    "answer": "Nội dung tuần 3:\n\n- context-free grammar\n- grammar and sentence structure\n- top-down parsing\n- bottom-up chart parsing\n- top-down chart parsing\n- probabilistic context-free grammar\n- dependency grammar\n- Stanford dependencies\n\nNguồn: schedule:WEEK_03."
   },
   {
     "input": "Chương nào nói về CFG?",

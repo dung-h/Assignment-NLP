@@ -305,7 +305,7 @@
           "assignments:BTL_PART_1"
         ]
       },
-      "answer": "output/grammar.txt; output/samples.txt; output/parse-results.txt. Nguồn: assignments:BTL_PART_1."
+      "answer": "Các tệp đầu ra:\n\n- output/grammar.txt\n- output/samples.txt\n- output/parse-results.txt\n\nNguồn: assignments:BTL_PART_1."
     }
   ]
 ]
