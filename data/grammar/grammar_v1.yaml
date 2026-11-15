@@ -5,14 +5,14 @@ start: S
 lexicon:
   COURSE: {slot: course, pattern: 'NLP|CO3085', examples: ['NLP', 'CO3085']}
   CREDIT_CUE: {slot: attribute_cue, pattern: 'bao nhiêu tín chỉ|mấy tín chỉ|mấy tín|tín chỉ|bao nhiêu ECTS|thuộc khoa nào', examples: ['bao nhiêu tín chỉ', 'mấy tín chỉ', 'bao nhiêu ECTS', 'thuộc khoa nào']}
-  COURSE_PREFIX: {pattern: 'môn học|môn NLP|môn', examples: ['môn học', 'môn NLP']}
+  COURSE_PREFIX: {pattern: 'NLP|môn học|môn NLP|môn', examples: ['NLP', 'môn học', 'môn NLP']}
   EXAM: {slot: exam, pattern: 'midterm|final', examples: ['Midterm', 'Final']}
-  EXAM_CUE: {slot: attribute_cue, pattern: 'bao nhiêu phút|mấy phút|hình thức|bao nhiêu phần trăm|chiếm bao nhiêu', examples: ['bao nhiêu phút', 'mấy phút', 'hình thức', 'chiếm bao nhiêu']}
+  EXAM_CUE: {slot: attribute_cue, pattern: 'kéo dài bao lâu|bao nhiêu phút|mấy phút|hình thức|bao nhiêu phần trăm|chiếm bao nhiêu', examples: ['kéo dài bao lâu', 'bao nhiêu phút', 'mấy phút', 'hình thức', 'chiếm bao nhiêu']}
   WEEK: {slot: week, pattern: 'tuần\s*\d+', examples: ['Tuần 3', 'Tuần 4', 'Tuần 15']}
   CHAPTER: {slot: chapter, pattern: 'chương\s*\d+', examples: ['Chương 3', 'Chương 4', 'Chương 11', 'Chương 12']}
   CHAPTER_LIST: {slot: chapter, pattern: 'chương\s*\d+(?:\s*(?:và|,)\s*chương\s*\d+)*', examples: ['Chương 4', 'Chương 3 và Chương 6']}
-  TOPIC: {slot: topic, pattern: 'PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing', examples: ['CFG', 'PCFG', 'reference', 'question answering', 'semantic grammar']}
-  TOPIC_LIST: {slot: topic, pattern: '(?:PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing)(?:\s+và\s+(?:PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing))+', examples: ['CFG và PCFG']}
+  TOPIC: {slot: topic, pattern: 'Features|Augmented Grammar|knowledge representation|local discourse context|PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing', examples: ['Features', 'Augmented Grammar', 'knowledge representation', 'local discourse context', 'CFG', 'PCFG', 'reference', 'question answering', 'semantic grammar']}
+  TOPIC_LIST: {slot: topic, pattern: '(?:Features|Augmented Grammar|knowledge representation|local discourse context|PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing)(?:\s+và\s+(?:Features|Augmented Grammar|knowledge representation|local discourse context|PCFG|CFG|semantic grammar|reference|question answering|selectional restriction|parsing))+', examples: ['CFG và PCFG', 'Features và Augmented Grammar']}
   BOOLEAN_TOPIC: {slot: topic, pattern: 'question answering|hỏi đáp|parsing|PCFG|CFG', examples: ['hỏi đáp', 'parsing', 'PCFG', 'CFG']}
   COMPONENT: {slot: topic, pattern: 'parser|hỏi đáp|question answering|RAG', examples: ['parser', 'hỏi đáp', 'RAG']}
   RESOURCE_TOPIC: {slot: topic, pattern: 'statistical NLP|Python NLP|PCFG|CFG', examples: ['statistical NLP', 'Python NLP', 'CFG']}
@@ -20,7 +20,7 @@ lexicon:
   ASSIGNMENT_NAME: {pattern: 'bài tập lớn|BTL', examples: ['bài tập lớn', 'BTL']}
   PART: {slot: assignment_part, pattern: 'phần\s*(?:IV|III|II|I|[1-4])', examples: ['Phần I', 'Phần II', 'Phần III', 'Phần IV', 'Phần 1']}
   REGULATION: {slot: regulation, pattern: 'sử dụng AI|AI|source code|LLM/RAG|thư viện ngoài', examples: ['sử dụng AI', 'source code', 'thư viện ngoài', 'LLM/RAG']}
-  PERMISSION: {slot: regulation, pattern: 'dùng LLM/RAG|sử dụng AI|dùng AI|dùng thư viện ngoài|chia sẻ giữa các nhóm', examples: ['dùng LLM/RAG', 'dùng thư viện ngoài', 'chia sẻ giữa các nhóm']}
+  PERMISSION: {slot: regulation, pattern: 'LLM hoặc RAG|dùng LLM/RAG|sử dụng AI|dùng AI|dùng thư viện ngoài|chia sẻ giữa các nhóm', examples: ['LLM hoặc RAG', 'dùng LLM/RAG', 'dùng thư viện ngoài', 'chia sẻ giữa các nhóm']}
   LO: {slot: learning_outcome, pattern: 'L\.?O\.?\s*\d+(?:\.\d+)?', examples: ['L.O.2.5', 'LO4.2']}
   CHAPTER_REF: {slot: reference, pattern: 'nó|chương này|chương sau|chương trước', examples: ['Nó', 'chương này', 'chương sau']}
   PART_REF: {slot: reference, pattern: 'phần này', examples: ['Phần này']}
@@ -29,7 +29,7 @@ lexicon:
 productions:
   COURSE_SUBJECT: [[COURSE], ['Môn', COURSE]]
   CREDIT_QUERY: [[COURSE_SUBJECT, 'có', CREDIT_CUE], [COURSE_SUBJECT, CREDIT_CUE]]
-  COURSE_PARTS: [[COURSE_PREFIX, 'gồm những phần nào'], [COURSE_PREFIX, 'có mấy phần'], [COURSE_PREFIX, 'có những phần nào']]
+  COURSE_PARTS: [[COURSE_PREFIX, 'gồm những phần nào'], [COURSE_PREFIX, 'có mấy phần'], [COURSE_PREFIX, 'có những phần nào'], [COURSE_PREFIX, 'có những phần chính nào']]
   EXAM_QUERY: [[EXAM, EXAM_CUE]]
   INSTRUCTOR_QUERY: [['Ai dạy', COURSE_SUBJECT], ['Giảng viên', COURSE_SUBJECT, 'là ai'], ['Giảng viên là ai'], ['Ai dạy']]
   WEEK_CONTENT: [[WEEK, 'học gì'], [WEEK, 'học nội dung gì'], [WEEK, 'có nội dung gì']]
@@ -37,7 +37,7 @@ productions:
   WEEK_OF_TOPIC: [[TOPIC, 'học tuần nào'], [TOPIC, 'học tuần mấy'], [TOPIC, 'được học khi nào'], [TOPIC, 'tuần nào']]
   CHAPTER_CONTENT: [[CHAPTER, 'nói về gì'], [CHAPTER, 'học gì'], [CHAPTER, 'có nội dung gì']]
   CHAPTER_IMPERATIVE: [['Cho biết', CHAPTER, 'nói về gì'], ['Hãy cho biết', CHAPTER, 'nội dung']]
-  CHAPTER_BY_TOPIC: [['Chương nào nói về', TOPIC], ['Chương nào nói về', TOPIC_LIST], ['Chương nào học về', TOPIC], ['Chương nào liên quan đến', TOPIC], [TOPIC, 'được học ở đâu'], [TOPIC, 'nằm ở chương nào']]
+  CHAPTER_BY_TOPIC: [['Chương nào nói về', TOPIC], ['Chương nào nói về', TOPIC_LIST], ['Chương nào học về', TOPIC], ['Chương nào học về', TOPIC_LIST], ['Chương nào liên quan đến', TOPIC], [TOPIC, 'được học ở đâu'], [TOPIC, 'nằm ở chương nào']]
   CHAPTER_TOPICS: [[CHAPTER, 'có những phương pháp gì'], [CHAPTER, 'có những chủ đề nào'], [CHAPTER, 'gồm những gì']]
   TOPIC_TEST: [[CHAPTER_SUBJECT, 'có', BOOLEAN_TOPIC, 'không'], [CHAPTER_SUBJECT, 'có liên quan đến', BOOLEAN_TOPIC, 'không'], [CHAPTER_SUBJECT, 'liên quan đến', BOOLEAN_TOPIC, 'không']]
   CHAPTER_SUBJECT: [[CHAPTER], [CHAPTER_REF]]
@@ -49,12 +49,12 @@ productions:
   TEAM_SIZE: [[ASSIGNMENT_NAME, 'nhóm mấy người'], [ASSIGNMENT_NAME, 'bao nhiêu người']]
   DEADLINE_QUERY: [['Deadline', ASSIGNMENT, 'khi nào'], ['Hạn nộp', ASSIGNMENT, 'ngày nào'], ['Hạn nộp', ASSIGNMENT, 'khi nào']]
   REGULATION_QUERY: [['Quy định về', REGULATION, 'là gì'], ['Quy định', REGULATION, 'như thế nào']]
-  PERMISSION_QUERY: [['Có được', PERMISSION, 'không'], ['Được', PERMISSION, 'không']]
+  PERMISSION_QUERY: [['Có được', PERMISSION, 'không'], ['Được', PERMISSION, 'không'], [ASSIGNMENT, 'có thể sử dụng', PERMISSION, 'không']]
   RESOURCE_BY_TOPIC: [['Tài liệu về', RESOURCE_TOPIC, 'là gì'], ['Tài liệu tham khảo về', RESOURCE_TOPIC, 'là gì'], ['Tài liệu nào liên quan đến', RESOURCE_TOPIC], ['Tài liệu liên quan đến', RESOURCE_TOPIC, 'là gì'], ['Tài liệu nào nói về', RESOURCE_TOPIC]]
   RESOURCE_BY_CHAPTER: [['Tài liệu cho', CHAPTER_RESOURCE_SUBJECT, 'là gì'], ['Tài liệu của', CHAPTER_RESOURCE_SUBJECT, 'là gì'], ['Tài liệu nào cho', CHAPTER_RESOURCE_SUBJECT]]
   CHAPTER_RESOURCE_SUBJECT: [[CHAPTER], [CHAPTER_REF]]
   LO_DESCRIPTION: [[LO, 'là gì'], [LO, 'học về gì'], [LO, 'nói về gì']]
-  LO_CONTENT: [[LO, 'liên quan đến nội dung nào'], [LO, 'liên quan nội dung gì']]
+  LO_CONTENT: [[LO, 'liên quan đến nội dung nào'], [LO, 'liên quan đến nội dung gì'], [LO, 'liên quan nội dung gì']]
   CHAPTER_BY_LO: [[LO_SUBJECT, 'nằm ở chương nào'], [LO_SUBJECT, 'thuộc chương nào']]
   LO_SUBJECT: [[LO], [CONTENT_REF]]
   ELLIPSIS: [['Còn', RELATIVE_REF]]

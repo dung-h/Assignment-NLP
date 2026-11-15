@@ -41,6 +41,89 @@ CASES = [
     ),
 ]
 
+ADDITIONAL_CASES = [
+    pytest.param(
+        'NLP có những phần chính nào?',
+        'ASK_COURSE_PARTS',
+        {},
+        {'intent': 'GET_COURSE_INFO', 'entities': {},
+         'attribute': 'parts', 'answer_mode': 'LIST'},
+        id='P1-COURSE-PARTS',
+    ),
+    pytest.param(
+        'Chương nào học về Features và Augmented Grammar?',
+        'ASK_CHAPTER_BY_TOPIC',
+        {'topic': ['Features', 'Augmented Grammar']},
+        {'intent': 'GET_TOPIC', 'entities': {'topic': ['FEATURES', 'AUGMENTED_GRAMMAR']},
+         'attribute': 'chapter', 'answer_mode': 'LIST'},
+        id='P1-FEATURES-AUGMENTED-GRAMMAR',
+    ),
+    pytest.param(
+        'Chương nào học về knowledge representation?',
+        'ASK_CHAPTER_BY_TOPIC',
+        {'topic': ['knowledge representation']},
+        {'intent': 'GET_TOPIC', 'entities': {'topic': ['KNOWLEDGE_REPRESENTATION']},
+         'attribute': 'chapter', 'answer_mode': 'LIST'},
+        id='P1-KNOWLEDGE-REPRESENTATION',
+    ),
+    pytest.param(
+        'Chương nào học về local discourse context?',
+        'ASK_CHAPTER_BY_TOPIC',
+        {'topic': ['local discourse context']},
+        {'intent': 'GET_TOPIC', 'entities': {'topic': ['LOCAL_DISCOURSE_CONTEXT']},
+         'attribute': 'chapter', 'answer_mode': 'LIST'},
+        id='P1-LOCAL-DISCOURSE-CONTEXT',
+    ),
+    pytest.param(
+        'L.O.4.2 liên quan đến nội dung gì?',
+        'ASK_LO_RELATED_CONTENT',
+        {'learning_outcome': ['L.O.4.2']},
+        {'intent': 'GET_LO', 'entities': {'learning_outcome': ['LO4.2']},
+         'attribute': 'content', 'answer_mode': 'LIST'},
+        id='P1-LO4.2-CONTENT',
+    ),
+    pytest.param(
+        'L.O.2.5 liên quan đến nội dung gì?',
+        'ASK_LO_RELATED_CONTENT',
+        {'learning_outcome': ['L.O.2.5']},
+        {'intent': 'GET_LO', 'entities': {'learning_outcome': ['LO2.5']},
+         'attribute': 'content', 'answer_mode': 'LIST'},
+        id='P1-LO2.5-CONTENT',
+    ),
+    pytest.param(
+        'L.O.3.3 liên quan đến nội dung gì?',
+        'ASK_LO_RELATED_CONTENT',
+        {'learning_outcome': ['L.O.3.3']},
+        {'intent': 'GET_LO', 'entities': {'learning_outcome': ['LO3.3']},
+         'attribute': 'content', 'answer_mode': 'LIST'},
+        id='P1-LO3.3-CONTENT',
+    ),
+    pytest.param(
+        'Bài tập lớn có thể sử dụng LLM hoặc RAG không?',
+        'ASK_PERMISSION',
+        {'assignment': ['Bài tập lớn'], 'regulation': ['LLM', 'RAG']},
+        {'intent': 'GET_RULE', 'entities': {'regulation': ['LLM_RAG']},
+         'attribute': 'permission', 'answer_mode': 'BOOLEAN'},
+        id='P1-LLM-OR-RAG',
+    ),
+    pytest.param(
+        'Midterm kéo dài bao lâu?',
+        'ASK_EXAM_ATTRIBUTE',
+        {'exam': ['Midterm'], 'attribute_cue': ['kéo dài bao lâu']},
+        {'intent': 'GET_COURSE_INFO', 'entities': {'exam': ['MIDTERM']},
+         'attribute': 'duration', 'answer_mode': 'VALUE'},
+        id='P1-P2-MIDTERM-DURATION',
+    ),
+    pytest.param(
+        'Final kéo dài bao lâu?',
+        'ASK_EXAM_ATTRIBUTE',
+        {'exam': ['Final'], 'attribute_cue': ['kéo dài bao lâu']},
+        {'intent': 'GET_COURSE_INFO', 'entities': {'exam': ['FINAL']},
+         'attribute': 'duration', 'answer_mode': 'VALUE'},
+        id='P1-P2-FINAL-DURATION',
+    ),
+]
+
 
 @pytest.mark.parametrize('query,frame,slots,semantic', CASES)
 def test_person1_requested_coverage(query, frame, slots, semantic):
@@ -66,6 +149,42 @@ def test_person12_cases_reach_grounded_retrieval(query, frame, slots, semantic):
     if len(semantic['entities'].get('topic', [])) > 1:
         assert actual['person_3_retrieval_result']['values'] == ['CH03', 'CH06']
         assert 'ít nhất một chủ đề' in actual['answer']
+
+
+@pytest.mark.parametrize('query,frame,slots,semantic', ADDITIONAL_CASES)
+def test_person1_additional_handoff_parsing(query, frame, slots, semantic):
+    parsed = RuleParser().parse(query)
+    assert parsed.valid, f'Unsupported natural-language form: {query}'
+    assert parsed.query_frame == frame
+    assert parsed.slots == slots
+
+
+@pytest.mark.parametrize('query,frame,slots,semantic', ADDITIONAL_CASES)
+def test_person2_additional_handoff_mapping(query, frame, slots, semantic):
+    actual, _ = SemanticMapper().map(
+        ParserResult(True, 'WH_QUESTION', frame, slots, None)
+    )
+    assert actual.to_dict() == semantic
+
+
+@pytest.mark.parametrize(
+    'query,expected_values',
+    [
+        ('NLP có những phần chính nào?', [
+            'Grammar and Parser', 'Semantic Interpretation and QA',
+            'Local Discourse Context', 'Evaluation',
+        ]),
+        ('Chương nào học về Features và Augmented Grammar?', ['CH04']),
+        ('Chương nào học về knowledge representation?', ['CH11']),
+        ('Chương nào học về local discourse context?', ['CH12']),
+        ('Bài tập lớn có thể sử dụng LLM hoặc RAG không?', [True]),
+        ('Midterm kéo dài bao lâu?', [60]),
+        ('Final kéo dài bao lâu?', [90]),
+    ],
+)
+def test_additional_handoff_cases_reach_expected_retrieval(query, expected_values):
+    actual = CourseAssistant().ask(query)
+    assert actual['person_3_retrieval_result']['values'] == expected_values
 
 
 def test_integration_sample_dialogue01_week_to_chapter_reference():
