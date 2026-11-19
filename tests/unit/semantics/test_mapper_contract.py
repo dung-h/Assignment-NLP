@@ -1,4 +1,4 @@
-"""Person 2 must emit queries accepted by the frozen Person 3 boundary."""
+"""Semantic mapping must produce queries accepted by the retrieval contract."""
 
 import pytest
 
@@ -26,6 +26,7 @@ def parsed(frame, slots=None):
         ("ASK_COURSE_ATTRIBUTE", "giờ tự học", {}, "self_study_hours"),
         ("ASK_COURSE_ATTRIBUTE", "mô tả", {}, "description"),
         ("ASK_EXAM_ATTRIBUTE", "thời lượng", {"exam": ["midterm"]}, "duration"),
+        ("ASK_EXAM_ATTRIBUTE", "kéo dài bao lâu", {"exam": ["midterm"]}, "duration"),
         ("ASK_EXAM_ATTRIBUTE", "hình thức", {"exam": ["final"]}, "format"),
         ("ASK_EXAM_ATTRIBUTE", "trọng số", {"exam": ["final"]}, "weight"),
         ("ASK_INSTRUCTOR_ATTRIBUTE", "tên", {}, "name"),

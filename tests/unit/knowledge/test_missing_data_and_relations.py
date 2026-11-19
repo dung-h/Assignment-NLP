@@ -1,4 +1,4 @@
-"""Independent Person 3 checks for missing data and grounded relations."""
+"""Checks for missing KB data and evidence-grounded relations."""
 
 import pytest
 from shutil import copytree

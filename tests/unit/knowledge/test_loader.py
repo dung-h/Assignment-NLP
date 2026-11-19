@@ -7,7 +7,7 @@ from src.knowledge.loader import KnowledgeBase, KnowledgeBaseLoader
 from src.knowledge.loader import KBValidationError
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[3]
 RAW_DATA = ROOT / "data" / "raw"
 ANNOTATION_DATA = ROOT / "data" / "annotations"
 

@@ -8,6 +8,11 @@ def fold(s):
 TOPIC_ALIASES = {
  'cfg':'CFG','context-free grammar':'CFG','context free grammar':'CFG',
  'pcfg':'PCFG','probabilistic context-free grammar':'PCFG',
+ 'feature':'FEATURES','features':'FEATURES','feature system':'FEATURES',
+ 'feature systems':'FEATURES',
+ 'augmented grammar':'AUGMENTED_GRAMMAR','augmented grammars':'AUGMENTED_GRAMMAR',
+ 'knowledge representation':'KNOWLEDGE_REPRESENTATION',
+ 'local discourse context':'LOCAL_DISCOURSE_CONTEXT',
  'parsing':'PARSING','parser':'PARSING',
  'semantic grammar':'SEMANTIC_GRAMMAR','reference':'REFERENCE',
  'question answering':'QUESTION_ANSWERING','hoi dap':'QUESTION_ANSWERING',
@@ -17,6 +22,7 @@ TOPIC_ALIASES = {
 }
 REG_ALIASES = {
  'llm/rag':'LLM_RAG','dung llm/rag':'LLM_RAG',
+ 'llm':'LLM_RAG','rag':'LLM_RAG',
  'su dung ai':'AI_USAGE','ai':'AI_USAGE','dung ai':'AI_USAGE',
  'source code':'SOURCE_CODE','thu vien ngoai':'EXTERNAL_LIBRARIES',
  'dung thu vien ngoai':'EXTERNAL_LIBRARIES','chia se giua cac nhom':'ASSIGNMENT_SHARING'

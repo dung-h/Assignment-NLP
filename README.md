@@ -110,31 +110,29 @@ review trên tập mới. Thiếu instructor, deadline hoặc quan hệ LO–cha
 từ chối đúng. Quan hệ LO4.2–CH12 và tài liệu–CFG là chú giải tham khảo của
 nhóm, không phải quan hệ do giảng viên chỉ định.
 
-## Bàn giao lỗi/cải tiến Người 1 và Người 2
+## Cấu trúc kiểm thử
 
-File `output/person12_handoff.txt` ghi nhận các case FAQ còn cần cải thiện.
-Bộ 84 case gold không bao phủ hết các câu trong dữ liệu mẫu.
-Các acceptance case bổ sung nằm ở `tests/test_person12_improvements.py`,
-được thu thập cả trong lượt `pytest` mặc định; không dùng `skip`/`xfail`.
+Bộ test được gom theo mục đích trong `tests/`, không theo thành viên thực hiện:
+
+- `tests/unit/`: kiểm tra từng module và ranh giới contract.
+- `tests/integration/`: kiểm tra các module đã nối với nhau, gồm xử lý hội thoại.
+- `tests/acceptance/`: kiểm tra câu hỏi hoàn chỉnh, mock KB dùng chung và bộ
+  đánh giá hồi quy end-to-end.
+
+Chạy toàn bộ test hoặc chọn riêng một tầng khi cần tìm lỗi:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest tests/test_completion_regressions.py -v
-.\.venv\Scripts\python.exe -m pytest tests/test_person12_improvements.py -v --tb=short
 .\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m pytest tests/unit -q
+.\.venv\Scripts\python.exe -m pytest tests/integration -q
+.\.venv\Scripts\python.exe -m pytest tests/acceptance -q
 ```
 
-Trong bộ bổ sung, `test_person1_requested_coverage` kiểm grammar/slot;
-`test_person2_with_correct_upstream_input` cấp ParserResult trực tiếp để
-không quy lỗi parser cho mapper. Case integration cuối tái hiện DIALOGUE 01
-trong `data/raw/dialogues.txt`. Ba case grammar là mục tiêu mở rộng coverage,
-không phải khẳng định đề bắt buộc hỗ trợ mọi paraphrase; case DIALOGUE 01 kiểm
-tra việc dùng quan hệ tuần–chương để xác định ngữ cảnh. Vì vậy, gold 84/84
-không đồng nghĩa toàn bộ acceptance test hoặc sample dialogue đều đạt.
-
-Kết quả gold regression riêng là **84/84**, không phải đánh giá trên tập độc lập. Các
-case ECTS, department, danh sách CFG–PCFG và tham chiếu week–chapter đã có
-test tích hợp. Với nhiều chủ đề, truy xuất hiện trả các chương liên quan đến
-ít nhất một chủ đề, chưa biểu diễn riêng phép giao hoặc phép hợp trong contract.
+Trong `tests/acceptance/test_language_coverage.py`, các phép kiểm tra parser,
+semantic mapper và toàn pipeline được tách rõ: test semantic mapper nhận một
+`ParserResult` hợp lệ làm đầu vào, còn test pipeline chạy câu hỏi từ đầu đến
+kết quả truy xuất. Nhờ đó có thể nhận biết lỗi nằm ở bước nào; các case mở rộng
+này không bị gộp vào bộ gold regression.
 
 ## Docker
 

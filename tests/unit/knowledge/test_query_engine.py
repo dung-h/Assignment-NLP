@@ -9,7 +9,7 @@ from src.knowledge.query_engine import QueryEngine, QueryHandlerNotImplemented
 from src.semantics.semantic_query_validator import InvalidSemanticQuery
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[3]
 FIXTURE = ROOT / "contracts" / "mock_cases" / "person3.json"
 CASES = json.loads(FIXTURE.read_text(encoding="utf-8"))["cases"]
 RETRIEVAL_CASES = [

@@ -10,7 +10,7 @@ def test_export_keeps_intermediate_outputs_aligned_with_inputs(tmp_path):
     (tmp_path / 'input' / 'sentences.txt').write_text(
         'Môn NLP có bao nhiêu tín chỉ?\nTuần 3 học gì?\n', encoding='utf-8'
     )
-    grammar = Path(__file__).resolve().parents[1] / 'data' / 'grammar' / 'grammar_v1.yaml'
+    grammar = Path(__file__).resolve().parents[3] / 'data' / 'grammar' / 'grammar_v1.yaml'
     (tmp_path / 'data' / 'grammar' / 'grammar_v1.yaml').write_text(
         grammar.read_text(encoding='utf-8'), encoding='utf-8'
     )

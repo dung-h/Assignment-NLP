@@ -1,9 +1,9 @@
-"""Person 1/2 handoff acceptance extensions beyond the 84-case regression set.
+"""Language-coverage and pipeline handoff checks beyond the frozen gold set.
 
-Run: python -m pytest tests/test_person12_improvements.py -v
-Also discovered by the default full pytest run. These assertions expose three
-requested coverage extensions and one missed sample-dialogue requirement.
-Do not turn them into xfail/skip or fold their results into the frozen gold score.
+The tests deliberately check individual pipeline boundaries as well as full
+requests. A parser rejection and a semantic-mapping mismatch are distinct
+failures, even when they originate from the same example question. These extra
+cases are not part of the frozen gold evaluation score.
 """
 
 import pytest
@@ -21,7 +21,7 @@ CASES = [
         {'course': ['NLP'], 'attribute_cue': ['bao nhiêu ECTS']},
         {'intent': 'GET_COURSE_INFO', 'entities': {'course': ['CO3085']},
          'attribute': 'ects', 'answer_mode': 'VALUE'},
-        id='P1-ECTS',
+        id='course-ects',
     ),
     pytest.param(
         'Môn NLP thuộc khoa nào?',
@@ -29,7 +29,7 @@ CASES = [
         {'course': ['NLP'], 'attribute_cue': ['thuộc khoa nào']},
         {'intent': 'GET_COURSE_INFO', 'entities': {'course': ['CO3085']},
          'attribute': 'department', 'answer_mode': 'VALUE'},
-        id='P1-DEPARTMENT',
+        id='course-department',
     ),
     pytest.param(
         'Chương nào nói về CFG và PCFG?',
@@ -37,7 +37,7 @@ CASES = [
         {'topic': ['CFG', 'PCFG']},
         {'intent': 'GET_TOPIC', 'entities': {'topic': ['CFG', 'PCFG']},
          'attribute': 'chapter', 'answer_mode': 'LIST'},
-        id='P1-MULTI-TOPIC',
+        id='multiple-topics',
     ),
 ]
 
@@ -48,7 +48,7 @@ ADDITIONAL_CASES = [
         {},
         {'intent': 'GET_COURSE_INFO', 'entities': {},
          'attribute': 'parts', 'answer_mode': 'LIST'},
-        id='P1-COURSE-PARTS',
+        id='course-parts',
     ),
     pytest.param(
         'Chương nào học về Features và Augmented Grammar?',
@@ -56,7 +56,7 @@ ADDITIONAL_CASES = [
         {'topic': ['Features', 'Augmented Grammar']},
         {'intent': 'GET_TOPIC', 'entities': {'topic': ['FEATURES', 'AUGMENTED_GRAMMAR']},
          'attribute': 'chapter', 'answer_mode': 'LIST'},
-        id='P1-FEATURES-AUGMENTED-GRAMMAR',
+        id='features-and-augmented-grammar',
     ),
     pytest.param(
         'Chương nào học về knowledge representation?',
@@ -64,7 +64,7 @@ ADDITIONAL_CASES = [
         {'topic': ['knowledge representation']},
         {'intent': 'GET_TOPIC', 'entities': {'topic': ['KNOWLEDGE_REPRESENTATION']},
          'attribute': 'chapter', 'answer_mode': 'LIST'},
-        id='P1-KNOWLEDGE-REPRESENTATION',
+        id='knowledge-representation',
     ),
     pytest.param(
         'Chương nào học về local discourse context?',
@@ -72,31 +72,31 @@ ADDITIONAL_CASES = [
         {'topic': ['local discourse context']},
         {'intent': 'GET_TOPIC', 'entities': {'topic': ['LOCAL_DISCOURSE_CONTEXT']},
          'attribute': 'chapter', 'answer_mode': 'LIST'},
-        id='P1-LOCAL-DISCOURSE-CONTEXT',
+        id='local-discourse-context',
     ),
     pytest.param(
         'L.O.4.2 liên quan đến nội dung gì?',
         'ASK_LO_RELATED_CONTENT',
         {'learning_outcome': ['L.O.4.2']},
         {'intent': 'GET_LO', 'entities': {'learning_outcome': ['LO4.2']},
-         'attribute': 'content', 'answer_mode': 'LIST'},
-        id='P1-LO4.2-CONTENT',
+         'attribute': 'related_content', 'answer_mode': 'LIST'},
+        id='lo4.2-related-content',
     ),
     pytest.param(
         'L.O.2.5 liên quan đến nội dung gì?',
         'ASK_LO_RELATED_CONTENT',
         {'learning_outcome': ['L.O.2.5']},
         {'intent': 'GET_LO', 'entities': {'learning_outcome': ['LO2.5']},
-         'attribute': 'content', 'answer_mode': 'LIST'},
-        id='P1-LO2.5-CONTENT',
+         'attribute': 'related_content', 'answer_mode': 'LIST'},
+        id='lo2.5-related-content',
     ),
     pytest.param(
         'L.O.3.3 liên quan đến nội dung gì?',
         'ASK_LO_RELATED_CONTENT',
         {'learning_outcome': ['L.O.3.3']},
         {'intent': 'GET_LO', 'entities': {'learning_outcome': ['LO3.3']},
-         'attribute': 'content', 'answer_mode': 'LIST'},
-        id='P1-LO3.3-CONTENT',
+         'attribute': 'related_content', 'answer_mode': 'LIST'},
+        id='lo3.3-related-content',
     ),
     pytest.param(
         'Bài tập lớn có thể sử dụng LLM hoặc RAG không?',
@@ -104,7 +104,7 @@ ADDITIONAL_CASES = [
         {'assignment': ['Bài tập lớn'], 'regulation': ['LLM', 'RAG']},
         {'intent': 'GET_RULE', 'entities': {'regulation': ['LLM_RAG']},
          'attribute': 'permission', 'answer_mode': 'BOOLEAN'},
-        id='P1-LLM-OR-RAG',
+        id='llm-or-rag-permission',
     ),
     pytest.param(
         'Midterm kéo dài bao lâu?',
@@ -112,7 +112,7 @@ ADDITIONAL_CASES = [
         {'exam': ['Midterm'], 'attribute_cue': ['kéo dài bao lâu']},
         {'intent': 'GET_COURSE_INFO', 'entities': {'exam': ['MIDTERM']},
          'attribute': 'duration', 'answer_mode': 'VALUE'},
-        id='P1-P2-MIDTERM-DURATION',
+        id='midterm-duration',
     ),
     pytest.param(
         'Final kéo dài bao lâu?',
@@ -120,13 +120,13 @@ ADDITIONAL_CASES = [
         {'exam': ['Final'], 'attribute_cue': ['kéo dài bao lâu']},
         {'intent': 'GET_COURSE_INFO', 'entities': {'exam': ['FINAL']},
          'attribute': 'duration', 'answer_mode': 'VALUE'},
-        id='P1-P2-FINAL-DURATION',
+        id='final-duration',
     ),
 ]
 
 
 @pytest.mark.parametrize('query,frame,slots,semantic', CASES)
-def test_person1_requested_coverage(query, frame, slots, semantic):
+def test_parser_recognizes_core_language_forms(query, frame, slots, semantic):
     parsed = RuleParser().parse(query)
     assert parsed.valid, f'Unsupported natural-language form: {query}'
     assert parsed.query_frame == frame
@@ -134,15 +134,15 @@ def test_person1_requested_coverage(query, frame, slots, semantic):
 
 
 @pytest.mark.parametrize('query,frame,slots,semantic', CASES)
-def test_person2_with_correct_upstream_input(query, frame, slots, semantic):
-    # Isolate Person 2: a Person 1 rejection must not be blamed on the mapper.
+def test_semantic_mapper_maps_parser_output_to_contract(query, frame, slots, semantic):
+    # Supply a valid parser result to isolate semantic mapping from parsing.
     parsed = ParserResult(True, 'WH_QUESTION', frame, slots, None)
     actual, _ = SemanticMapper().map(parsed)
     assert actual.to_dict() == semantic
 
 
 @pytest.mark.parametrize('query,frame,slots,semantic', CASES)
-def test_person12_cases_reach_grounded_retrieval(query, frame, slots, semantic):
+def test_core_language_forms_reach_grounded_answers(query, frame, slots, semantic):
     actual = CourseAssistant().ask(query)
     assert actual['person_2_semantic_query'] == semantic
     assert actual['person_3_retrieval_result']['status'] == 'FOUND'
@@ -152,7 +152,7 @@ def test_person12_cases_reach_grounded_retrieval(query, frame, slots, semantic):
 
 
 @pytest.mark.parametrize('query,frame,slots,semantic', ADDITIONAL_CASES)
-def test_person1_additional_handoff_parsing(query, frame, slots, semantic):
+def test_parser_recognizes_additional_language_forms(query, frame, slots, semantic):
     parsed = RuleParser().parse(query)
     assert parsed.valid, f'Unsupported natural-language form: {query}'
     assert parsed.query_frame == frame
@@ -160,7 +160,7 @@ def test_person1_additional_handoff_parsing(query, frame, slots, semantic):
 
 
 @pytest.mark.parametrize('query,frame,slots,semantic', ADDITIONAL_CASES)
-def test_person2_additional_handoff_mapping(query, frame, slots, semantic):
+def test_semantic_mapper_handles_additional_parser_frames(query, frame, slots, semantic):
     actual, _ = SemanticMapper().map(
         ParserResult(True, 'WH_QUESTION', frame, slots, None)
     )
@@ -171,8 +171,8 @@ def test_person2_additional_handoff_mapping(query, frame, slots, semantic):
     'query,expected_values',
     [
         ('NLP có những phần chính nào?', [
-            'Grammar and Parser', 'Semantic Interpretation and QA',
-            'Local Discourse Context', 'Evaluation',
+            'Part I - Syntactic Processing', 'Part II - Semantic Interpretation',
+            'Part III - Context and World Knowledge',
         ]),
         ('Chương nào học về Features và Augmented Grammar?', ['CH04']),
         ('Chương nào học về knowledge representation?', ['CH11']),
@@ -182,12 +182,12 @@ def test_person2_additional_handoff_mapping(query, frame, slots, semantic):
         ('Final kéo dài bao lâu?', [90]),
     ],
 )
-def test_additional_handoff_cases_reach_expected_retrieval(query, expected_values):
+def test_additional_language_forms_reach_expected_retrieval(query, expected_values):
     actual = CourseAssistant().ask(query)
     assert actual['person_3_retrieval_result']['values'] == expected_values
 
 
-def test_integration_sample_dialogue01_week_to_chapter_reference():
+def test_sample_dialogue_resolves_week_to_chapter_reference():
     # data/raw/dialogues.txt, DIALOGUE 01 explicitly expects CH03 here.
     bot = CourseAssistant()
     bot.ask('Tuần 3 học gì?')

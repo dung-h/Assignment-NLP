@@ -75,6 +75,12 @@ class TestCanonicalTopic:
         assert canonical('topic', 'hỏi đáp') == 'QUESTION_ANSWERING'
         assert canonical('topic', 'parsing') == 'PARSING'
 
+    def test_new_course_topic_aliases(self):
+        assert canonical('topic', 'Features') == 'FEATURES'
+        assert canonical('topic', 'Augmented Grammar') == 'AUGMENTED_GRAMMAR'
+        assert canonical('topic', 'knowledge representation') == 'KNOWLEDGE_REPRESENTATION'
+        assert canonical('topic', 'local discourse context') == 'LOCAL_DISCOURSE_CONTEXT'
+
     def test_fallback(self):
         assert canonical('topic', 'some new topic') == 'SOME_NEW_TOPIC'
 
@@ -83,6 +89,8 @@ class TestCanonicalRegulation:
     def test_alias(self):
         assert canonical('regulation', 'LLM/RAG') == 'LLM_RAG'
         assert canonical('regulation', 'dùng LLM/RAG') == 'LLM_RAG'
+        assert canonical('regulation', 'LLM') == 'LLM_RAG'
+        assert canonical('regulation', 'RAG') == 'LLM_RAG'
 
     def test_no_false_positive(self):
         # 'ai' không nên match trong 'fair use'

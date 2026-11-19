@@ -9,7 +9,7 @@ from src.knowledge.loader import KnowledgeBase
 from src.knowledge.query_engine import QueryEngine
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "contracts" / "mock_cases" / "person3.json"
 CASES = json.loads(FIXTURE.read_text(encoding="utf-8"))["cases"]
 RETRIEVAL_CASES = [
@@ -18,12 +18,12 @@ RETRIEVAL_CASES = [
 
 
 @pytest.fixture(scope="module")
-def person3_runtime():
+def knowledge_runtime():
     kb = KnowledgeBase()
     return kb, QueryEngine(kb), AnswerGenerator()
 
 
-def test_person3_fixture_has_required_shape():
+def test_shared_kb_cases_have_required_shape():
     assert [case["id"] for case in CASES] == [
         "K01", "K02", "K03", "K04", "K05", "K06",
         "K07", "K08", "K09", "K10", "K11", "K12",
@@ -54,8 +54,8 @@ def test_person3_fixture_has_required_shape():
             }
 
 
-def test_person3_fixture_is_loaded_from_shared_contract(person3_runtime):
-    _, query_engine, _ = person3_runtime
+def test_shared_kb_cases_match_retrieval_behavior(knowledge_runtime):
+    _, query_engine, _ = knowledge_runtime
     case = CASES[0]
     query = SemanticQuery(**case["input_semantic_query"])
     assert query_engine.execute(query).to_dict() == case["expected_retrieval"]

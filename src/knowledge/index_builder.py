@@ -28,15 +28,18 @@ def _topic_ids(terms: Iterable[str]) -> list[str]:
     result: list[str] = []
     for term in terms:
         normalized = fold(str(term))
+        matches: list[tuple[int, int, str]] = []
+        occupied: list[tuple[int, int]] = []
         for alias, topic_id in ordered_aliases:
-            if not re.search(
-                rf"(?:^|\s){re.escape(alias)}(?:$|\s)",
-                normalized,
-            ):
-                continue
+            for match in re.finditer(rf"(?<!\w){re.escape(alias)}(?!\w)", normalized):
+                start, end = match.span()
+                if any(start < right and end > left for left, right in occupied):
+                    continue
+                occupied.append((start, end))
+                matches.append((start, -(end - start), topic_id))
+        for _, _, topic_id in sorted(matches):
             if topic_id not in result:
                 result.append(topic_id)
-            break
     return result
 
 

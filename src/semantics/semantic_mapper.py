@@ -30,7 +30,14 @@ def attribute_from_cue(frame, cue):
         if 'mo ta' in c or 'description' in c: return 'description'
 
     if frame == 'ASK_EXAM_ATTRIBUTE':
-        if 'phut' in c or 'thoi luong' in c or 'duration' in c: return 'duration'
+        if (
+            'phut' in c
+            or 'thoi luong' in c
+            or 'keo dai bao lau' in c
+            or 'bao lau' in c
+            or 'duration' in c
+        ):
+            return 'duration'
         if 'hinh thuc' in c or 'format' in c: return 'format'
         if 'phan tram' in c or 'chiem' in c or 'trong so' in c or 'weight' in c: return 'weight'
 
@@ -77,9 +84,13 @@ class SemanticMapper:
         for slot, vals in parsed.slots.items():
             if slot in {'attribute_cue', 'reference'}:
                 continue
+            # The shared permission frame queries a course-wide regulation.
+            # The assignment phrase is grammatical context, not a contract entity.
+            if parsed.query_frame == 'ASK_PERMISSION' and slot == 'assignment':
+                continue
             if not isinstance(vals, list) or any(not isinstance(v, str) for v in vals):
                 return self._unknown(context)
-            entities[slot] = [canonical(slot, v) for v in vals]
+            entities[slot] = list(dict.fromkeys(canonical(slot, v) for v in vals))
 
         allowed_types = set(spec.get('required', [])) | set(spec.get('optional', []))
         references = parsed.slots.get('reference', [])
