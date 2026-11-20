@@ -165,7 +165,11 @@ class QueryEngine:
                 assignment = self.kb.assignments.get(assignment_id)
                 if not assignment or q.attribute not in assignment:
                     continue
-                values.append(assignment[q.attribute])
+                value = assignment[q.attribute]
+                if isinstance(value, list):
+                    values.extend(value)
+                else:
+                    values.append(value)
                 sources.append(f"assignments:{assignment_id}")
             return self._found(values, sources)
 

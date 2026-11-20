@@ -13,9 +13,17 @@ Giảng viên NLP là ai?
 Giảng viên Môn NLP là ai?
 Giảng viên là ai?
 Ai dạy?
+email giảng viên là gì?
+email của giảng viên là gì?
 Tuần 3 học gì?
 Tuần 3 học nội dung gì?
 Tuần 3 có nội dung gì?
+Tuần 3 có hoạt động gì?
+Hoạt động của Tuần 3 là gì?
+Tuần 3 có mốc gì?
+Mốc của Tuần 3 là gì?
+Những tuần nào có mốc?
+Tuần nào có mốc?
 Chương 4 học vào tuần nào?
 Chương 4 học tuần mấy?
 Chương 4 vào tuần nào?
@@ -26,6 +34,11 @@ Features tuần nào?
 Chương 3 nói về gì?
 Chương 3 học gì?
 Chương 3 có nội dung gì?
+Chương 3 có tên là gì?
+Tên của Chương 3 là gì?
+Chương 3 thuộc phần môn nào?
+phần môn I có những chương nào?
+Những chương nào thuộc phần môn I?
 Cho biết Chương 3 nói về gì?
 Hãy cho biết Chương 3 nội dung?
 Chương nào nói về Features?
@@ -51,6 +64,12 @@ Bài tập lớn là gì?
 Bài tập lớn yêu cầu xây dựng những gì?
 Mục tiêu Bài tập lớn là gì?
 Bài tập lớn có mục tiêu gì?
+Bài tập lớn gồm những phần nào?
+Bài tập lớn có những phần nào?
+Bài tập lớn có những yêu cầu gì?
+Bài tập lớn yêu cầu những gì?
+Yêu cầu của Bài tập lớn là gì?
+Phần I của Bài tập lớn có những yêu cầu gì?
 Bài tập lớn có phần parser không?
 Bài tập lớn có parser không?
 Phần I cần xuất file gì?
@@ -66,6 +85,10 @@ bài tập lớn bao nhiêu người?
 Deadline Bài tập lớn khi nào?
 Hạn nộp Bài tập lớn ngày nào?
 Hạn nộp Bài tập lớn khi nào?
+Hạn nộp Phần I của bài tập lớn khi nào?
+Deadline Phần I của bài tập lớn khi nào?
+Hạn nộp DEADLINE_01 là ngày nào?
+Ngày của DEADLINE_01 là ngày nào?
 Quy định về sử dụng AI là gì?
 Quy định sử dụng AI như thế nào?
 Có được LLM hoặc RAG không?
@@ -82,6 +105,8 @@ Tài liệu của Chương 3 là gì?
 Tài liệu của Nó là gì?
 Tài liệu nào cho Chương 3?
 Tài liệu nào cho Nó?
+tác giả của tài liệu RES02 là gì?
+Tài liệu RES02 có tác giả là gì?
 L.O.2.5 là gì?
 L.O.2.5 học về gì?
 L.O.2.5 nói về gì?
@@ -105,9 +130,15 @@ Ai dạy CO3085?
 Ai dạy Môn CO3085?
 Giảng viên CO3085 là ai?
 Giảng viên Môn CO3085 là ai?
+văn phòng giảng viên là gì?
+văn phòng của giảng viên là gì?
 Tuần 4 học gì?
 Tuần 4 học nội dung gì?
 Tuần 4 có nội dung gì?
+Tuần 4 có hoạt động gì?
+Hoạt động của Tuần 4 là gì?
+Tuần 4 có mốc gì?
+Mốc của Tuần 4 là gì?
 Chương 3 và Chương 6 học vào tuần nào?
 Chương 3 và Chương 6 học tuần mấy?
 Chương 3 và Chương 6 vào tuần nào?
@@ -118,6 +149,11 @@ Augmented Grammar tuần nào?
 Chương 4 nói về gì?
 Chương 4 học gì?
 Chương 4 có nội dung gì?
+Chương 4 có tên là gì?
+Tên của Chương 4 là gì?
+Chương 4 thuộc phần môn nào?
+phần môn II có những chương nào?
+Những chương nào thuộc phần môn II?
 Cho biết Chương 4 nói về gì?
 Hãy cho biết Chương 4 nội dung?
 Chương nào nói về Augmented Grammar?
@@ -143,6 +179,12 @@ BTL là gì?
 BTL yêu cầu xây dựng những gì?
 Mục tiêu BTL là gì?
 BTL có mục tiêu gì?
+BTL gồm những phần nào?
+BTL có những phần nào?
+BTL có những yêu cầu gì?
+BTL yêu cầu những gì?
+Yêu cầu của BTL là gì?
+Phần I của BTL có những yêu cầu gì?
 Bài tập lớn có phần hỏi đáp không?
 Bài tập lớn có hỏi đáp không?
 Phần II cần xuất file gì?
@@ -154,6 +196,8 @@ BTL bao nhiêu người?
 Deadline BTL khi nào?
 Hạn nộp BTL ngày nào?
 Hạn nộp BTL khi nào?
+Hạn nộp Phần I của BTL khi nào?
+Deadline Phần I của BTL khi nào?
 Quy định về source code là gì?
 Quy định source code như thế nào?
 Có được dùng LLM/RAG không?
@@ -170,6 +214,8 @@ Tài liệu của Chương 4 là gì?
 Tài liệu của chương này là gì?
 Tài liệu nào cho Chương 4?
 Tài liệu nào cho chương này?
+tác giả của tài liệu RES05 là gì?
+Tài liệu RES02 có năm là gì?
 LO4.2 là gì?
 LO4.2 học về gì?
 LO4.2 nói về gì?
@@ -190,6 +236,10 @@ Midterm mấy phút?
 Tuần 15 học gì?
 Tuần 15 học nội dung gì?
 Tuần 15 có nội dung gì?
+Tuần 15 có hoạt động gì?
+Hoạt động của Tuần 15 là gì?
+Tuần 15 có mốc gì?
+Mốc của Tuần 15 là gì?
 knowledge representation học tuần nào?
 knowledge representation học tuần mấy?
 knowledge representation được học khi nào?
@@ -197,6 +247,11 @@ knowledge representation tuần nào?
 Chương 11 nói về gì?
 Chương 11 học gì?
 Chương 11 có nội dung gì?
+Chương 11 có tên là gì?
+Tên của Chương 11 là gì?
+Chương 11 thuộc phần môn nào?
+phần môn III có những chương nào?
+Những chương nào thuộc phần môn III?
 Cho biết Chương 11 nói về gì?
 Hãy cho biết Chương 11 nội dung?
 Chương nào nói về knowledge representation?
@@ -216,12 +271,15 @@ Nó liên quan đến PCFG không?
 Phần II của bài tập lớn là gì?
 Phần II bài tập lớn là gì?
 Phần II của bài tập lớn yêu cầu gì?
+Phần II của Bài tập lớn có những yêu cầu gì?
 Bài tập lớn có phần RAG không?
 Bài tập lớn có RAG không?
 Phần III cần xuất file gì?
 Phần III xuất file gì?
 Phần III output gì?
 Phần III cần output gì?
+Hạn nộp Phần II của bài tập lớn khi nào?
+Deadline Phần II của bài tập lớn khi nào?
 Quy định về thư viện ngoài là gì?
 Quy định thư viện ngoài như thế nào?
 Có được dùng thư viện ngoài không?
@@ -238,6 +296,8 @@ Tài liệu của Chương 11 là gì?
 Tài liệu của chương sau là gì?
 Tài liệu nào cho Chương 11?
 Tài liệu nào cho chương sau?
+năm của tài liệu RES02 là gì?
+Tài liệu RES02 có nhà xuất bản là gì?
 NLP có thuộc khoa nào?
 Môn NLP có thuộc khoa nào?
 NLP thuộc khoa nào?
@@ -250,6 +310,9 @@ local discourse context tuần nào?
 Chương 12 nói về gì?
 Chương 12 học gì?
 Chương 12 có nội dung gì?
+Chương 12 có tên là gì?
+Tên của Chương 12 là gì?
+Chương 12 thuộc phần môn nào?
 Cho biết Chương 12 nói về gì?
 Hãy cho biết Chương 12 nội dung?
 Chương nào nói về local discourse context?
@@ -269,12 +332,15 @@ Nó liên quan đến CFG không?
 Phần II của BTL là gì?
 Phần II BTL là gì?
 Phần II của BTL yêu cầu gì?
+Phần II của BTL có những yêu cầu gì?
 BTL có phần parser không?
 BTL có parser không?
 Phần IV cần xuất file gì?
 Phần IV xuất file gì?
 Phần IV output gì?
 Phần IV cần output gì?
+Hạn nộp Phần II của BTL khi nào?
+Deadline Phần II của BTL khi nào?
 Quy định về LLM/RAG là gì?
 Quy định LLM/RAG như thế nào?
 Có được chia sẻ giữa các nhóm không?
@@ -283,6 +349,8 @@ Bài tập lớn có thể sử dụng chia sẻ giữa các nhóm không?
 Tài liệu cho Chương 12 là gì?
 Tài liệu của Chương 12 là gì?
 Tài liệu nào cho Chương 12?
+năm của tài liệu RES05 là gì?
+Tài liệu RES02 có sử dụng là gì?
 CO3085 có bao nhiêu tín chỉ?
 Môn CO3085 có bao nhiêu tín chỉ?
 CO3085 bao nhiêu tín chỉ?
@@ -306,13 +374,18 @@ chương này liên quan đến hỏi đáp không?
 Phần III của bài tập lớn là gì?
 Phần III bài tập lớn là gì?
 Phần III của bài tập lớn yêu cầu gì?
+Phần III của Bài tập lớn có những yêu cầu gì?
 BTL có phần hỏi đáp không?
 BTL có hỏi đáp không?
 Phần 1 cần xuất file gì?
 Phần 1 xuất file gì?
 Phần 1 output gì?
 Phần 1 cần output gì?
+Hạn nộp Phần III của bài tập lớn khi nào?
+Deadline Phần III của bài tập lớn khi nào?
 BTL có thể sử dụng LLM hoặc RAG không?
+nhà xuất bản của tài liệu RES02 là gì?
+Tài liệu RES05 có tác giả là gì?
 CO3085 có mấy tín chỉ?
 Môn CO3085 có mấy tín chỉ?
 CO3085 mấy tín chỉ?
@@ -336,9 +409,14 @@ chương này liên quan đến parsing không?
 Phần III của BTL là gì?
 Phần III BTL là gì?
 Phần III của BTL yêu cầu gì?
+Phần III của BTL có những yêu cầu gì?
 BTL có phần RAG không?
 BTL có RAG không?
+Hạn nộp Phần III của BTL khi nào?
+Deadline Phần III của BTL khi nào?
 BTL có thể sử dụng dùng LLM/RAG không?
+nhà xuất bản của tài liệu RES05 là gì?
+Tài liệu RES05 có năm là gì?
 CO3085 có bao nhiêu ECTS?
 Môn CO3085 có bao nhiêu ECTS?
 CO3085 bao nhiêu ECTS?
@@ -362,7 +440,12 @@ chương này liên quan đến PCFG không?
 Phần IV của bài tập lớn là gì?
 Phần IV bài tập lớn là gì?
 Phần IV của bài tập lớn yêu cầu gì?
+Phần IV của Bài tập lớn có những yêu cầu gì?
+Hạn nộp Phần IV của bài tập lớn khi nào?
+Deadline Phần IV của bài tập lớn khi nào?
 BTL có thể sử dụng dùng thư viện ngoài không?
+sử dụng của tài liệu RES02 là gì?
+Tài liệu RES05 có nhà xuất bản là gì?
 CO3085 có thuộc khoa nào?
 Môn CO3085 có thuộc khoa nào?
 CO3085 thuộc khoa nào?
@@ -386,7 +469,12 @@ chương này liên quan đến CFG không?
 Phần IV của BTL là gì?
 Phần IV BTL là gì?
 Phần IV của BTL yêu cầu gì?
+Phần IV của BTL có những yêu cầu gì?
+Hạn nộp Phần IV của BTL khi nào?
+Deadline Phần IV của BTL khi nào?
 BTL có thể sử dụng chia sẻ giữa các nhóm không?
+sử dụng của tài liệu RES05 là gì?
+Tài liệu RES05 có sử dụng là gì?
 Final hình thức?
 semantic grammar học tuần nào?
 semantic grammar học tuần mấy?
@@ -406,6 +494,9 @@ chương sau liên quan đến hỏi đáp không?
 Phần 1 của bài tập lớn là gì?
 Phần 1 bài tập lớn là gì?
 Phần 1 của bài tập lớn yêu cầu gì?
+Phần 1 của Bài tập lớn có những yêu cầu gì?
+Hạn nộp Phần 1 của bài tập lớn khi nào?
+Deadline Phần 1 của bài tập lớn khi nào?
 Final chiếm bao nhiêu?
 Chương 11 có parsing không?
 chương sau có parsing không?
@@ -416,6 +507,9 @@ chương sau liên quan đến parsing không?
 Phần 1 của BTL là gì?
 Phần 1 BTL là gì?
 Phần 1 của BTL yêu cầu gì?
+Phần 1 của BTL có những yêu cầu gì?
+Hạn nộp Phần 1 của BTL khi nào?
+Deadline Phần 1 của BTL khi nào?
 Chương 11 có PCFG không?
 chương sau có PCFG không?
 Chương 11 có liên quan đến PCFG không?

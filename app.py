@@ -233,7 +233,12 @@ def build_ui(bot=None):
 
 def main():
     _configure_console_encoding()
-    ap=argparse.ArgumentParser(); ap.add_argument('--cli'); ap.add_argument('--demo',action='store_true'); ap.add_argument('--export-outputs', action='store_true'); args=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument('--cli'); ap.add_argument('--demo',action='store_true'); ap.add_argument('--export-outputs', action='store_true'); ap.add_argument('--evaluate', action='store_true'); ap.add_argument('--strict', action='store_true'); args=ap.parse_args()
+    if args.strict and not args.evaluate:
+        ap.error('--strict cần đi cùng --evaluate')
+    if args.evaluate:
+        from src.evaluation.evaluator import main as evaluate
+        return evaluate(['--strict'] if args.strict else [])
     if args.export_outputs:
         from src.output_export import export_outputs
         print(f'Đã xuất kết quả cho {export_outputs()} câu hỏi.')
@@ -246,4 +251,4 @@ def main():
             print('\n###',q); print(json.dumps(bot.ask(q),ensure_ascii=False,indent=2))
         return
     build_ui().launch(server_name=os.environ.get('GRADIO_SERVER_NAME', '127.0.0.1'), css=UI_CSS)
-if __name__=='__main__': main()
+if __name__=='__main__': raise SystemExit(main())

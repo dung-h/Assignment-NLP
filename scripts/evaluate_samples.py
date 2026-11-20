@@ -22,7 +22,7 @@ from src.assistant import CourseAssistant
 
 
 SAMPLE_QUERIES = ROOT / "data" / "raw" / "sample_queries.txt"
-OUTPUT = ROOT / "output" / "evaluation.txt"
+OUTPUT = ROOT / "output" / "sample_query_evaluation.txt"
 ROW = re.compile(r"^(Q\d+)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*$")
 ENTITY_ALIASES = {
     "PART_I": "BTL_PART_1",

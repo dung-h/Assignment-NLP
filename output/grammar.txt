@@ -19,6 +19,11 @@ lexicon:
   ASSIGNMENT: {slot: assignment, pattern: 'bài tập lớn|BTL', examples: ['Bài tập lớn', 'BTL']}
   ASSIGNMENT_NAME: {pattern: 'bài tập lớn|BTL', examples: ['bài tập lớn', 'BTL']}
   PART: {slot: assignment_part, pattern: 'phần\s*(?:IV|III|II|I|[1-4])', examples: ['Phần I', 'Phần II', 'Phần III', 'Phần IV', 'Phần 1']}
+  COURSE_PART: {slot: course_part, pattern: 'phần môn\s*(?:III|II|I|[1-3])', examples: ['phần môn I', 'phần môn II', 'phần môn III']}
+  RESOURCE_ID: {slot: resource, pattern: 'RES\s*\d+', examples: ['RES02', 'RES05']}
+  DEADLINE_ID: {slot: deadline, pattern: 'DEADLINE[_-]?\d+', examples: ['DEADLINE_01']}
+  INSTRUCTOR_CUE: {slot: attribute_cue, pattern: 'email|văn phòng', examples: ['email', 'văn phòng']}
+  RESOURCE_CUE: {slot: attribute_cue, pattern: 'tác giả|năm|nhà xuất bản|sử dụng', examples: ['tác giả', 'năm', 'nhà xuất bản', 'sử dụng']}
   REGULATION: {slot: regulation, pattern: 'sử dụng AI|AI|source code|LLM/RAG|thư viện ngoài', examples: ['sử dụng AI', 'source code', 'thư viện ngoài', 'LLM/RAG']}
   PERMISSION: {slot: regulation, pattern: 'LLM hoặc RAG|dùng LLM/RAG|sử dụng AI|dùng AI|dùng thư viện ngoài|chia sẻ giữa các nhóm', examples: ['LLM hoặc RAG', 'dùng LLM/RAG', 'dùng thư viện ngoài', 'chia sẻ giữa các nhóm']}
   LO: {slot: learning_outcome, pattern: 'L\.?O\.?\s*\d+(?:\.\d+)?', examples: ['L.O.2.5', 'LO4.2']}
@@ -32,10 +37,17 @@ productions:
   COURSE_PARTS: [[COURSE_PREFIX, 'gồm những phần nào'], [COURSE_PREFIX, 'có mấy phần'], [COURSE_PREFIX, 'có những phần nào'], [COURSE_PREFIX, 'có những phần chính nào']]
   EXAM_QUERY: [[EXAM, EXAM_CUE]]
   INSTRUCTOR_QUERY: [['Ai dạy', COURSE_SUBJECT], ['Giảng viên', COURSE_SUBJECT, 'là ai'], ['Giảng viên là ai'], ['Ai dạy']]
+  INSTRUCTOR_ATTRIBUTE: [[INSTRUCTOR_CUE, 'giảng viên là gì'], [INSTRUCTOR_CUE, 'của giảng viên là gì']]
   WEEK_CONTENT: [[WEEK, 'học gì'], [WEEK, 'học nội dung gì'], [WEEK, 'có nội dung gì']]
+  WEEK_ACTIVITY: [[WEEK, 'có hoạt động gì'], ['Hoạt động của', WEEK, 'là gì']]
+  WEEK_MILESTONE: [[WEEK, 'có mốc gì'], ['Mốc của', WEEK, 'là gì']]
+  MILESTONE_WEEK: [['Những tuần nào có mốc'], ['Tuần nào có mốc']]
   WEEK_OF_CHAPTER: [[CHAPTER_LIST, 'học vào tuần nào'], [CHAPTER_LIST, 'học tuần mấy'], [CHAPTER_LIST, 'vào tuần nào']]
   WEEK_OF_TOPIC: [[TOPIC, 'học tuần nào'], [TOPIC, 'học tuần mấy'], [TOPIC, 'được học khi nào'], [TOPIC, 'tuần nào']]
   CHAPTER_CONTENT: [[CHAPTER, 'nói về gì'], [CHAPTER, 'học gì'], [CHAPTER, 'có nội dung gì']]
+  CHAPTER_TITLE: [[CHAPTER, 'có tên là gì'], ['Tên của', CHAPTER, 'là gì']]
+  PART_OF_CHAPTER: [[CHAPTER, 'thuộc phần môn nào']]
+  CHAPTERS_OF_PART: [[COURSE_PART, 'có những chương nào'], ['Những chương nào thuộc', COURSE_PART]]
   CHAPTER_IMPERATIVE: [['Cho biết', CHAPTER, 'nói về gì'], ['Hãy cho biết', CHAPTER, 'nội dung']]
   CHAPTER_BY_TOPIC: [['Chương nào nói về', TOPIC], ['Chương nào nói về', TOPIC_LIST], ['Chương nào học về', TOPIC], ['Chương nào học về', TOPIC_LIST], ['Chương nào liên quan đến', TOPIC], [TOPIC, 'được học ở đâu'], [TOPIC, 'nằm ở chương nào']]
   CHAPTER_TOPICS: [[CHAPTER, 'có những phương pháp gì'], [CHAPTER, 'có những chủ đề nào'], [CHAPTER, 'gồm những gì']]
@@ -43,15 +55,20 @@ productions:
   CHAPTER_SUBJECT: [[CHAPTER], [CHAPTER_REF]]
   PART_INFO: [[PART, 'của', ASSIGNMENT_NAME, 'là gì'], [PART, ASSIGNMENT_NAME, 'là gì'], [PART, 'của', ASSIGNMENT_NAME, 'yêu cầu gì']]
   ASSIGNMENT_INFO: [[ASSIGNMENT, 'là gì'], [ASSIGNMENT, 'yêu cầu xây dựng những gì'], ['Mục tiêu', ASSIGNMENT, 'là gì'], [ASSIGNMENT, 'có mục tiêu gì']]
+  ASSIGNMENT_PARTS: [[ASSIGNMENT, 'gồm những phần nào'], [ASSIGNMENT, 'có những phần nào']]
+  ASSIGNMENT_REQUIREMENTS: [[ASSIGNMENT, 'có những yêu cầu gì'], [ASSIGNMENT, 'yêu cầu những gì'], ['Yêu cầu của', ASSIGNMENT, 'là gì'], [PART, 'của', ASSIGNMENT, 'có những yêu cầu gì']]
   COMPONENT_TEST: [[ASSIGNMENT, 'có phần', COMPONENT, 'không'], [ASSIGNMENT, 'có', COMPONENT, 'không']]
   PART_OUTPUTS: [[PART_SUBJECT, 'cần xuất file gì'], [PART_SUBJECT, 'xuất file gì'], [PART_SUBJECT, 'output gì'], [PART_SUBJECT, 'cần output gì']]
   PART_SUBJECT: [[PART], [PART_REF]]
   TEAM_SIZE: [[ASSIGNMENT_NAME, 'nhóm mấy người'], [ASSIGNMENT_NAME, 'bao nhiêu người']]
   DEADLINE_QUERY: [['Deadline', ASSIGNMENT, 'khi nào'], ['Hạn nộp', ASSIGNMENT, 'ngày nào'], ['Hạn nộp', ASSIGNMENT, 'khi nào']]
+  PART_DEADLINE: [['Hạn nộp', PART, 'của', ASSIGNMENT_NAME, 'khi nào'], ['Deadline', PART, 'của', ASSIGNMENT_NAME, 'khi nào']]
+  DEADLINE_INFO: [['Hạn nộp', DEADLINE_ID, 'là ngày nào'], ['Ngày của', DEADLINE_ID, 'là ngày nào']]
   REGULATION_QUERY: [['Quy định về', REGULATION, 'là gì'], ['Quy định', REGULATION, 'như thế nào']]
   PERMISSION_QUERY: [['Có được', PERMISSION, 'không'], ['Được', PERMISSION, 'không'], [ASSIGNMENT, 'có thể sử dụng', PERMISSION, 'không']]
   RESOURCE_BY_TOPIC: [['Tài liệu về', RESOURCE_TOPIC, 'là gì'], ['Tài liệu tham khảo về', RESOURCE_TOPIC, 'là gì'], ['Tài liệu nào liên quan đến', RESOURCE_TOPIC], ['Tài liệu liên quan đến', RESOURCE_TOPIC, 'là gì'], ['Tài liệu nào nói về', RESOURCE_TOPIC]]
   RESOURCE_BY_CHAPTER: [['Tài liệu cho', CHAPTER_RESOURCE_SUBJECT, 'là gì'], ['Tài liệu của', CHAPTER_RESOURCE_SUBJECT, 'là gì'], ['Tài liệu nào cho', CHAPTER_RESOURCE_SUBJECT]]
+  RESOURCE_ATTRIBUTE: [[RESOURCE_CUE, 'của tài liệu', RESOURCE_ID, 'là gì'], ['Tài liệu', RESOURCE_ID, 'có', RESOURCE_CUE, 'là gì']]
   CHAPTER_RESOURCE_SUBJECT: [[CHAPTER], [CHAPTER_REF]]
   LO_DESCRIPTION: [[LO, 'là gì'], [LO, 'học về gì'], [LO, 'nói về gì']]
   LO_CONTENT: [[LO, 'liên quan đến nội dung nào'], [LO, 'liên quan đến nội dung gì'], [LO, 'liên quan nội dung gì']]
@@ -63,24 +80,36 @@ rules:
   - {frame: ASK_COURSE_PARTS, sentence_type: WH_QUESTION, production: COURSE_PARTS}
   - {frame: ASK_EXAM_ATTRIBUTE, sentence_type: WH_QUESTION, production: EXAM_QUERY}
   - {frame: ASK_INSTRUCTOR, sentence_type: WH_QUESTION, production: INSTRUCTOR_QUERY}
+  - {frame: ASK_INSTRUCTOR_ATTRIBUTE, sentence_type: WH_QUESTION, production: INSTRUCTOR_ATTRIBUTE}
   - {frame: ASK_WEEK_CONTENT, sentence_type: WH_QUESTION, production: WEEK_CONTENT}
+  - {frame: ASK_WEEK_ACTIVITY, sentence_type: WH_QUESTION, production: WEEK_ACTIVITY}
+  - {frame: ASK_WEEK_MILESTONE, sentence_type: WH_QUESTION, production: WEEK_MILESTONE}
+  - {frame: ASK_MILESTONE_WEEK, sentence_type: WH_QUESTION, production: MILESTONE_WEEK}
   - {frame: ASK_WEEK_OF_CHAPTER, sentence_type: WH_QUESTION, production: WEEK_OF_CHAPTER}
   - {frame: ASK_WEEK_OF_TOPIC, sentence_type: WH_QUESTION, production: WEEK_OF_TOPIC}
   - {frame: ASK_CHAPTER_CONTENT, sentence_type: WH_QUESTION, production: CHAPTER_CONTENT}
+  - {frame: ASK_CHAPTER_TITLE, sentence_type: WH_QUESTION, production: CHAPTER_TITLE}
+  - {frame: ASK_PART_OF_CHAPTER, sentence_type: WH_QUESTION, production: PART_OF_CHAPTER}
+  - {frame: ASK_CHAPTERS_OF_PART, sentence_type: WH_QUESTION, production: CHAPTERS_OF_PART}
   - {frame: ASK_CHAPTER_CONTENT, sentence_type: IMPERATIVE_REQUEST, production: CHAPTER_IMPERATIVE}
   - {frame: ASK_CHAPTER_BY_TOPIC, sentence_type: WH_QUESTION, production: CHAPTER_BY_TOPIC}
   - {frame: ASK_TOPIC_OF_CHAPTER, sentence_type: WH_QUESTION, production: CHAPTER_TOPICS}
   - {frame: ASK_TOPIC_EXISTENCE_IN_CHAPTER, sentence_type: YES_NO_QUESTION, production: TOPIC_TEST}
   - {frame: ASK_ASSIGNMENT_PART_INFO, sentence_type: WH_QUESTION, production: PART_INFO}
   - {frame: ASK_ASSIGNMENT_INFO, sentence_type: WH_QUESTION, production: ASSIGNMENT_INFO}
+  - {frame: ASK_ASSIGNMENT_PARTS, sentence_type: WH_QUESTION, production: ASSIGNMENT_PARTS}
+  - {frame: ASK_ASSIGNMENT_REQUIREMENTS, sentence_type: WH_QUESTION, production: ASSIGNMENT_REQUIREMENTS}
   - {frame: ASK_ASSIGNMENT_COMPONENT_EXISTENCE, sentence_type: YES_NO_QUESTION, production: COMPONENT_TEST}
   - {frame: ASK_ASSIGNMENT_OUTPUTS, sentence_type: WH_QUESTION, production: PART_OUTPUTS}
   - {frame: ASK_ASSIGNMENT_TEAM_SIZE, sentence_type: WH_QUESTION, production: TEAM_SIZE}
   - {frame: ASK_ASSIGNMENT_DEADLINE, sentence_type: WH_QUESTION, production: DEADLINE_QUERY}
+  - {frame: ASK_ASSIGNMENT_PART_DEADLINE, sentence_type: WH_QUESTION, production: PART_DEADLINE}
+  - {frame: ASK_DEADLINE_INFO, sentence_type: WH_QUESTION, production: DEADLINE_INFO}
   - {frame: ASK_REGULATION, sentence_type: WH_QUESTION, production: REGULATION_QUERY}
   - {frame: ASK_PERMISSION, sentence_type: YES_NO_QUESTION, production: PERMISSION_QUERY}
   - {frame: ASK_RESOURCE_BY_TOPIC, sentence_type: WH_QUESTION, production: RESOURCE_BY_TOPIC}
   - {frame: ASK_RESOURCE_BY_CHAPTER, sentence_type: WH_QUESTION, production: RESOURCE_BY_CHAPTER}
+  - {frame: ASK_RESOURCE_ATTRIBUTE, sentence_type: WH_QUESTION, production: RESOURCE_ATTRIBUTE}
   - {frame: ASK_LO_DESCRIPTION, sentence_type: WH_QUESTION, production: LO_DESCRIPTION}
   - {frame: ASK_LO_RELATED_CONTENT, sentence_type: WH_QUESTION, production: LO_CONTENT}
   - {frame: ASK_CHAPTER_BY_LO, sentence_type: WH_QUESTION, production: CHAPTER_BY_LO}

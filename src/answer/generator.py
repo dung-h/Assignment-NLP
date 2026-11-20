@@ -42,6 +42,15 @@ class AnswerGenerator:
             self._display_value(query, value, kb) for value in retrieval.values
         ]
         answer = self._render_found(query, display_values)
+        if query.intent == "GET_ASSIGNMENT" and query.attribute == "requirements" and kb is not None:
+            optional_parts = [
+                source.split(":", 1)[1]
+                for source in retrieval.sources
+                if source.startswith("assignments:")
+                and kb.assignment_parts.get(source.split(":", 1)[1], {}).get("optional_or_extension")
+            ]
+            if optional_parts:
+                answer += "\n\nTheo dữ liệu mẫu, phần ngữ cảnh (" + ", ".join(optional_parts) + ") là phần mở rộng."
         if query.intent == "GET_LO" and query.attribute in {"chapter", "related_content"} and any(
             source.startswith("annotation:lo_chapters:") for source in retrieval.sources
         ):
@@ -95,6 +104,8 @@ class AnswerGenerator:
                 return "Các chương liên quan đến ít nhất một chủ đề được hỏi: " + ", ".join(values) + "."
             return "Nội dung này được tìm thấy ở: " + ", ".join(values) + "."
         if key == ("GET_SCHEDULE", "week", "LIST"):
+            if not query.entities:
+                return "Các tuần có mốc trong lịch mẫu: " + ", ".join(values) + "."
             return "Được học ở: " + ", ".join(values) + "."
         if key == ("GET_SCHEDULE", "topics", "LIST"):
             weeks = query.entities.get("week", [])

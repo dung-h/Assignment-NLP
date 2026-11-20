@@ -6,9 +6,9 @@ thông báo hành chính chính thức.
 
 ## Thành viên
 
-Nhóm cần điền tên và MSSV thật trước khi nộp. Phân công hiện tại:
-Người 1 phụ trách grammar/parser; Người 2 phụ trách semantic/context;
-Người 3 phụ trách KB/retrieval/answer và tích hợp.
+- Quách Trọng Kiên — 2211734: grammar và parser.
+- Nguyễn Trần Nhật Châu — 2310335: ngữ nghĩa và ngữ cảnh.
+- Hồ Anh Dũng — 2310543: cơ sở tri thức, truy vấn và sinh câu trả lời.
 
 ## Pipeline
 
@@ -82,7 +82,7 @@ Không dùng LLM để xử lý NLP hoặc tạo câu trả lời trong bản n�
 ```powershell
 .\.venv\Scripts\python.exe app.py --export-outputs
 .\.venv\Scripts\python.exe scripts/run_samples.py
-.\.venv\Scripts\python.exe scripts/evaluate_gold.py --strict
+.\.venv\Scripts\python.exe app.py --evaluate
 .\.venv\Scripts\python.exe -m pytest -q --ignore=experiments
 ```
 
@@ -91,24 +91,28 @@ hội thoại hai lượt với trace. Script export ghi cây hoặc `()` theo y
 `output/semantic.txt`, `intent-entity.txt`, `query.txt`, `retrieval.txt` và
 `answer.txt` giữ cùng thứ tự với input.
 
-Gold fixture `data/annotations/evaluation_v1.yaml` có 84 lượt regression,
-gồm 6 hội thoại hai lượt. Oracle bao gồm parser/slot, full SemanticQuery,
-exact retrieval và template answer đã freeze; các paraphrase tái sử dụng
-oracle đã review bằng `oracle_case` và override tường minh.
+Tập đánh giá chính là `data/annotations/evaluation.yaml`. Mỗi trường hợp ghi
+câu hỏi, lịch sử hội thoại, các thông tin cần có trong đầu ra và nguồn đối
+chiếu. Chương trình dùng cùng tiêu chí cho toàn bộ tập: kiểm tra dữ liệu trả
+về, nguồn và các ý bắt buộc trong câu trả lời; không chấm theo nhãn parser
+hay cách biểu diễn intent/entity nội bộ. Trường hợp chưa rõ ý có thể có phản
+hồi hỏi lại trong danh sách các đầu ra được chấp nhận.
+Nhóm trường hợp hỏi lại khảo sát một khả năng sử dụng do nhóm đề xuất; đề
+bài không quy định mọi câu nhập nhằng phải được xử lý bằng một câu hỏi lại.
 
-`output/evaluation.txt` báo số đúng/sai theo outcome và context.
-`output/evaluation_results.json` giữ expected/actual/provenance từng case;
-`output/pipeline_results.json` lưu kết quả pipeline cho các câu đầu vào mẫu.
-`--strict` trả exit code khác 0 khi còn case fail. Evaluator có mutation test
-để phát hiện value/source thừa, sai kiểu boolean, cây hỏng và câu trả lời
-thêm fact. Số unit test pass không phải số câu trả lời đúng.
+`output/evaluation.txt` ghi cách chấm, kết quả và lỗi từng trường hợp;
+`output/evaluation_results.json` lưu kỳ vọng cùng dấu vết chạy thực tế và
+mã kiểm tra nội dung tập dữ liệu. `output/pipeline_results.json` là kết quả
+chạy các câu đầu vào minh họa. Thêm `--strict` vào lệnh `app.py --evaluate`
+để trả mã lỗi khi có trường hợp chưa đạt. Chạy thành công chương trình đánh
+giá không có nghĩa mọi câu hỏi đều được trả lời đúng.
 
-Tập này đã được dùng trong phát triển, không phải held-out độc lập. Kết quả
-template regression chưa thay thế đánh giá diễn đạt/factual answer bởi người
-review trên tập mới. Thiếu instructor, deadline hoặc quan hệ LO–chapter chưa
-được đối chiếu được kỳ vọng trả NOT_FOUND; đó là case đúng khi diễn giải và
-từ chối đúng. Quan hệ LO4.2–CH12 và tài liệu–CFG là chú giải tham khảo của
-nhóm, không phải quan hệ do giảng viên chỉ định.
+Các phép kiểm tra từ ngữ chưa thay thế việc người đánh giá xem xét toàn bộ
+ý nghĩa, tính đầy đủ và tính tự nhiên của câu trả lời. Tập có câu đã dùng khi
+phát triển, chưa phải đánh giá độc lập. `evaluation_v1.yaml` được giữ để kiểm
+tra các hành vi cũ trong pytest, không dùng làm kết quả đánh giá chính.
+Chú giải LO4.2–CH12 và tài liệu–CFG do nhóm bổ sung, không phải quan hệ do
+giảng viên chỉ định.
 
 ## Cấu trúc kiểm thử
 
@@ -134,6 +138,10 @@ semantic mapper và toàn pipeline được tách rõ: test semantic mapper nh�
 kết quả truy xuất. Nhờ đó có thể nhận biết lỗi nằm ở bước nào; các case mở rộng
 này không bị gộp vào bộ gold regression.
 
+Lệnh cũ `scripts/evaluate_gold.py` cũng gọi bộ đánh giá chính.
+`scripts/evaluate_samples.py` chỉ khảo sát các nhãn trong sample_queries và
+ghi riêng `output/sample_query_evaluation.txt`, không ghi đè kết quả chính.
+
 ## Docker
 
 Để demo qua Docker, mở PowerShell tại thư mục gốc và bảo đảm Docker Desktop
@@ -150,6 +158,7 @@ Mở `http://localhost:7860` và giữ terminal đang chạy trong khi demo. Nh�
 ```powershell
 docker run --rm nlp python -m pytest -q
 docker run --rm nlp python app.py --export-outputs
+docker run --rm nlp python app.py --evaluate
 ```
 
 UI trong container bind `0.0.0.0`; cổng được công bố riêng trên localhost của
@@ -171,8 +180,8 @@ video cần hoàn thiện theo yêu cầu nộp của lớp.
 
 ## Hạn chế
 
-Chỉ hỗ trợ 24 QueryFrame trong phạm vi grammar; contract còn có các frame
-chưa có recognition rule. Không hiểu mọi cách diễn đạt tiếng Việt. Context
+Văn phạm có ít nhất một mẫu cho cả 36 QueryFrame, nhưng không hiểu mọi cách
+diễn đạt tiếng Việt. Context
 là cục bộ, không phải dialogue manager tổng quát. Không có căn cứ suy ra
 deadline, instructor hay quan hệ LO/resource chưa được annotate. Chưa có
 đánh giá người dùng độc lập hoặc cam kết hiệu năng nhiều người dùng.

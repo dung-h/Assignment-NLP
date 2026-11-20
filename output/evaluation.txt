@@ -1,33 +1,1095 @@
-NLP COURSE ASSISTANT — GOLD EVALUATION v1
+ĐÁNH GIÁ COURSE ASSISTANT
 
-Method
-- Gold cases assert parser, semantic, retrieval and answer facts/sources.
-- Every case remains in the denominator; known failures are reported, not hidden.
-- Current cases are regression cases already used during development; no independent held-out claim.
-- Answer scores below measure frozen-template/fact assertions, not independent human review.
-- Fixture target: 84 turns; current fixture: 84 turns.
+Tập câu hỏi: Bộ đánh giá đầu vào–đầu ra Course Assistant
+Đáp ứng các điều kiện kiểm tra: 101/148 (68.2%)
+Chưa đáp ứng: 47
 
-Regression end-to-end assertion accuracy
-- Overall: 84/84 (100.0%)
-- regression: 84/84 (100.0%)
-- development: 0/0 (n/a)
-- held_out: 0/0 (n/a)
+Cách đánh giá:
+- Một lượt gồm câu hỏi hiện tại và lịch sử hội thoại được ghi trong testcase.
+- Mọi lượt dùng cùng cách kiểm tra dữ liệu trả về, nguồn và thông tin cần có trong câu trả lời.
+- Nhãn parser, intent và entity chỉ dùng để phân tích lỗi, không làm điều kiện đạt.
+- Các phản hồi thay thế được chấp nhận khi đã ghi trong testcase trước khi chấm.
+- Nhóm CLARIFY khảo sát khả năng hỏi lại do nhóm đề xuất; đề bài yêu cầu thông báo phù hợp nhưng không bắt buộc mọi trường hợp nhập nhằng phải dùng đúng cách này.
+- Đây là kiểm tra tự động theo các điều kiện đã ghi; không thay thế chấm ngữ nghĩa toàn bộ câu trả lời bởi người đánh giá độc lập.
+- Tập có các câu đã dùng khi phát triển; không đại diện thống kê cho câu hỏi thực tế.
 
-Layer metrics
-- parser: 84/84 (100.0%); unobserved=0
-- semantic: 84/84 (100.0%); unobserved=0
-- retrieval: 84/84 (100.0%); unobserved=0
-- answer: 84/84 (100.0%); unobserved=0
+Kết quả theo nhóm:
+- thông tin môn học và thi: 11/24
+- giảng viên: 4/6
+- lịch học: 10/17
+- chương và chủ đề: 17/19
+- bài tập lớn: 15/22
+- hạn nộp: 4/7
+- quy định: 7/8
+- tài liệu: 8/11
+- chuẩn đầu ra: 9/12
+- ngoài phạm vi: 9/9
+- hội thoại: 7/12
+- câu hỏi chưa rõ: 0/1
 
-Expected outcome breakdown
-- FOUND: 61/61 (100.0%)
-- NOT_FOUND: 14/14 (100.0%)
-- UNKNOWN: 9/9 (100.0%)
+Kết quả theo loại phản hồi mong đợi:
+- FOUND: 75/109
+- MISSING: 17/24
+- OUT_OF_SCOPE: 9/9
+- CLARIFY: 0/5
+- MISSING hoặc CLARIFY: 0/1
 
-Context follow-ups: 6/6 (100.0%)
+Bước đầu tiên quan sát thấy lỗi:
+- Chọn nhầm loại yêu cầu: 1
+- Không nhận diện câu ở parser: 42
+- Thiếu phản hồi làm rõ ngữ cảnh: 4
 
-Observed failures
-- None.
+E001 | ĐẠT | Môn NLP có bao nhiêu tín chỉ?
+  Mong đợi: FOUND: 3 / ba; tín chỉ
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Môn CO3085 có 3 tín chỉ. Nguồn: course_info:CO3085.
 
-Provenance
-- Factual expectations are traced in each case to data/raw or a versioned annotation.
+E002 | ĐẠT | Môn học gồm những phần nào?
+  Mong đợi: FOUND: Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III - Context and World Knowledge
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Các phần của môn học:  - Part I - Syntactic Processing - Part II - Semantic Interpretation - Part III - Context and World Knowledge  Nguồn: course_info:CO3085.
+
+E003 | ĐẠT | Midterm bao nhiêu phút?
+  Mong đợi: FOUND: 60 / sáu mươi; phút
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: MIDTERM có thời lượng 60 phút. Nguồn: course_info:CO3085.
+
+E004 | ĐẠT | Ai dạy môn NLP?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Tôi không tìm thấy thông tin giảng viên trong dữ liệu môn học hiện tại.
+
+E005 | ĐẠT | Tuần 3 học gì?
+  Mong đợi: FOUND: context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Nội dung tuần 3:  - context-free grammar - grammar and sentence structure - top-down parsing - bottom-up chart parsing - top-down chart parsing - probabilistic context-free grammar - dependency grammar - Stanford dependencies  Nguồn: schedule:WEEK_03.
+
+E006 | ĐẠT | Chương 4 học vào tuần nào?
+  Mong đợi: FOUND: WEEK_04 / tuần 4; WEEK_05 / tuần 5
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Được học ở: WEEK_04 (Tuần 4), WEEK_05 (Tuần 5). Nguồn: schedule:WEEK_04, schedule:WEEK_05.
+
+E007 | ĐẠT | PCFG được học khi nào?
+  Mong đợi: FOUND: WEEK_03 / tuần 3; WEEK_07 / tuần 7
+  Nguồn đối chiếu: data/raw/schedule.txt, data/raw/topics.txt
+  Thực tế: Được học ở: WEEK_03 (Tuần 3), WEEK_07 (Tuần 7). Nguồn: schedule:WEEK_03, schedule:WEEK_07.
+
+E008 | ĐẠT | Chương 12 nói về gì?
+  Mong đợi: FOUND: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Tóm tắt CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: topics:CH12.
+
+E009 | ĐẠT | Chương nào nói về CFG?
+  Mong đợi: FOUND: CH03 / chương 3
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung này được tìm thấy ở: CH03 (Chương 3 – GRAMMAR AND PARSING). Nguồn: topics:CH03.
+
+E010 | ĐẠT | Chương 10 có những phương pháp gì?
+  Mong đợi: FOUND: 10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching; 10.4 Semantically driven parsing techniques
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung chương 10:  - 10.1 Grammatical relations - 10.2 Semantic grammars - 10.3 Template matching - 10.4 Semantically driven parsing techniques  Nguồn: topics:CH10.
+
+E011 | ĐẠT | Chương 11 có question answering không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Có. Nguồn: topics:CH11.
+
+E012 | CHƯA ĐẠT | Bài tập lớn yêu cầu xây dựng những gì?
+  Mong đợi: Nêu đủ yêu cầu bắt buộc về văn phạm và parser, ngữ nghĩa và hỏi đáp, cùng đánh giá. Nếu có nêu phần ngữ cảnh thì phân biệt đó là mục mở rộng trong dữ liệu mẫu.
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Mục tiêu bài tập lớn: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01.
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: grammar / văn phạm
+  Thiếu thông tin trả lời: sinh câu
+  Thiếu thông tin trả lời: parser / phân tích cú pháp
+  Thiếu thông tin trả lời: parse tree / cây cú pháp / cây phân tích
+  Thiếu thông tin trả lời: semantic representation / biểu diễn ngữ nghĩa / diễn giải ngữ nghĩa
+  Thiếu thông tin trả lời: intent / ý định
+  Thiếu thông tin trả lời: entity / thực thể
+  Thiếu thông tin trả lời: knowledge base / cơ sở tri thức
+  Thiếu thông tin trả lời: answer generation / sinh câu trả lời / hỏi đáp
+  Thiếu thông tin trả lời: ngoài miền / ngoài phạm vi
+  Thiếu thông tin trả lời: không tìm thấy / thiếu thông tin
+  Thiếu thông tin trả lời: test set / tập kiểm thử / tập câu hỏi / bộ kiểm thử
+  Thiếu thông tin trả lời: accuracy / độ chính xác / chỉ số đánh giá
+  Thiếu thông tin trả lời: phân tích lỗi
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_1
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_2
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_4
+
+E013 | ĐẠT | Phần I của bài tập lớn là gì?
+  Mong đợi: FOUND: Grammar and Parser
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1.
+
+E014 | ĐẠT | Bài tập lớn có phần parser không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Có. Nguồn: assignments:BTL01.
+
+E015 | ĐẠT | Phần I cần xuất file gì?
+  Mong đợi: FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Các tệp đầu ra:  - output/grammar.txt - output/samples.txt - output/parse-results.txt  Nguồn: assignments:BTL_PART_1.
+
+E016 | ĐẠT | BTL bao nhiêu người?
+  Mong đợi: FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01.
+
+E017 | ĐẠT | Deadline bài tập lớn khi nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Tôi hiểu đây là câu hỏi về deadline, nhưng dữ liệu mẫu hiện tại không có deadline chính thức tương ứng.
+
+E018 | ĐẠT | Quy định về sử dụng AI là gì?
+  Mong đợi: FOUND: Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo quy định của môn học
+  Nguồn đối chiếu: data/raw/regulations.txt
+  Thực tế: Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo quy định của môn học. Nguồn: regulations:AI_USAGE.
+
+E019 | ĐẠT | Có được dùng LLM/RAG không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/regulations.txt
+  Thực tế: Có. Nguồn: regulations:LLM_RAG.
+
+E020 | ĐẠT | Tài liệu về statistical NLP là gì?
+  Mong đợi: FOUND: Introduction to Natural Language Processing; Foundation of Statistical Natural Language Processing
+  Nguồn đối chiếu: data/raw/resources.txt, data/annotations/resource_topics.yaml
+  Thực tế: Tài liệu phù hợp:  - Introduction to Natural Language Processing - Foundation of Statistical Natural Language Processing  Nguồn: resources:RES02, resources:RES04.
+
+E021 | ĐẠT | Tài liệu cho chương 3 là gì?
+  Mong đợi: FOUND: Natural Language Processing with Python
+  Nguồn đối chiếu: data/raw/resources.txt, data/raw/topics.txt, data/annotations/resource_topics.yaml
+  Thực tế: Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định):  - Natural Language Processing with Python  Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05.
+
+E022 | ĐẠT | L.O.2.5 là gì?
+  Mong đợi: FOUND: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Mô tả LO2.5: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu. Nguồn: course_info:LO2.5.
+
+E023 | ĐẠT | L.O.4.2 liên quan đến nội dung nào?
+  Mong đợi: FOUND: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora
+  Nguồn đối chiếu: data/raw/course_info.txt, data/raw/topics.txt, data/annotations/lo_chapters.yaml
+  Thực tế: Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12.
+
+E024 | ĐẠT | L.O.2.5 nằm ở chương nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E025 | ĐẠT | BTL có phần hỏi đáp không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Có. Nguồn: assignments:BTL01.
+
+E026 | ĐẠT | Quy định về thư viện ngoài là gì?
+  Mong đợi: FOUND: Được phép sử dụng thư viện công khai nếu tuân thủ yêu cầu của bài tập
+  Nguồn đối chiếu: data/raw/regulations.txt
+  Thực tế: Được phép sử dụng thư viện công khai nếu tuân thủ yêu cầu của bài tập. Nguồn: regulations:EXTERNAL_LIBRARIES.
+
+E027 | ĐẠT | Tài liệu liên quan đến Python NLP là gì?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/resources.txt, data/annotations/resource_topics.yaml
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E028 | ĐẠT | Hôm nay ở TP.HCM có mưa không?
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E029 | ĐẠT | Ai là tổng thống của Pháp?
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E030 | ĐẠT | Hãy giải bài tập xác suất này giúp tôi.
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E031 | ĐẠT | Chương 4 nói về gì?
+  Mong đợi: FOUND: The chapter extends formal grammar with feature systems and augmented grammar. It covers lexicon, parsing with features, augmented transition networks, generalized feature systems and unification grammar
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Tóm tắt CH04: The chapter extends formal grammar with feature systems and augmented grammar. It covers lexicon, parsing with features, augmented transition networks, generalized feature systems and unification grammar. Nguồn: topics:CH04.
+
+E032 | ĐẠT | Nó có liên quan đến parsing không?
+  Hội thoại trước: Chương 4 nói về gì?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Có. Nguồn: topics:CH04.
+
+E033 | ĐẠT | Chương 11 có hỏi đáp không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Có. Nguồn: topics:CH11.
+
+E034 | ĐẠT | Còn chương sau?
+  Hội thoại trước: Chương 11 có hỏi đáp không?
+  Mong đợi: FOUND: không / không được phép
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Không. Nguồn: topics:CH12.
+
+E035 | ĐẠT | BTL có phần parser không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Có. Nguồn: assignments:BTL01.
+
+E036 | ĐẠT | Phần này cần xuất file gì?
+  Hội thoại trước: BTL có phần parser không?
+  Mong đợi: FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Các tệp đầu ra:  - output/grammar.txt - output/samples.txt - output/parse-results.txt  Nguồn: assignments:BTL_PART_1.
+
+E037 | ĐẠT | NLP có mấy tín chỉ?
+  Mong đợi: FOUND: 3 / ba; tín chỉ
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Môn CO3085 có 3 tín chỉ. Nguồn: course_info:CO3085.
+
+E038 | ĐẠT | Môn học có những phần nào?
+  Mong đợi: FOUND: Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III - Context and World Knowledge
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Các phần của môn học:  - Part I - Syntactic Processing - Part II - Semantic Interpretation - Part III - Context and World Knowledge  Nguồn: course_info:CO3085.
+
+E039 | ĐẠT | Midterm mấy phút?
+  Mong đợi: FOUND: 60 / sáu mươi; phút
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: MIDTERM có thời lượng 60 phút. Nguồn: course_info:CO3085.
+
+E040 | ĐẠT | Giảng viên môn NLP là ai?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Tôi không tìm thấy thông tin giảng viên trong dữ liệu môn học hiện tại.
+
+E041 | ĐẠT | Tuần 3 học nội dung gì?
+  Mong đợi: FOUND: context-free grammar; grammar and sentence structure; top-down parsing; bottom-up chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford dependencies
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Nội dung tuần 3:  - context-free grammar - grammar and sentence structure - top-down parsing - bottom-up chart parsing - top-down chart parsing - probabilistic context-free grammar - dependency grammar - Stanford dependencies  Nguồn: schedule:WEEK_03.
+
+E042 | ĐẠT | Chương 4 học tuần mấy?
+  Mong đợi: FOUND: WEEK_04 / tuần 4; WEEK_05 / tuần 5
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Được học ở: WEEK_04 (Tuần 4), WEEK_05 (Tuần 5). Nguồn: schedule:WEEK_04, schedule:WEEK_05.
+
+E043 | ĐẠT | PCFG học tuần nào?
+  Mong đợi: FOUND: WEEK_03 / tuần 3; WEEK_07 / tuần 7
+  Nguồn đối chiếu: data/raw/schedule.txt, data/raw/topics.txt
+  Thực tế: Được học ở: WEEK_03 (Tuần 3), WEEK_07 (Tuần 7). Nguồn: schedule:WEEK_03, schedule:WEEK_07.
+
+E044 | ĐẠT | Chương 12 học gì?
+  Mong đợi: FOUND: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Tóm tắt CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: topics:CH12.
+
+E045 | ĐẠT | CFG nằm ở chương nào?
+  Mong đợi: FOUND: CH03 / chương 3
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung này được tìm thấy ở: CH03 (Chương 3 – GRAMMAR AND PARSING). Nguồn: topics:CH03.
+
+E046 | ĐẠT | Chương 10 gồm những gì?
+  Mong đợi: FOUND: 10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching; 10.4 Semantically driven parsing techniques
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung chương 10:  - 10.1 Grammatical relations - 10.2 Semantic grammars - 10.3 Template matching - 10.4 Semantically driven parsing techniques  Nguồn: topics:CH10.
+
+E047 | ĐẠT | Chương 11 liên quan đến question answering không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Có. Nguồn: topics:CH11.
+
+E048 | ĐẠT | Mục tiêu Bài tập lớn là gì?
+  Mong đợi: FOUND: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Mục tiêu bài tập lớn: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering. Nguồn: assignments:BTL01.
+
+E049 | ĐẠT | Phần I bài tập lớn là gì?
+  Mong đợi: FOUND: Grammar and Parser
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Nội dung phần bài tập lớn: Grammar and Parser. Nguồn: assignments:BTL_PART_1.
+
+E050 | ĐẠT | Bài tập lớn có parser không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Có. Nguồn: assignments:BTL01.
+
+E051 | ĐẠT | Phần I output gì?
+  Mong đợi: FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Các tệp đầu ra:  - output/grammar.txt - output/samples.txt - output/parse-results.txt  Nguồn: assignments:BTL_PART_1.
+
+E052 | ĐẠT | BTL nhóm mấy người?
+  Mong đợi: FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01.
+
+E053 | ĐẠT | Hạn nộp bài tập lớn ngày nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Tôi hiểu đây là câu hỏi về deadline, nhưng dữ liệu mẫu hiện tại không có deadline chính thức tương ứng.
+
+E054 | ĐẠT | Quy định sử dụng AI như thế nào?
+  Mong đợi: FOUND: Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo quy định của môn học
+  Nguồn đối chiếu: data/raw/regulations.txt
+  Thực tế: Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo quy định của môn học. Nguồn: regulations:AI_USAGE.
+
+E055 | ĐẠT | Được dùng LLM/RAG không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/regulations.txt
+  Thực tế: Có. Nguồn: regulations:LLM_RAG.
+
+E056 | ĐẠT | Tài liệu nào nói về statistical NLP?
+  Mong đợi: FOUND: Introduction to Natural Language Processing; Foundation of Statistical Natural Language Processing
+  Nguồn đối chiếu: data/raw/resources.txt, data/annotations/resource_topics.yaml
+  Thực tế: Tài liệu phù hợp:  - Introduction to Natural Language Processing - Foundation of Statistical Natural Language Processing  Nguồn: resources:RES02, resources:RES04.
+
+E057 | ĐẠT | Tài liệu của chương 3 là gì?
+  Mong đợi: FOUND: Natural Language Processing with Python
+  Nguồn đối chiếu: data/raw/resources.txt, data/raw/topics.txt, data/annotations/resource_topics.yaml
+  Thực tế: Tài liệu liên quan theo chủ đề (không khẳng định là tài liệu giảng viên chỉ định):  - Natural Language Processing with Python  Nguồn: topics:CH03, annotation:resource_topics:RES05, resources:RES05.
+
+E058 | ĐẠT | L.O.2.5 nói về gì?
+  Mong đợi: FOUND: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Mô tả LO2.5: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu. Nguồn: course_info:LO2.5.
+
+E059 | ĐẠT | L.O.4.2 liên quan nội dung gì?
+  Mong đợi: FOUND: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora
+  Nguồn đối chiếu: data/raw/course_info.txt, data/raw/topics.txt, data/annotations/lo_chapters.yaml
+  Thực tế: Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12.
+
+E060 | ĐẠT | L.O.2.5 thuộc chương nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E061 | ĐẠT | Ai dạy CO3085?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Tôi không tìm thấy thông tin giảng viên trong dữ liệu môn học hiện tại.
+
+E062 | ĐẠT | Giảng viên CO3085 là ai?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Tôi không tìm thấy thông tin giảng viên trong dữ liệu môn học hiện tại.
+
+E063 | ĐẠT | Deadline BTL khi nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Tôi hiểu đây là câu hỏi về deadline, nhưng dữ liệu mẫu hiện tại không có deadline chính thức tương ứng.
+
+E064 | ĐẠT | Hạn nộp BTL khi nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Tôi hiểu đây là câu hỏi về deadline, nhưng dữ liệu mẫu hiện tại không có deadline chính thức tương ứng.
+
+E065 | ĐẠT | Tài liệu cho chương 10 là gì?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/resources.txt, data/raw/topics.txt, data/annotations/resource_topics.yaml
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E066 | ĐẠT | LO4.2 liên quan nội dung gì?
+  Mong đợi: FOUND: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora
+  Nguồn đối chiếu: data/raw/course_info.txt, data/raw/topics.txt, data/annotations/lo_chapters.yaml
+  Thực tế: Theo đối chiếu tham khảo: CH12: The chapter introduces local discourse context and discourse entities, with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12.
+
+E067 | ĐẠT | LO4.2 thuộc chương nào?
+  Mong đợi: FOUND: CH12 / chương 12
+  Nguồn đối chiếu: data/raw/course_info.txt, data/raw/topics.txt, data/annotations/lo_chapters.yaml
+  Thực tế: Theo đối chiếu tham khảo: CH12. Nguồn: course_info:LO4.2, topics:CH12, annotation:lo_chapters:LO4.2_CH12.
+
+E068 | ĐẠT | Chương 99 nói về gì?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E069 | ĐẠT | 2 + 2 bằng bao nhiêu?
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E070 | ĐẠT | Gửi email cho tôi.
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E071 | CHƯA ĐẠT | NLP
+  Mong đợi: CLARIFY: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ; chương / phần / nội dung / câu hỏi / môn học
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E072 | ĐẠT | Cho tôi biết giá vàng hôm nay.
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E073 | ĐẠT | Chương nào nói về CFG? rồi dự báo thời tiết
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E074 | ĐẠT | PCFG nằm ở chương nào?
+  Mong đợi: FOUND: CH03 / chương 3; CH06 / chương 6
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung này được tìm thấy ở: CH03 (Chương 3 – GRAMMAR AND PARSING), CH06 (Chương 6 – AMBIGUITY RESOLUTION - STATISTICAL METHODS). Nguồn: topics:CH03, topics:CH06.
+
+E075 | ĐẠT | Chương 3 và Chương 6 học vào tuần nào?
+  Mong đợi: FOUND: WEEK_03 / tuần 3; WEEK_07 / tuần 7; WEEK_08 / tuần 8
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Được học ở: WEEK_03 (Tuần 3), WEEK_07 (Tuần 7), WEEK_08 (Tuần 8). Nguồn: schedule:WEEK_03, schedule:WEEK_07, schedule:WEEK_08.
+
+E076 | ĐẠT | Chương 3 có question answering không?
+  Mong đợi: FOUND: không / không được phép
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Không. Nguồn: topics:CH03.
+
+E077 | ĐẠT | Bài tập lớn có phần RAG không?
+  Mong đợi: FOUND: không / không được phép
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Không. Nguồn: assignments:BTL01.
+
+E078 | ĐẠT | Có được chia sẻ giữa các nhóm không?
+  Mong đợi: FOUND: không / không được phép
+  Nguồn đối chiếu: data/raw/regulations.txt
+  Thực tế: Không. Nguồn: regulations:ASSIGNMENT_SHARING.
+
+E079 | ĐẠT | Phần này output gì?
+  Hội thoại trước: Phần I của bài tập lớn là gì?
+  Mong đợi: FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Các tệp đầu ra:  - output/grammar.txt - output/samples.txt - output/parse-results.txt  Nguồn: assignments:BTL_PART_1.
+
+E080 | ĐẠT | Còn chương sau?
+  Hội thoại trước: Chương 12 nói về gì?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E081 | CHƯA ĐẠT | Nó có parsing không?
+  Hội thoại trước: Chương 3 và Chương 6 học vào tuần nào?
+  Mong đợi: CLARIFY: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ; chương / phần / nội dung / câu hỏi / môn học
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E082 | ĐẠT | Môn NLP có mấy tín chỉ?
+  Mong đợi: FOUND: 3 / ba; tín chỉ
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Môn CO3085 có 3 tín chỉ. Nguồn: course_info:CO3085.
+
+E083 | CHƯA ĐẠT | Môn NLP này có mấy tín chỉ?
+  Mong đợi: FOUND: 3 / ba; tín chỉ
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 3 / ba
+  Thiếu thông tin trả lời: tín chỉ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E084 | ĐẠT | Môn NLP có bao nhiêu ECTS?
+  Mong đợi: FOUND: 6 / sáu; ECTS
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Môn CO3085 có 6 ECTS. Nguồn: course_info:CO3085.
+
+E085 | ĐẠT | Tuần 5 học gì?
+  Mong đợi: FOUND: augmented transition networks; generalized feature systems; unification grammar
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Nội dung tuần 5:  - augmented transition networks - generalized feature systems - unification grammar  Nguồn: schedule:WEEK_05.
+
+E086 | CHƯA ĐẠT | Tuần 5 học những gì?
+  Mong đợi: FOUND: augmented transition networks; generalized feature systems; unification grammar
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: augmented transition networks
+  Thiếu thông tin trả lời: generalized feature systems
+  Thiếu thông tin trả lời: unification grammar
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_05
+
+E087 | CHƯA ĐẠT | Tuần 5 học những nội dung gì?
+  Mong đợi: FOUND: augmented transition networks; generalized feature systems; unification grammar
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: augmented transition networks
+  Thiếu thông tin trả lời: generalized feature systems
+  Thiếu thông tin trả lời: unification grammar
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_05
+
+E088 | ĐẠT | Chương nào học về knowledge representation?
+  Mong đợi: FOUND: CH11 / chương 11
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung này được tìm thấy ở: CH11 (Chương 11 – KNOWLEDGE REPRESENTATION AND REASONING). Nguồn: topics:CH11.
+
+E089 | ĐẠT | Bài tập lớn nhóm mấy người?
+  Mong đợi: FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01.
+
+E090 | ĐẠT | Bài tập lớn có những yêu cầu gì?
+  Mong đợi: Nêu đủ yêu cầu bắt buộc về văn phạm và parser, ngữ nghĩa và hỏi đáp, cùng đánh giá. Nếu có nêu phần ngữ cảnh thì phân biệt đó là mục mở rộng trong dữ liệu mẫu.
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Yêu cầu bài tập lớn:  - xây dựng grammar cho miền Course Assistant - sinh câu hợp lệ từ grammar - xây dựng parser - xuất parse tree - xử lý câu không hợp lệ - semantic representation - intent identification - entity extraction - query to knowledge base - answer generation - xử lý câu hỏi ngoài miền - xử lý trường hợp không tìm thấy thông tin - xử lý một số hội thoại nhiều lượt - lưu discourse entities đơn giản - xử lý tham chiếu đại từ hoặc mô tả xác định - xử lý một số trường hợp ellipsis đơn giản - tạo test set - đo accuracy hoặc metric phù hợp - phân tích lỗi - trình bày các trường hợp hệ thống không trả lời đúng  Theo dữ liệu mẫu, phần ngữ cảnh (BTL_PART_3) là phần mở rộng.  Nguồn: assignments:BTL_PART_1, assignments:BTL_PART_2, assignments:BTL_PART_3, assignments:BTL_PART_4.
+
+E091 | CHƯA ĐẠT | Deadline của bài tập lớn là khi nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E092 | ĐẠT | Tài liệu nào nói về CFG?
+  Mong đợi: FOUND: Natural Language Processing with Python
+  Nguồn đối chiếu: data/annotations/resource_topics.yaml
+  Thực tế: Tài liệu phù hợp:  - Natural Language Processing with Python  Nguồn: annotation:resource_topics:RES05, resources:RES05.
+
+E093 | ĐẠT | Giá vàng hôm nay bao nhiêu?
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E094 | ĐẠT | Tài liệu của chương này là gì?
+  Hội thoại trước: Tuần 5 học gì?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E095 | CHƯA ĐẠT | Tài liệu của phần này ở đâu?
+  Hội thoại trước: Tuần 5 học gì?
+  Mong đợi: Xác định chương 4 từ tuần 5 rồi thông báo thiếu quan hệ tài liệu, hoặc hỏi lại để làm rõ đối tượng và loại tài liệu cần tìm.
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E096 | CHƯA ĐẠT | Chương nào có cả CFG và PCFG?
+  Mong đợi: FOUND: CH03 / chương 3
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: CH03 / chương 3
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: topics:CH03
+
+E097 | ĐẠT | Midterm kéo dài bao lâu?
+  Mong đợi: FOUND: 60 / sáu mươi; phút
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: MIDTERM có thời lượng 60 phút. Nguồn: course_info:CO3085.
+
+E098 | ĐẠT | Final kéo dài bao lâu?
+  Mong đợi: FOUND: 90 / chín mươi; phút
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: FINAL có thời lượng 90 phút. Nguồn: course_info:CO3085.
+
+E099 | CHƯA ĐẠT | Môn NLP được bao nhiêu tín chỉ?
+  Mong đợi: FOUND: 3 / ba; tín chỉ
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 3 / ba
+  Thiếu thông tin trả lời: tín chỉ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E100 | CHƯA ĐẠT | Môn NLP có tất cả bao nhiêu tín chỉ?
+  Mong đợi: FOUND: 3 / ba; tín chỉ
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 3 / ba
+  Thiếu thông tin trả lời: tín chỉ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E101 | CHƯA ĐẠT | Cho tôi biết số tín chỉ của môn NLP.
+  Mong đợi: FOUND: 3 / ba; tín chỉ
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 3 / ba
+  Thiếu thông tin trả lời: tín chỉ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E102 | CHƯA ĐẠT | Môn NLP có mấy ECTS?
+  Mong đợi: FOUND: 6 / sáu; ECTS
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 6 / sáu
+  Thiếu thông tin trả lời: ECTS
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E103 | CHƯA ĐẠT | Số ECTS của môn NLP là bao nhiêu?
+  Mong đợi: FOUND: 6 / sáu; ECTS
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 6 / sáu
+  Thiếu thông tin trả lời: ECTS
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E104 | ĐẠT | Tuần 5 học nội dung gì?
+  Mong đợi: FOUND: augmented transition networks; generalized feature systems; unification grammar
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Nội dung tuần 5:  - augmented transition networks - generalized feature systems - unification grammar  Nguồn: schedule:WEEK_05.
+
+E105 | ĐẠT | Tuần 5 có nội dung gì?
+  Mong đợi: FOUND: augmented transition networks; generalized feature systems; unification grammar
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Nội dung tuần 5:  - augmented transition networks - generalized feature systems - unification grammar  Nguồn: schedule:WEEK_05.
+
+E106 | CHƯA ĐẠT | Tuần 5 gồm những nội dung nào?
+  Mong đợi: FOUND: augmented transition networks; generalized feature systems; unification grammar
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: augmented transition networks
+  Thiếu thông tin trả lời: generalized feature systems
+  Thiếu thông tin trả lời: unification grammar
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_05
+
+E107 | CHƯA ĐẠT | Cho biết nội dung học của tuần 5.
+  Mong đợi: FOUND: augmented transition networks; generalized feature systems; unification grammar
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: augmented transition networks
+  Thiếu thông tin trả lời: generalized feature systems
+  Thiếu thông tin trả lời: unification grammar
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_05
+
+E108 | CHƯA ĐẠT | Tuần thứ 5 học gì?
+  Mong đợi: FOUND: augmented transition networks; generalized feature systems; unification grammar
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: augmented transition networks
+  Thiếu thông tin trả lời: generalized feature systems
+  Thiếu thông tin trả lời: unification grammar
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_05
+
+E109 | CHƯA ĐẠT | Chương 4 được học vào những tuần nào?
+  Mong đợi: FOUND: WEEK_04 / tuần 4; WEEK_05 / tuần 5
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: WEEK_04 / tuần 4
+  Thiếu thông tin trả lời: WEEK_05 / tuần 5
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_04
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_05
+
+E110 | CHƯA ĐẠT | Những tuần nào học chương 4?
+  Mong đợi: FOUND: WEEK_04 / tuần 4; WEEK_05 / tuần 5
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: WEEK_04 / tuần 4
+  Thiếu thông tin trả lời: WEEK_05 / tuần 5
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_04
+  Câu trả lời chưa nêu nguồn: schedule:WEEK_05
+
+E111 | ĐẠT | Chương nào học về CFG?
+  Mong đợi: FOUND: CH03 / chương 3
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung này được tìm thấy ở: CH03 (Chương 3 – GRAMMAR AND PARSING). Nguồn: topics:CH03.
+
+E112 | CHƯA ĐẠT | Nội dung CFG thuộc chương nào?
+  Mong đợi: FOUND: CH03 / chương 3
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: CH03 / chương 3
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: topics:CH03
+
+E113 | ĐẠT | Knowledge representation nằm ở chương nào?
+  Mong đợi: FOUND: CH11 / chương 11
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung này được tìm thấy ở: CH11 (Chương 11 – KNOWLEDGE REPRESENTATION AND REASONING). Nguồn: topics:CH11.
+
+E114 | ĐẠT | Chương nào nói về knowledge representation?
+  Mong đợi: FOUND: CH11 / chương 11
+  Nguồn đối chiếu: data/raw/topics.txt
+  Thực tế: Nội dung này được tìm thấy ở: CH11 (Chương 11 – KNOWLEDGE REPRESENTATION AND REASONING). Nguồn: topics:CH11.
+
+E115 | ĐẠT | Bài tập lớn bao nhiêu người?
+  Mong đợi: FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Quy mô nhóm làm bài tập lớn: 3-4 students. Nguồn: assignments:BTL01.
+
+E116 | CHƯA ĐẠT | Nhóm làm bài tập lớn cần bao nhiêu người?
+  Mong đợi: FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: assignments:BTL01
+
+E117 | CHƯA ĐẠT | Mỗi nhóm BTL có mấy thành viên?
+  Mong đợi: FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: assignments:BTL01
+
+E118 | CHƯA ĐẠT | Những yêu cầu của bài tập lớn là gì?
+  Mong đợi: Nêu đủ yêu cầu bắt buộc về văn phạm và parser, ngữ nghĩa và hỏi đáp, cùng đánh giá. Nếu có nêu phần ngữ cảnh thì phân biệt đó là mục mở rộng trong dữ liệu mẫu.
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: grammar / văn phạm
+  Thiếu thông tin trả lời: sinh câu
+  Thiếu thông tin trả lời: parser / phân tích cú pháp
+  Thiếu thông tin trả lời: parse tree / cây cú pháp / cây phân tích
+  Thiếu thông tin trả lời: semantic representation / biểu diễn ngữ nghĩa / diễn giải ngữ nghĩa
+  Thiếu thông tin trả lời: intent / ý định
+  Thiếu thông tin trả lời: entity / thực thể
+  Thiếu thông tin trả lời: knowledge base / cơ sở tri thức
+  Thiếu thông tin trả lời: answer generation / sinh câu trả lời / hỏi đáp
+  Thiếu thông tin trả lời: không tìm thấy / thiếu thông tin
+  Thiếu thông tin trả lời: test set / tập kiểm thử / tập câu hỏi / bộ kiểm thử
+  Thiếu thông tin trả lời: accuracy / độ chính xác / chỉ số đánh giá
+  Thiếu thông tin trả lời: phân tích lỗi
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_1
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_2
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_4
+
+E119 | CHƯA ĐẠT | Bài tập lớn cần thực hiện những yêu cầu nào?
+  Mong đợi: Nêu đủ yêu cầu bắt buộc về văn phạm và parser, ngữ nghĩa và hỏi đáp, cùng đánh giá. Nếu có nêu phần ngữ cảnh thì phân biệt đó là mục mở rộng trong dữ liệu mẫu.
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: grammar / văn phạm
+  Thiếu thông tin trả lời: sinh câu
+  Thiếu thông tin trả lời: parser / phân tích cú pháp
+  Thiếu thông tin trả lời: parse tree / cây cú pháp / cây phân tích
+  Thiếu thông tin trả lời: semantic representation / biểu diễn ngữ nghĩa / diễn giải ngữ nghĩa
+  Thiếu thông tin trả lời: intent / ý định
+  Thiếu thông tin trả lời: entity / thực thể
+  Thiếu thông tin trả lời: knowledge base / cơ sở tri thức
+  Thiếu thông tin trả lời: answer generation / sinh câu trả lời / hỏi đáp
+  Thiếu thông tin trả lời: không tìm thấy / thiếu thông tin
+  Thiếu thông tin trả lời: test set / tập kiểm thử / tập câu hỏi / bộ kiểm thử
+  Thiếu thông tin trả lời: accuracy / độ chính xác / chỉ số đánh giá
+  Thiếu thông tin trả lời: phân tích lỗi
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_1
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_2
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_4
+
+E120 | CHƯA ĐẠT | Ai là giảng viên dạy môn NLP?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E121 | CHƯA ĐẠT | Tên giảng viên môn NLP là gì?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E122 | CHƯA ĐẠT | Khi nào phải nộp bài tập lớn?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E123 | CHƯA ĐẠT | Hạn nộp bài tập lớn là ngày nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E124 | ĐẠT | Tài liệu nào liên quan đến CFG?
+  Mong đợi: FOUND: Natural Language Processing with Python
+  Nguồn đối chiếu: data/annotations/resource_topics.yaml
+  Thực tế: Tài liệu phù hợp:  - Natural Language Processing with Python  Nguồn: annotation:resource_topics:RES05, resources:RES05.
+
+E125 | CHƯA ĐẠT | Có tài liệu tham khảo nào về CFG?
+  Mong đợi: FOUND: Natural Language Processing with Python
+  Nguồn đối chiếu: data/annotations/resource_topics.yaml
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: Natural Language Processing with Python
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: annotation:resource_topics:RES05
+  Câu trả lời chưa nêu nguồn: resources:RES05
+
+E126 | CHƯA ĐẠT | Tôi có thể đọc tài liệu nào về CFG?
+  Mong đợi: FOUND: Natural Language Processing with Python
+  Nguồn đối chiếu: data/annotations/resource_topics.yaml
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: Natural Language Processing with Python
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: annotation:resource_topics:RES05
+  Câu trả lời chưa nêu nguồn: resources:RES05
+
+E127 | ĐẠT | Ngày mai thời tiết thế nào?
+  Mong đợi: OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu
+  Nguồn đối chiếu: data/raw/00_README.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+
+E128 | ĐẠT | Tài liệu cho chương này là gì?
+  Hội thoại trước: Tuần 5 học gì?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E129 | CHƯA ĐẠT | Chương này có tài liệu nào?
+  Hội thoại trước: Tuần 5 học gì?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/schedule.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E130 | CHƯA ĐẠT | Bài thi giữa kỳ diễn ra trong bao lâu?
+  Mong đợi: FOUND: 60 / sáu mươi; phút
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 60 / sáu mươi
+  Thiếu thông tin trả lời: phút
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E131 | CHƯA ĐẠT | Bài thi cuối kỳ kéo dài mấy phút?
+  Mong đợi: FOUND: 90 / chín mươi; phút
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 90 / chín mươi
+  Thiếu thông tin trả lời: phút
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E132 | CHƯA ĐẠT | LO2.5 nói về nội dung gì?
+  Mong đợi: FOUND: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:LO2.5
+
+E133 | CHƯA ĐẠT | Chuẩn đầu ra LO2.5 là gì?
+  Mong đợi: FOUND: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:LO2.5
+
+E134 | ĐẠT | LO2.5 thuộc chương nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, tôi không tìm thấy thông tin này trong dữ liệu môn học hiện tại.
+
+E135 | CHƯA ĐẠT | Chuẩn đầu ra LO2.5 được học trong chương nào?
+  Mong đợi: MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: không tìm thấy / không có / chưa có / chưa được cung cấp
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E136 | CHƯA ĐẠT | Phần I của bài tập lớn phải nộp các file nào?
+  Mong đợi: FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: output/grammar.txt
+  Thiếu thông tin trả lời: output/samples.txt
+  Thiếu thông tin trả lời: output/parse-results.txt
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_1
+
+E137 | CHƯA ĐẠT | Đầu ra của phần I gồm những tệp gì?
+  Mong đợi: FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt
+  Nguồn đối chiếu: data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: output/grammar.txt
+  Thiếu thông tin trả lời: output/samples.txt
+  Thiếu thông tin trả lời: output/parse-results.txt
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: assignments:BTL_PART_1
+
+E138 | ĐẠT | Môn NLP thuộc khoa nào?
+  Mong đợi: FOUND: Khoa Khoa học và Kỹ thuật Máy tính
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Môn CO3085 thuộc Khoa Khoa học và Kỹ thuật Máy tính. Nguồn: course_info:CO3085.
+
+E139 | CHƯA ĐẠT | Môn NLP học trong học kỳ nào?
+  Mong đợi: FOUND: HK261
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: HK261
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E140 | CHƯA ĐẠT | Môn NLP cần bao nhiêu giờ tự học?
+  Mong đợi: FOUND: 60 giờ
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 60 giờ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E141 | CHƯA ĐẠT | Midterm chiếm bao nhiêu phần trăm?
+  Mong đợi: FOUND: 30% / 30 phần trăm / 30
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 30
+  Thiếu thông tin trả lời: % / phần trăm / percent
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E142 | CHƯA ĐẠT | Final chiếm bao nhiêu phần trăm?
+  Mong đợi: FOUND: 40% / 40 phần trăm / 40
+  Nguồn đối chiếu: data/raw/course_info.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: 40
+  Thiếu thông tin trả lời: % / phần trăm / percent
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: course_info:CO3085
+
+E143 | ĐẠT | Có được dùng thư viện ngoài không?
+  Mong đợi: FOUND: có / được phép
+  Nguồn đối chiếu: data/raw/regulations.txt
+  Thực tế: Có. Nguồn: regulations:EXTERNAL_LIBRARIES.
+
+E144 | CHƯA ĐẠT | Có được chia sẻ bài làm giữa các nhóm không?
+  Mong đợi: FOUND: không / không được phép
+  Nguồn đối chiếu: data/raw/regulations.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: không / không được phép
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: regulations:ASSIGNMENT_SHARING
+
+E145 | CHƯA ĐẠT | Ai là tác giả của Natural Language Processing with Python?
+  Mong đợi: FOUND: Steven Bird; Ewan Klein; Edward Loper
+  Nguồn đối chiếu: data/raw/resources.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Trạng thái kết quả không đúng
+  Giá trị trả về thiếu, thừa, sai nội dung hoặc sai kiểu dữ liệu
+  Nguồn trả về thiếu hoặc không đúng
+  Thiếu thông tin trả lời: Steven Bird
+  Thiếu thông tin trả lời: Ewan Klein
+  Thiếu thông tin trả lời: Edward Loper
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+  Câu trả lời chưa nêu nguồn: resources:RES05
+
+E146 | CHƯA ĐẠT | Tài liệu của chương này là gì?
+  Mong đợi: Chưa có lượt hỏi trước để xác định chương; cần hỏi rõ chương.
+  Nguồn đối chiếu: data/raw/topics.txt, data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E147 | CHƯA ĐẠT | Tài liệu của chương này là gì?
+  Hội thoại trước: Chương 3 và Chương 6 học vào tuần nào?
+  Mong đợi: Có nhiều chương đang được nói đến; cần làm rõ chương cần tìm tài liệu.
+  Nguồn đối chiếu: data/raw/topics.txt, data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ
+  Có thông tin không được phép khẳng định: ngoài phạm vi
+
+E148 | CHƯA ĐẠT | Phần này cần xuất file gì?
+  Hội thoại trước: Chương 4 nói về gì?
+  Mong đợi: Ngữ cảnh đang nói về chương học, chưa xác định phần BTL; cần hỏi lại.
+  Nguồn đối chiếu: data/raw/topics.txt, data/raw/assignments.txt
+  Thực tế: Xin lỗi, câu hỏi này nằm ngoài phạm vi Course Assistant hiện tại.
+  Thiếu thông tin trả lời: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ
+  Có thông tin không được phép khẳng định: ngoài phạm vi

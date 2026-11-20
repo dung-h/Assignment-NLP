@@ -36,6 +36,14 @@ def canonical(slot, value):
     if slot=='chapter':
         m=re.search(r'(\d+)',f); return f'CH{int(m.group(1)):02d}' if m else value
     if slot=='assignment': return 'BTL01' if ('bai tap lon' in f or 'btl' in f) else value
+    if slot=='course_part':
+        m=re.search(r'phan mon\s*(iii|ii|i|[1-3])$', f)
+        if m:
+            number={'i': 1, 'ii': 2, 'iii': 3}.get(m.group(1), m.group(1))
+            return f'COURSE_PART_{number}'
+    if slot=='resource':
+        m=re.fullmatch(r'res\s*(\d+)', f)
+        if m: return f'RES{int(m.group(1)):02d}'
     if slot=='assignment_part':
         roman={'i':1,'ii':2,'iii':3,'iv':4}
         m=re.fullmatch(r'phan\s*(iv|iii|ii|i|[1-4])',f)

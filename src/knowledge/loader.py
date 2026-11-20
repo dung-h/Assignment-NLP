@@ -389,6 +389,8 @@ class KnowledgeBaseLoader:
             }
             _put_if_present(part, "requirements", requirements)
             _put_if_present(part, "outputs", outputs)
+            if any(line.strip() == "optional_or_extension:" for line in body_lines):
+                part["optional_or_extension"] = True
             kb.assignment_parts[part_id] = part
 
         goal = " ".join(_clean_lines(_block(lines, "goal", ["PART I - Grammar and Parser"])))

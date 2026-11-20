@@ -1,0 +1,4203 @@
+version: 2
+name: Bộ đánh giá đầu vào–đầu ra Course Assistant
+evaluation_kind: development
+method: Tất cả trường hợp dùng cùng tiêu chí kiểm tra dữ liệu, nguồn và các ý cần có trong câu trả lời.
+  Không chấm nhãn parser hay biểu diễn ngữ nghĩa nội bộ. Các kiểm tra từ ngữ là điều kiện tự động, chưa
+  thay thế đánh giá đầy đủ của con người.
+cases:
+- id: E001
+  input:
+    query: Môn NLP có bao nhiêu tín chỉ?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:credits
+  origin_ids:
+  - G001
+  - C01
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 3 / ba; tín chỉ'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '3'
+        - ba
+      - - tín chỉ
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 3
+      - tín chỉ
+- id: E002
+  input:
+    query: Môn học gồm những phần nào?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:parts
+  origin_ids:
+  - G002
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III
+    - Context and World Knowledge'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Part I - Syntactic Processing
+      - Part II - Semantic Interpretation
+      - Part III - Context and World Knowledge
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - Syntactic Processing
+        - xử lý cú pháp
+      - - Semantic Interpretation
+        - diễn dịch ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - Context and World Knowledge
+        - ngữ cảnh và tri thức thế giới
+      forbidden:
+      - ngoài phạm vi
+- id: E003
+  input:
+    query: Midterm bao nhiêu phút?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:duration
+  origin_ids:
+  - G003
+  - C63
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 60 / sáu mươi; phút'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 60
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '60'
+        - sáu mươi
+      - - phút
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 60
+      - phút
+- id: E004
+  input:
+    query: Ai dạy môn NLP?
+    history: []
+  category: giảng viên
+  task: GET_INSTRUCTOR:name
+  origin_ids:
+  - G004
+  - C13
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E005
+  input:
+    query: Tuần 3 học gì?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - G005
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: context-free grammar; grammar and sentence structure; top-down parsing; bottom-up
+    chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford
+    dependencies'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - context-free grammar
+      - grammar and sentence structure
+      - top-down parsing
+      - bottom-up chart parsing
+      - top-down chart parsing
+      - probabilistic context-free grammar
+      - dependency grammar
+      - Stanford dependencies
+      sources:
+      - schedule:WEEK_03
+      answer_facts:
+      - - context-free grammar
+      - - grammar and sentence structure
+      - - top-down parsing
+      - - bottom-up chart parsing
+      - - top-down chart parsing
+      - - probabilistic context-free grammar
+      - - dependency grammar
+      - - Stanford dependencies
+      forbidden:
+      - ngoài phạm vi
+- id: E006
+  input:
+    query: Chương 4 học vào tuần nào?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:week
+  origin_ids:
+  - G006
+  - C08
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: WEEK_04 / tuần 4; WEEK_05 / tuần 5'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - WEEK_04
+      - WEEK_05
+      sources:
+      - schedule:WEEK_04
+      - schedule:WEEK_05
+      answer_facts:
+      - - WEEK_04
+        - tuần 4
+      - - WEEK_05
+        - tuần 5
+      forbidden:
+      - ngoài phạm vi
+- id: E007
+  input:
+    query: PCFG được học khi nào?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:week
+  origin_ids:
+  - G007
+  provenance:
+  - data/raw/schedule.txt
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: WEEK_03 / tuần 3; WEEK_07 / tuần 7'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - WEEK_03
+      - WEEK_07
+      sources:
+      - schedule:WEEK_03
+      - schedule:WEEK_07
+      answer_facts:
+      - - WEEK_03
+        - tuần 3
+      - - WEEK_07
+        - tuần 7
+      forbidden:
+      - ngoài phạm vi
+- id: E008
+  input:
+    query: Chương 12 nói về gì?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:summary
+  origin_ids:
+  - G008
+  - G081
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: The chapter introduces local discourse context and discourse entities, with
+    emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and
+    surface anaphora'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - The chapter introduces local discourse context and discourse entities, with emphasis on reference
+        expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora.
+      sources:
+      - topics:CH12
+      answer_facts:
+      - - The chapter introduces local discourse context and discourse entities, with emphasis on reference
+          expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora
+      forbidden:
+      - ngoài phạm vi
+- id: E009
+  input:
+    query: Chương nào nói về CFG?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - G009
+  - C09
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH03 / chương 3'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH03
+      sources:
+      - topics:CH03
+      answer_facts:
+      - - CH03
+        - chương 3
+      forbidden:
+      - ngoài phạm vi
+- id: E010
+  input:
+    query: Chương 10 có những phương pháp gì?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:topics
+  origin_ids:
+  - G010
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: 10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching;
+    10.4 Semantically driven parsing techniques'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 10.1 Grammatical relations
+      - 10.2 Semantic grammars
+      - 10.3 Template matching
+      - 10.4 Semantically driven parsing techniques
+      sources:
+      - topics:CH10
+      answer_facts:
+      - - 10.1 Grammatical relations
+      - - 10.2 Semantic grammars
+      - - 10.3 Template matching
+      - - 10.4 Semantically driven parsing techniques
+      forbidden:
+      - ngoài phạm vi
+- id: E011
+  input:
+    query: Chương 11 có question answering không?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:contains_topic
+  origin_ids:
+  - G011
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - topics:CH11
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E012
+  input:
+    query: Bài tập lớn yêu cầu xây dựng những gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:requirements
+  origin_ids:
+  - G012
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: Nêu đủ yêu cầu bắt buộc về văn phạm và parser, ngữ nghĩa và hỏi đáp, cùng đánh giá.
+    Nếu có nêu phần ngữ cảnh thì phân biệt đó là mục mở rộng trong dữ liệu mẫu.
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - xây dựng grammar cho miền Course Assistant
+      - sinh câu hợp lệ từ grammar
+      - xây dựng parser
+      - xuất parse tree
+      - xử lý câu không hợp lệ
+      - semantic representation
+      - intent identification
+      - entity extraction
+      - query to knowledge base
+      - answer generation
+      - xử lý câu hỏi ngoài miền
+      - xử lý trường hợp không tìm thấy thông tin
+      - tạo test set
+      - đo accuracy hoặc metric phù hợp
+      - phân tích lỗi
+      - trình bày các trường hợp hệ thống không trả lời đúng
+      sources:
+      - assignments:BTL_PART_1
+      - assignments:BTL_PART_2
+      - assignments:BTL_PART_4
+      answer_facts:
+      - - grammar
+        - văn phạm
+      - - sinh câu
+      - - parser
+        - phân tích cú pháp
+      - - parse tree
+        - cây cú pháp
+        - cây phân tích
+      - - semantic representation
+        - biểu diễn ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - intent
+        - ý định
+      - - entity
+        - thực thể
+      - - knowledge base
+        - cơ sở tri thức
+      - - answer generation
+        - sinh câu trả lời
+        - hỏi đáp
+      - - ngoài miền
+        - ngoài phạm vi
+      - - không tìm thấy
+        - thiếu thông tin
+      - - test set
+        - tập kiểm thử
+        - tập câu hỏi
+        - bộ kiểm thử
+      - - accuracy
+        - độ chính xác
+        - chỉ số đánh giá
+      - - phân tích lỗi
+      forbidden:
+      - ngoài phạm vi
+    - outcome: FOUND
+      values:
+      - xây dựng grammar cho miền Course Assistant
+      - sinh câu hợp lệ từ grammar
+      - xây dựng parser
+      - xuất parse tree
+      - xử lý câu không hợp lệ
+      - semantic representation
+      - intent identification
+      - entity extraction
+      - query to knowledge base
+      - answer generation
+      - xử lý câu hỏi ngoài miền
+      - xử lý trường hợp không tìm thấy thông tin
+      - xử lý một số hội thoại nhiều lượt
+      - lưu discourse entities đơn giản
+      - xử lý tham chiếu đại từ hoặc mô tả xác định
+      - xử lý một số trường hợp ellipsis đơn giản
+      - tạo test set
+      - đo accuracy hoặc metric phù hợp
+      - phân tích lỗi
+      - trình bày các trường hợp hệ thống không trả lời đúng
+      sources:
+      - assignments:BTL_PART_1
+      - assignments:BTL_PART_2
+      - assignments:BTL_PART_3
+      - assignments:BTL_PART_4
+      answer_facts:
+      - - grammar
+        - văn phạm
+      - - sinh câu
+      - - parser
+        - phân tích cú pháp
+      - - parse tree
+        - cây cú pháp
+        - cây phân tích
+      - - semantic representation
+        - biểu diễn ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - intent
+        - ý định
+      - - entity
+        - thực thể
+      - - knowledge base
+        - cơ sở tri thức
+      - - answer generation
+        - sinh câu trả lời
+        - hỏi đáp
+      - - ngoài miền
+        - ngoài phạm vi
+      - - không tìm thấy
+        - thiếu thông tin
+      - - test set
+        - tập kiểm thử
+        - tập câu hỏi
+        - bộ kiểm thử
+      - - accuracy
+        - độ chính xác
+        - chỉ số đánh giá
+      - - phân tích lỗi
+      - - ngữ cảnh
+        - context
+      - - mở rộng
+        - tùy chọn
+        - optional
+      forbidden:
+      - ngoài phạm vi
+- id: E013
+  input:
+    query: Phần I của bài tập lớn là gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:title
+  origin_ids:
+  - G013
+  - G079
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: Grammar and Parser'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Grammar and Parser
+      sources:
+      - assignments:BTL_PART_1
+      answer_facts:
+      - - Grammar and Parser
+      forbidden:
+      - ngoài phạm vi
+- id: E014
+  input:
+    query: Bài tập lớn có phần parser không?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:contains_component
+  origin_ids:
+  - G014
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E015
+  input:
+    query: Phần I cần xuất file gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:outputs
+  origin_ids:
+  - G015
+  - C62
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - output/grammar.txt
+      - output/samples.txt
+      - output/parse-results.txt
+      sources:
+      - assignments:BTL_PART_1
+      answer_facts:
+      - - output/grammar.txt
+      - - output/samples.txt
+      - - output/parse-results.txt
+      forbidden:
+      - ngoài phạm vi
+- id: E016
+  input:
+    query: BTL bao nhiêu người?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:team_size
+  origin_ids:
+  - G016
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3-4 students
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - 3-4 students
+        - 3-4 người
+        - 3–4 người
+        - 3 đến 4 người
+        - 3 tới 4 sinh viên
+      forbidden:
+      - ngoài phạm vi
+- id: E017
+  input:
+    query: Deadline bài tập lớn khi nào?
+    history: []
+  category: hạn nộp
+  task: GET_DEADLINE:date
+  origin_ids:
+  - G017
+  - C47
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E018
+  input:
+    query: Quy định về sử dụng AI là gì?
+    history: []
+  category: quy định
+  task: GET_RULE:policy_text
+  origin_ids:
+  - G018
+  provenance:
+  - data/raw/regulations.txt
+  expectation_note: 'FOUND: Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình
+    thực hiện theo quy định của môn học'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo
+        quy định của môn học.
+      sources:
+      - regulations:AI_USAGE
+      answer_facts:
+      - - Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo
+          quy định của môn học
+      forbidden:
+      - ngoài phạm vi
+- id: E019
+  input:
+    query: Có được dùng LLM/RAG không?
+    history: []
+  category: quy định
+  task: GET_RULE:permission
+  origin_ids:
+  - G019
+  provenance:
+  - data/raw/regulations.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - regulations:LLM_RAG
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E020
+  input:
+    query: Tài liệu về statistical NLP là gì?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - G020
+  provenance:
+  - data/raw/resources.txt
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'FOUND: Introduction to Natural Language Processing; Foundation of Statistical Natural
+    Language Processing'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Introduction to Natural Language Processing
+      - Foundation of Statistical Natural Language Processing
+      sources:
+      - resources:RES02
+      - resources:RES04
+      answer_facts:
+      - - Introduction to Natural Language Processing
+      - - Foundation of Statistical Natural Language Processing
+      forbidden:
+      - ngoài phạm vi
+- id: E021
+  input:
+    query: Tài liệu cho chương 3 là gì?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - G021
+  provenance:
+  - data/raw/resources.txt
+  - data/raw/topics.txt
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'FOUND: Natural Language Processing with Python'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Natural Language Processing with Python
+      sources:
+      - topics:CH03
+      - annotation:resource_topics:RES05
+      - resources:RES05
+      answer_facts:
+      - - Natural Language Processing with Python
+      forbidden:
+      - ngoài phạm vi
+- id: E022
+  input:
+    query: L.O.2.5 là gì?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:description
+  origin_ids:
+  - G022
+  - C60
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu.
+      sources:
+      - course_info:LO2.5
+      answer_facts:
+      - - Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+      forbidden:
+      - ngoài phạm vi
+- id: E023
+  input:
+    query: L.O.4.2 liên quan đến nội dung nào?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:related_content
+  origin_ids:
+  - G023
+  provenance:
+  - data/raw/course_info.txt
+  - data/raw/topics.txt
+  - data/annotations/lo_chapters.yaml
+  expectation_note: 'FOUND: CH12: The chapter introduces local discourse context and discourse entities,
+    with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis
+    and surface anaphora'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 'CH12: The chapter introduces local discourse context and discourse entities, with emphasis on
+        reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface
+        anaphora.'
+      sources:
+      - course_info:LO4.2
+      - topics:CH12
+      - annotation:lo_chapters:LO4.2_CH12
+      answer_facts:
+      - - 'CH12: The chapter introduces local discourse context and discourse entities, with emphasis
+          on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface
+          anaphora'
+      forbidden:
+      - ngoài phạm vi
+- id: E024
+  input:
+    query: L.O.2.5 nằm ở chương nào?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:chapter
+  origin_ids:
+  - G024
+  - C61
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E025
+  input:
+    query: BTL có phần hỏi đáp không?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:contains_component
+  origin_ids:
+  - G025
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E026
+  input:
+    query: Quy định về thư viện ngoài là gì?
+    history: []
+  category: quy định
+  task: GET_RULE:policy_text
+  origin_ids:
+  - G026
+  provenance:
+  - data/raw/regulations.txt
+  expectation_note: 'FOUND: Được phép sử dụng thư viện công khai nếu tuân thủ yêu cầu của bài tập'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Được phép sử dụng thư viện công khai nếu tuân thủ yêu cầu của bài tập.
+      sources:
+      - regulations:EXTERNAL_LIBRARIES
+      answer_facts:
+      - - Được phép sử dụng thư viện công khai nếu tuân thủ yêu cầu của bài tập
+      forbidden:
+      - ngoài phạm vi
+- id: E027
+  input:
+    query: Tài liệu liên quan đến Python NLP là gì?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - G027
+  provenance:
+  - data/raw/resources.txt
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E028
+  input:
+    query: Hôm nay ở TP.HCM có mưa không?
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - G028
+  - C17
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E029
+  input:
+    query: Ai là tổng thống của Pháp?
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - G029
+  - C54
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E030
+  input:
+    query: Hãy giải bài tập xác suất này giúp tôi.
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - G030
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E031
+  input:
+    query: Chương 4 nói về gì?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:summary
+  origin_ids:
+  - G031
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: The chapter extends formal grammar with feature systems and augmented grammar.
+    It covers lexicon, parsing with features, augmented transition networks, generalized feature systems
+    and unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - The chapter extends formal grammar with feature systems and augmented grammar. It covers lexicon,
+        parsing with features, augmented transition networks, generalized feature systems and unification
+        grammar.
+      sources:
+      - topics:CH04
+      answer_facts:
+      - - The chapter extends formal grammar with feature systems and augmented grammar. It covers lexicon,
+          parsing with features, augmented transition networks, generalized feature systems and unification
+          grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E032
+  input:
+    query: Nó có liên quan đến parsing không?
+    history:
+    - Chương 4 nói về gì?
+  category: hội thoại
+  task: GET_TOPIC:contains_topic
+  origin_ids:
+  - G032
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - topics:CH04
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E033
+  input:
+    query: Chương 11 có hỏi đáp không?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:contains_topic
+  origin_ids:
+  - G033
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - topics:CH11
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E034
+  input:
+    query: Còn chương sau?
+    history:
+    - Chương 11 có hỏi đáp không?
+  category: hội thoại
+  task: GET_TOPIC:contains_topic
+  origin_ids:
+  - G034
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: không / không được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - false
+      sources:
+      - topics:CH12
+      answer_facts:
+      - - không
+        - không được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E035
+  input:
+    query: BTL có phần parser không?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:contains_component
+  origin_ids:
+  - G035
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E036
+  input:
+    query: Phần này cần xuất file gì?
+    history:
+    - BTL có phần parser không?
+  category: hội thoại
+  task: GET_ASSIGNMENT:outputs
+  origin_ids:
+  - G036
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - output/grammar.txt
+      - output/samples.txt
+      - output/parse-results.txt
+      sources:
+      - assignments:BTL_PART_1
+      answer_facts:
+      - - output/grammar.txt
+      - - output/samples.txt
+      - - output/parse-results.txt
+      forbidden:
+      - ngoài phạm vi
+- id: E037
+  input:
+    query: NLP có mấy tín chỉ?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:credits
+  origin_ids:
+  - G037
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 3 / ba; tín chỉ'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '3'
+        - ba
+      - - tín chỉ
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 3
+      - tín chỉ
+- id: E038
+  input:
+    query: Môn học có những phần nào?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:parts
+  origin_ids:
+  - G038
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: Part I - Syntactic Processing; Part II - Semantic Interpretation; Part III
+    - Context and World Knowledge'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Part I - Syntactic Processing
+      - Part II - Semantic Interpretation
+      - Part III - Context and World Knowledge
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - Syntactic Processing
+        - xử lý cú pháp
+      - - Semantic Interpretation
+        - diễn dịch ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - Context and World Knowledge
+        - ngữ cảnh và tri thức thế giới
+      forbidden:
+      - ngoài phạm vi
+- id: E039
+  input:
+    query: Midterm mấy phút?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:duration
+  origin_ids:
+  - G039
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 60 / sáu mươi; phút'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 60
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '60'
+        - sáu mươi
+      - - phút
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 60
+      - phút
+- id: E040
+  input:
+    query: Giảng viên môn NLP là ai?
+    history: []
+  category: giảng viên
+  task: GET_INSTRUCTOR:name
+  origin_ids:
+  - G040
+  - C44
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E041
+  input:
+    query: Tuần 3 học nội dung gì?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - G041
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: context-free grammar; grammar and sentence structure; top-down parsing; bottom-up
+    chart parsing; top-down chart parsing; probabilistic context-free grammar; dependency grammar; Stanford
+    dependencies'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - context-free grammar
+      - grammar and sentence structure
+      - top-down parsing
+      - bottom-up chart parsing
+      - top-down chart parsing
+      - probabilistic context-free grammar
+      - dependency grammar
+      - Stanford dependencies
+      sources:
+      - schedule:WEEK_03
+      answer_facts:
+      - - context-free grammar
+      - - grammar and sentence structure
+      - - top-down parsing
+      - - bottom-up chart parsing
+      - - top-down chart parsing
+      - - probabilistic context-free grammar
+      - - dependency grammar
+      - - Stanford dependencies
+      forbidden:
+      - ngoài phạm vi
+- id: E042
+  input:
+    query: Chương 4 học tuần mấy?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:week
+  origin_ids:
+  - G042
+  - C31
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: WEEK_04 / tuần 4; WEEK_05 / tuần 5'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - WEEK_04
+      - WEEK_05
+      sources:
+      - schedule:WEEK_04
+      - schedule:WEEK_05
+      answer_facts:
+      - - WEEK_04
+        - tuần 4
+      - - WEEK_05
+        - tuần 5
+      forbidden:
+      - ngoài phạm vi
+- id: E043
+  input:
+    query: PCFG học tuần nào?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:week
+  origin_ids:
+  - G043
+  provenance:
+  - data/raw/schedule.txt
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: WEEK_03 / tuần 3; WEEK_07 / tuần 7'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - WEEK_03
+      - WEEK_07
+      sources:
+      - schedule:WEEK_03
+      - schedule:WEEK_07
+      answer_facts:
+      - - WEEK_03
+        - tuần 3
+      - - WEEK_07
+        - tuần 7
+      forbidden:
+      - ngoài phạm vi
+- id: E044
+  input:
+    query: Chương 12 học gì?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:summary
+  origin_ids:
+  - G044
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: The chapter introduces local discourse context and discourse entities, with
+    emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and
+    surface anaphora'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - The chapter introduces local discourse context and discourse entities, with emphasis on reference
+        expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora.
+      sources:
+      - topics:CH12
+      answer_facts:
+      - - The chapter introduces local discourse context and discourse entities, with emphasis on reference
+          expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface anaphora
+      forbidden:
+      - ngoài phạm vi
+- id: E045
+  input:
+    query: CFG nằm ở chương nào?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - G045
+  - C34
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH03 / chương 3'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH03
+      sources:
+      - topics:CH03
+      answer_facts:
+      - - CH03
+        - chương 3
+      forbidden:
+      - ngoài phạm vi
+- id: E046
+  input:
+    query: Chương 10 gồm những gì?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:topics
+  origin_ids:
+  - G046
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: 10.1 Grammatical relations; 10.2 Semantic grammars; 10.3 Template matching;
+    10.4 Semantically driven parsing techniques'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 10.1 Grammatical relations
+      - 10.2 Semantic grammars
+      - 10.3 Template matching
+      - 10.4 Semantically driven parsing techniques
+      sources:
+      - topics:CH10
+      answer_facts:
+      - - 10.1 Grammatical relations
+      - - 10.2 Semantic grammars
+      - - 10.3 Template matching
+      - - 10.4 Semantically driven parsing techniques
+      forbidden:
+      - ngoài phạm vi
+- id: E047
+  input:
+    query: Chương 11 liên quan đến question answering không?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:contains_topic
+  origin_ids:
+  - G047
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - topics:CH11
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E048
+  input:
+    query: Mục tiêu Bài tập lớn là gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:goal
+  origin_ids:
+  - G048
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn
+    học. Hệ thống phải thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải thể
+        hiện pipeline NLP từ parsing đến semantic interpretation và question answering.
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - Xây dựng hệ thống xử lý câu hỏi tự nhiên trong miền thông tin của một môn học. Hệ thống phải
+          thể hiện pipeline NLP từ parsing đến semantic interpretation và question answering
+      forbidden:
+      - ngoài phạm vi
+- id: E049
+  input:
+    query: Phần I bài tập lớn là gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:title
+  origin_ids:
+  - G049
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: Grammar and Parser'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Grammar and Parser
+      sources:
+      - assignments:BTL_PART_1
+      answer_facts:
+      - - Grammar and Parser
+      forbidden:
+      - ngoài phạm vi
+- id: E050
+  input:
+    query: Bài tập lớn có parser không?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:contains_component
+  origin_ids:
+  - G050
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E051
+  input:
+    query: Phần I output gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:outputs
+  origin_ids:
+  - G051
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - output/grammar.txt
+      - output/samples.txt
+      - output/parse-results.txt
+      sources:
+      - assignments:BTL_PART_1
+      answer_facts:
+      - - output/grammar.txt
+      - - output/samples.txt
+      - - output/parse-results.txt
+      forbidden:
+      - ngoài phạm vi
+- id: E052
+  input:
+    query: BTL nhóm mấy người?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:team_size
+  origin_ids:
+  - G052
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3-4 students
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - 3-4 students
+        - 3-4 người
+        - 3–4 người
+        - 3 đến 4 người
+        - 3 tới 4 sinh viên
+      forbidden:
+      - ngoài phạm vi
+- id: E053
+  input:
+    query: Hạn nộp bài tập lớn ngày nào?
+    history: []
+  category: hạn nộp
+  task: GET_DEADLINE:date
+  origin_ids:
+  - G053
+  - C14
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E054
+  input:
+    query: Quy định sử dụng AI như thế nào?
+    history: []
+  category: quy định
+  task: GET_RULE:policy_text
+  origin_ids:
+  - G054
+  provenance:
+  - data/raw/regulations.txt
+  expectation_note: 'FOUND: Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình
+    thực hiện theo quy định của môn học'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo
+        quy định của môn học.
+      sources:
+      - regulations:AI_USAGE
+      answer_facts:
+      - - Sinh viên phải khai báo việc sử dụng AI trong báo cáo, nghiên cứu và quá trình thực hiện theo
+          quy định của môn học
+      forbidden:
+      - ngoài phạm vi
+- id: E055
+  input:
+    query: Được dùng LLM/RAG không?
+    history: []
+  category: quy định
+  task: GET_RULE:permission
+  origin_ids:
+  - G055
+  provenance:
+  - data/raw/regulations.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - regulations:LLM_RAG
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E056
+  input:
+    query: Tài liệu nào nói về statistical NLP?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - G056
+  provenance:
+  - data/raw/resources.txt
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'FOUND: Introduction to Natural Language Processing; Foundation of Statistical Natural
+    Language Processing'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Introduction to Natural Language Processing
+      - Foundation of Statistical Natural Language Processing
+      sources:
+      - resources:RES02
+      - resources:RES04
+      answer_facts:
+      - - Introduction to Natural Language Processing
+      - - Foundation of Statistical Natural Language Processing
+      forbidden:
+      - ngoài phạm vi
+- id: E057
+  input:
+    query: Tài liệu của chương 3 là gì?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - G057
+  provenance:
+  - data/raw/resources.txt
+  - data/raw/topics.txt
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'FOUND: Natural Language Processing with Python'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Natural Language Processing with Python
+      sources:
+      - topics:CH03
+      - annotation:resource_topics:RES05
+      - resources:RES05
+      answer_facts:
+      - - Natural Language Processing with Python
+      forbidden:
+      - ngoài phạm vi
+- id: E058
+  input:
+    query: L.O.2.5 nói về gì?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:description
+  origin_ids:
+  - G058
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu.
+      sources:
+      - course_info:LO2.5
+      answer_facts:
+      - - Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+      forbidden:
+      - ngoài phạm vi
+- id: E059
+  input:
+    query: L.O.4.2 liên quan nội dung gì?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:related_content
+  origin_ids:
+  - G059
+  provenance:
+  - data/raw/course_info.txt
+  - data/raw/topics.txt
+  - data/annotations/lo_chapters.yaml
+  expectation_note: 'FOUND: CH12: The chapter introduces local discourse context and discourse entities,
+    with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis
+    and surface anaphora'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 'CH12: The chapter introduces local discourse context and discourse entities, with emphasis on
+        reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface
+        anaphora.'
+      sources:
+      - course_info:LO4.2
+      - topics:CH12
+      - annotation:lo_chapters:LO4.2_CH12
+      answer_facts:
+      - - 'CH12: The chapter introduces local discourse context and discourse entities, with emphasis
+          on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface
+          anaphora'
+      forbidden:
+      - ngoài phạm vi
+- id: E060
+  input:
+    query: L.O.2.5 thuộc chương nào?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:chapter
+  origin_ids:
+  - G060
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E061
+  input:
+    query: Ai dạy CO3085?
+    history: []
+  category: giảng viên
+  task: GET_INSTRUCTOR:name
+  origin_ids:
+  - G061
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E062
+  input:
+    query: Giảng viên CO3085 là ai?
+    history: []
+  category: giảng viên
+  task: GET_INSTRUCTOR:name
+  origin_ids:
+  - G062
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E063
+  input:
+    query: Deadline BTL khi nào?
+    history: []
+  category: hạn nộp
+  task: GET_DEADLINE:date
+  origin_ids:
+  - G063
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E064
+  input:
+    query: Hạn nộp BTL khi nào?
+    history: []
+  category: hạn nộp
+  task: GET_DEADLINE:date
+  origin_ids:
+  - G064
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E065
+  input:
+    query: Tài liệu cho chương 10 là gì?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - G065
+  provenance:
+  - data/raw/resources.txt
+  - data/raw/topics.txt
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E066
+  input:
+    query: LO4.2 liên quan nội dung gì?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:related_content
+  origin_ids:
+  - G066
+  provenance:
+  - data/raw/course_info.txt
+  - data/raw/topics.txt
+  - data/annotations/lo_chapters.yaml
+  expectation_note: 'FOUND: CH12: The chapter introduces local discourse context and discourse entities,
+    with emphasis on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis
+    and surface anaphora'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 'CH12: The chapter introduces local discourse context and discourse entities, with emphasis on
+        reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface
+        anaphora.'
+      sources:
+      - course_info:LO4.2
+      - topics:CH12
+      - annotation:lo_chapters:LO4.2_CH12
+      answer_facts:
+      - - 'CH12: The chapter introduces local discourse context and discourse entities, with emphasis
+          on reference expressions, pronouns, centering, definite descriptions, sets, ellipsis and surface
+          anaphora'
+      forbidden:
+      - ngoài phạm vi
+- id: E067
+  input:
+    query: LO4.2 thuộc chương nào?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:chapter
+  origin_ids:
+  - G067
+  provenance:
+  - data/raw/course_info.txt
+  - data/raw/topics.txt
+  - data/annotations/lo_chapters.yaml
+  expectation_note: 'FOUND: CH12 / chương 12'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH12
+      sources:
+      - course_info:LO4.2
+      - topics:CH12
+      - annotation:lo_chapters:LO4.2_CH12
+      answer_facts:
+      - - CH12
+        - chương 12
+      forbidden:
+      - ngoài phạm vi
+- id: E068
+  input:
+    query: Chương 99 nói về gì?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:summary
+  origin_ids:
+  - G068
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E069
+  input:
+    query: 2 + 2 bằng bao nhiêu?
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - G069
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E070
+  input:
+    query: Gửi email cho tôi.
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - G070
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E071
+  input:
+    query: NLP
+    history: []
+  category: câu hỏi chưa rõ
+  task: clarification
+  origin_ids:
+  - G071
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'CLARIFY: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ; chương / phần
+    / nội dung / câu hỏi / môn học'
+  expected:
+    alternatives:
+    - outcome: CLARIFY
+      values: []
+      sources: []
+      answer_facts:
+      - - bạn muốn
+        - bạn đang hỏi
+        - ý bạn
+        - bạn có thể
+        - cần làm rõ
+      - - chương
+        - phần
+        - nội dung
+        - câu hỏi
+        - môn học
+      forbidden:
+      - ngoài phạm vi
+- id: E072
+  input:
+    query: Cho tôi biết giá vàng hôm nay.
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - G072
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E073
+  input:
+    query: Chương nào nói về CFG? rồi dự báo thời tiết
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - G073
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E074
+  input:
+    query: PCFG nằm ở chương nào?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - G074
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH03 / chương 3; CH06 / chương 6'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH03
+      - CH06
+      sources:
+      - topics:CH03
+      - topics:CH06
+      answer_facts:
+      - - CH03
+        - chương 3
+      - - CH06
+        - chương 6
+      forbidden:
+      - ngoài phạm vi
+- id: E075
+  input:
+    query: Chương 3 và Chương 6 học vào tuần nào?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:week
+  origin_ids:
+  - G075
+  - G083
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: WEEK_03 / tuần 3; WEEK_07 / tuần 7; WEEK_08 / tuần 8'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - WEEK_03
+      - WEEK_07
+      - WEEK_08
+      sources:
+      - schedule:WEEK_03
+      - schedule:WEEK_07
+      - schedule:WEEK_08
+      answer_facts:
+      - - WEEK_03
+        - tuần 3
+      - - WEEK_07
+        - tuần 7
+      - - WEEK_08
+        - tuần 8
+      forbidden:
+      - ngoài phạm vi
+- id: E076
+  input:
+    query: Chương 3 có question answering không?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:contains_topic
+  origin_ids:
+  - G076
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: không / không được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - false
+      sources:
+      - topics:CH03
+      answer_facts:
+      - - không
+        - không được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E077
+  input:
+    query: Bài tập lớn có phần RAG không?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:contains_component
+  origin_ids:
+  - G077
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: không / không được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - false
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - không
+        - không được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E078
+  input:
+    query: Có được chia sẻ giữa các nhóm không?
+    history: []
+  category: quy định
+  task: GET_RULE:permission
+  origin_ids:
+  - G078
+  provenance:
+  - data/raw/regulations.txt
+  expectation_note: 'FOUND: không / không được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - false
+      sources:
+      - regulations:ASSIGNMENT_SHARING
+      answer_facts:
+      - - không
+        - không được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E079
+  input:
+    query: Phần này output gì?
+    history:
+    - Phần I của bài tập lớn là gì?
+  category: hội thoại
+  task: GET_ASSIGNMENT:outputs
+  origin_ids:
+  - G080
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - output/grammar.txt
+      - output/samples.txt
+      - output/parse-results.txt
+      sources:
+      - assignments:BTL_PART_1
+      answer_facts:
+      - - output/grammar.txt
+      - - output/samples.txt
+      - - output/parse-results.txt
+      forbidden:
+      - ngoài phạm vi
+- id: E080
+  input:
+    query: Còn chương sau?
+    history:
+    - Chương 12 nói về gì?
+  category: hội thoại
+  task: GET_TOPIC:summary
+  origin_ids:
+  - G082
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E081
+  input:
+    query: Nó có parsing không?
+    history:
+    - Chương 3 và Chương 6 học vào tuần nào?
+  category: hội thoại
+  task: clarification
+  origin_ids:
+  - G084
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'CLARIFY: bạn muốn / bạn đang hỏi / ý bạn / bạn có thể / cần làm rõ; chương / phần
+    / nội dung / câu hỏi / môn học'
+  expected:
+    alternatives:
+    - outcome: CLARIFY
+      values: []
+      sources: []
+      answer_facts:
+      - - bạn muốn
+        - bạn đang hỏi
+        - ý bạn
+        - bạn có thể
+        - cần làm rõ
+      - - chương
+        - phần
+        - nội dung
+        - câu hỏi
+        - môn học
+      forbidden:
+      - ngoài phạm vi
+- id: E082
+  input:
+    query: Môn NLP có mấy tín chỉ?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:credits
+  origin_ids:
+  - C02
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 3 / ba; tín chỉ'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '3'
+        - ba
+      - - tín chỉ
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 3
+      - tín chỉ
+- id: E083
+  input:
+    query: Môn NLP này có mấy tín chỉ?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:credits
+  origin_ids:
+  - C03
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 3 / ba; tín chỉ'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '3'
+        - ba
+      - - tín chỉ
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 3
+      - tín chỉ
+- id: E084
+  input:
+    query: Môn NLP có bao nhiêu ECTS?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:ects
+  origin_ids:
+  - C04
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 6 / sáu; ECTS'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 6
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '6'
+        - sáu
+      - - ECTS
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 6
+      - ECTS
+- id: E085
+  input:
+    query: Tuần 5 học gì?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - C05
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: augmented transition networks; generalized feature systems; unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - augmented transition networks
+      - generalized feature systems
+      - unification grammar
+      sources:
+      - schedule:WEEK_05
+      answer_facts:
+      - - augmented transition networks
+      - - generalized feature systems
+      - - unification grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E086
+  input:
+    query: Tuần 5 học những gì?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - C06
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: augmented transition networks; generalized feature systems; unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - augmented transition networks
+      - generalized feature systems
+      - unification grammar
+      sources:
+      - schedule:WEEK_05
+      answer_facts:
+      - - augmented transition networks
+      - - generalized feature systems
+      - - unification grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E087
+  input:
+    query: Tuần 5 học những nội dung gì?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - C07
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: augmented transition networks; generalized feature systems; unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - augmented transition networks
+      - generalized feature systems
+      - unification grammar
+      sources:
+      - schedule:WEEK_05
+      answer_facts:
+      - - augmented transition networks
+      - - generalized feature systems
+      - - unification grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E088
+  input:
+    query: Chương nào học về knowledge representation?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - C10
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH11 / chương 11'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH11
+      sources:
+      - topics:CH11
+      answer_facts:
+      - - CH11
+        - chương 11
+      forbidden:
+      - ngoài phạm vi
+- id: E089
+  input:
+    query: Bài tập lớn nhóm mấy người?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:team_size
+  origin_ids:
+  - C11
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3-4 students
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - 3-4 students
+        - 3-4 người
+        - 3–4 người
+        - 3 đến 4 người
+        - 3 tới 4 sinh viên
+      forbidden:
+      - ngoài phạm vi
+- id: E090
+  input:
+    query: Bài tập lớn có những yêu cầu gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:requirements
+  origin_ids:
+  - C12
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: Nêu đủ yêu cầu bắt buộc về văn phạm và parser, ngữ nghĩa và hỏi đáp, cùng đánh giá.
+    Nếu có nêu phần ngữ cảnh thì phân biệt đó là mục mở rộng trong dữ liệu mẫu.
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - xây dựng grammar cho miền Course Assistant
+      - sinh câu hợp lệ từ grammar
+      - xây dựng parser
+      - xuất parse tree
+      - xử lý câu không hợp lệ
+      - semantic representation
+      - intent identification
+      - entity extraction
+      - query to knowledge base
+      - answer generation
+      - xử lý câu hỏi ngoài miền
+      - xử lý trường hợp không tìm thấy thông tin
+      - tạo test set
+      - đo accuracy hoặc metric phù hợp
+      - phân tích lỗi
+      - trình bày các trường hợp hệ thống không trả lời đúng
+      sources:
+      - assignments:BTL_PART_1
+      - assignments:BTL_PART_2
+      - assignments:BTL_PART_4
+      answer_facts:
+      - - grammar
+        - văn phạm
+      - - sinh câu
+      - - parser
+        - phân tích cú pháp
+      - - parse tree
+        - cây cú pháp
+        - cây phân tích
+      - - semantic representation
+        - biểu diễn ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - intent
+        - ý định
+      - - entity
+        - thực thể
+      - - knowledge base
+        - cơ sở tri thức
+      - - answer generation
+        - sinh câu trả lời
+        - hỏi đáp
+      - - ngoài miền
+        - ngoài phạm vi
+      - - không tìm thấy
+        - thiếu thông tin
+      - - test set
+        - tập kiểm thử
+        - tập câu hỏi
+        - bộ kiểm thử
+      - - accuracy
+        - độ chính xác
+        - chỉ số đánh giá
+      - - phân tích lỗi
+      forbidden:
+      - ngoài phạm vi
+    - outcome: FOUND
+      values: &id001
+      - xây dựng grammar cho miền Course Assistant
+      - sinh câu hợp lệ từ grammar
+      - xây dựng parser
+      - xuất parse tree
+      - xử lý câu không hợp lệ
+      - semantic representation
+      - intent identification
+      - entity extraction
+      - query to knowledge base
+      - answer generation
+      - xử lý câu hỏi ngoài miền
+      - xử lý trường hợp không tìm thấy thông tin
+      - xử lý một số hội thoại nhiều lượt
+      - lưu discourse entities đơn giản
+      - xử lý tham chiếu đại từ hoặc mô tả xác định
+      - xử lý một số trường hợp ellipsis đơn giản
+      - tạo test set
+      - đo accuracy hoặc metric phù hợp
+      - phân tích lỗi
+      - trình bày các trường hợp hệ thống không trả lời đúng
+      sources:
+      - assignments:BTL_PART_1
+      - assignments:BTL_PART_2
+      - assignments:BTL_PART_3
+      - assignments:BTL_PART_4
+      answer_facts:
+      - - grammar
+        - văn phạm
+      - - sinh câu
+      - - parser
+        - phân tích cú pháp
+      - - parse tree
+        - cây cú pháp
+        - cây phân tích
+      - - semantic representation
+        - biểu diễn ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - intent
+        - ý định
+      - - entity
+        - thực thể
+      - - knowledge base
+        - cơ sở tri thức
+      - - answer generation
+        - sinh câu trả lời
+        - hỏi đáp
+      - - ngoài miền
+        - ngoài phạm vi
+      - - không tìm thấy
+        - thiếu thông tin
+      - - test set
+        - tập kiểm thử
+        - tập câu hỏi
+        - bộ kiểm thử
+      - - accuracy
+        - độ chính xác
+        - chỉ số đánh giá
+      - - phân tích lỗi
+      - - ngữ cảnh
+        - context
+      - - mở rộng
+        - tùy chọn
+        - optional
+      forbidden:
+      - ngoài phạm vi
+- id: E091
+  input:
+    query: Deadline của bài tập lớn là khi nào?
+    history: []
+  category: hạn nộp
+  task: GET_DEADLINE:date
+  origin_ids:
+  - C15
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E092
+  input:
+    query: Tài liệu nào nói về CFG?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - C16
+  provenance:
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'FOUND: Natural Language Processing with Python'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Natural Language Processing with Python
+      sources:
+      - annotation:resource_topics:RES05
+      - resources:RES05
+      answer_facts:
+      - - Natural Language Processing with Python
+      forbidden:
+      - ngoài phạm vi
+- id: E093
+  input:
+    query: Giá vàng hôm nay bao nhiêu?
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - C18
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E094
+  input:
+    query: Tài liệu của chương này là gì?
+    history:
+    - Tuần 5 học gì?
+  category: hội thoại
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - C19
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E095
+  input:
+    query: Tài liệu của phần này ở đâu?
+    history:
+    - Tuần 5 học gì?
+  category: hội thoại
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - C20
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: Xác định chương 4 từ tuần 5 rồi thông báo thiếu quan hệ tài liệu, hoặc hỏi lại để
+    làm rõ đối tượng và loại tài liệu cần tìm.
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+    - outcome: CLARIFY
+      values: []
+      sources: []
+      answer_facts:
+      - - bạn muốn
+        - bạn đang hỏi
+        - ý bạn
+        - bạn có thể
+        - cần làm rõ
+      - - chương
+        - phần
+        - nội dung
+        - câu hỏi
+        - môn học
+      forbidden:
+      - ngoài phạm vi
+- id: E096
+  input:
+    query: Chương nào có cả CFG và PCFG?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - C57
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH03 / chương 3'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH03
+      sources:
+      - topics:CH03
+      answer_facts:
+      - - CH03
+        - chương 3
+      forbidden:
+      - ngoài phạm vi
+- id: E097
+  input:
+    query: Midterm kéo dài bao lâu?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:duration
+  origin_ids:
+  - C58
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 60 / sáu mươi; phút'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 60
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '60'
+        - sáu mươi
+      - - phút
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 60
+      - phút
+- id: E098
+  input:
+    query: Final kéo dài bao lâu?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:duration
+  origin_ids:
+  - C59
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 90 / chín mươi; phút'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 90
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '90'
+        - chín mươi
+      - - phút
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 90
+      - phút
+- id: E099
+  input:
+    query: Môn NLP được bao nhiêu tín chỉ?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:credits
+  origin_ids:
+  - C21
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 3 / ba; tín chỉ'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '3'
+        - ba
+      - - tín chỉ
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 3
+      - tín chỉ
+- id: E100
+  input:
+    query: Môn NLP có tất cả bao nhiêu tín chỉ?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:credits
+  origin_ids:
+  - C22
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 3 / ba; tín chỉ'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '3'
+        - ba
+      - - tín chỉ
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 3
+      - tín chỉ
+- id: E101
+  input:
+    query: Cho tôi biết số tín chỉ của môn NLP.
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:credits
+  origin_ids:
+  - C23
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 3 / ba; tín chỉ'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '3'
+        - ba
+      - - tín chỉ
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 3
+      - tín chỉ
+- id: E102
+  input:
+    query: Môn NLP có mấy ECTS?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:ects
+  origin_ids:
+  - C24
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 6 / sáu; ECTS'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 6
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '6'
+        - sáu
+      - - ECTS
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 6
+      - ECTS
+- id: E103
+  input:
+    query: Số ECTS của môn NLP là bao nhiêu?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:ects
+  origin_ids:
+  - C25
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 6 / sáu; ECTS'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 6
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '6'
+        - sáu
+      - - ECTS
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 6
+      - ECTS
+- id: E104
+  input:
+    query: Tuần 5 học nội dung gì?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - C26
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: augmented transition networks; generalized feature systems; unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - augmented transition networks
+      - generalized feature systems
+      - unification grammar
+      sources:
+      - schedule:WEEK_05
+      answer_facts:
+      - - augmented transition networks
+      - - generalized feature systems
+      - - unification grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E105
+  input:
+    query: Tuần 5 có nội dung gì?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - C27
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: augmented transition networks; generalized feature systems; unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - augmented transition networks
+      - generalized feature systems
+      - unification grammar
+      sources:
+      - schedule:WEEK_05
+      answer_facts:
+      - - augmented transition networks
+      - - generalized feature systems
+      - - unification grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E106
+  input:
+    query: Tuần 5 gồm những nội dung nào?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - C28
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: augmented transition networks; generalized feature systems; unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - augmented transition networks
+      - generalized feature systems
+      - unification grammar
+      sources:
+      - schedule:WEEK_05
+      answer_facts:
+      - - augmented transition networks
+      - - generalized feature systems
+      - - unification grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E107
+  input:
+    query: Cho biết nội dung học của tuần 5.
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - C29
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: augmented transition networks; generalized feature systems; unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - augmented transition networks
+      - generalized feature systems
+      - unification grammar
+      sources:
+      - schedule:WEEK_05
+      answer_facts:
+      - - augmented transition networks
+      - - generalized feature systems
+      - - unification grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E108
+  input:
+    query: Tuần thứ 5 học gì?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:topics
+  origin_ids:
+  - C30
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: augmented transition networks; generalized feature systems; unification grammar'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - augmented transition networks
+      - generalized feature systems
+      - unification grammar
+      sources:
+      - schedule:WEEK_05
+      answer_facts:
+      - - augmented transition networks
+      - - generalized feature systems
+      - - unification grammar
+      forbidden:
+      - ngoài phạm vi
+- id: E109
+  input:
+    query: Chương 4 được học vào những tuần nào?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:week
+  origin_ids:
+  - C32
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: WEEK_04 / tuần 4; WEEK_05 / tuần 5'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - WEEK_04
+      - WEEK_05
+      sources:
+      - schedule:WEEK_04
+      - schedule:WEEK_05
+      answer_facts:
+      - - WEEK_04
+        - tuần 4
+      - - WEEK_05
+        - tuần 5
+      forbidden:
+      - ngoài phạm vi
+- id: E110
+  input:
+    query: Những tuần nào học chương 4?
+    history: []
+  category: lịch học
+  task: GET_SCHEDULE:week
+  origin_ids:
+  - C33
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'FOUND: WEEK_04 / tuần 4; WEEK_05 / tuần 5'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - WEEK_04
+      - WEEK_05
+      sources:
+      - schedule:WEEK_04
+      - schedule:WEEK_05
+      answer_facts:
+      - - WEEK_04
+        - tuần 4
+      - - WEEK_05
+        - tuần 5
+      forbidden:
+      - ngoài phạm vi
+- id: E111
+  input:
+    query: Chương nào học về CFG?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - C35
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH03 / chương 3'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH03
+      sources:
+      - topics:CH03
+      answer_facts:
+      - - CH03
+        - chương 3
+      forbidden:
+      - ngoài phạm vi
+- id: E112
+  input:
+    query: Nội dung CFG thuộc chương nào?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - C36
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH03 / chương 3'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH03
+      sources:
+      - topics:CH03
+      answer_facts:
+      - - CH03
+        - chương 3
+      forbidden:
+      - ngoài phạm vi
+- id: E113
+  input:
+    query: Knowledge representation nằm ở chương nào?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - C37
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH11 / chương 11'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH11
+      sources:
+      - topics:CH11
+      answer_facts:
+      - - CH11
+        - chương 11
+      forbidden:
+      - ngoài phạm vi
+- id: E114
+  input:
+    query: Chương nào nói về knowledge representation?
+    history: []
+  category: chương và chủ đề
+  task: GET_TOPIC:chapter
+  origin_ids:
+  - C38
+  provenance:
+  - data/raw/topics.txt
+  expectation_note: 'FOUND: CH11 / chương 11'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - CH11
+      sources:
+      - topics:CH11
+      answer_facts:
+      - - CH11
+        - chương 11
+      forbidden:
+      - ngoài phạm vi
+- id: E115
+  input:
+    query: Bài tập lớn bao nhiêu người?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:team_size
+  origin_ids:
+  - C39
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3-4 students
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - 3-4 students
+        - 3-4 người
+        - 3–4 người
+        - 3 đến 4 người
+        - 3 tới 4 sinh viên
+      forbidden:
+      - ngoài phạm vi
+- id: E116
+  input:
+    query: Nhóm làm bài tập lớn cần bao nhiêu người?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:team_size
+  origin_ids:
+  - C40
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3-4 students
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - 3-4 students
+        - 3-4 người
+        - 3–4 người
+        - 3 đến 4 người
+        - 3 tới 4 sinh viên
+      forbidden:
+      - ngoài phạm vi
+- id: E117
+  input:
+    query: Mỗi nhóm BTL có mấy thành viên?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:team_size
+  origin_ids:
+  - C41
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: 3-4 students / 3-4 người / 3–4 người / 3 đến 4 người / 3 tới 4 sinh viên'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 3-4 students
+      sources:
+      - assignments:BTL01
+      answer_facts:
+      - - 3-4 students
+        - 3-4 người
+        - 3–4 người
+        - 3 đến 4 người
+        - 3 tới 4 sinh viên
+      forbidden:
+      - ngoài phạm vi
+- id: E118
+  input:
+    query: Những yêu cầu của bài tập lớn là gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:requirements
+  origin_ids:
+  - C42
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: Nêu đủ yêu cầu bắt buộc về văn phạm và parser, ngữ nghĩa và hỏi đáp, cùng đánh giá.
+    Nếu có nêu phần ngữ cảnh thì phân biệt đó là mục mở rộng trong dữ liệu mẫu.
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - xây dựng grammar cho miền Course Assistant
+      - sinh câu hợp lệ từ grammar
+      - xây dựng parser
+      - xuất parse tree
+      - xử lý câu không hợp lệ
+      - semantic representation
+      - intent identification
+      - entity extraction
+      - query to knowledge base
+      - answer generation
+      - xử lý câu hỏi ngoài miền
+      - xử lý trường hợp không tìm thấy thông tin
+      - tạo test set
+      - đo accuracy hoặc metric phù hợp
+      - phân tích lỗi
+      - trình bày các trường hợp hệ thống không trả lời đúng
+      sources:
+      - assignments:BTL_PART_1
+      - assignments:BTL_PART_2
+      - assignments:BTL_PART_4
+      answer_facts:
+      - - grammar
+        - văn phạm
+      - - sinh câu
+      - - parser
+        - phân tích cú pháp
+      - - parse tree
+        - cây cú pháp
+        - cây phân tích
+      - - semantic representation
+        - biểu diễn ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - intent
+        - ý định
+      - - entity
+        - thực thể
+      - - knowledge base
+        - cơ sở tri thức
+      - - answer generation
+        - sinh câu trả lời
+        - hỏi đáp
+      - - ngoài miền
+        - ngoài phạm vi
+      - - không tìm thấy
+        - thiếu thông tin
+      - - test set
+        - tập kiểm thử
+        - tập câu hỏi
+        - bộ kiểm thử
+      - - accuracy
+        - độ chính xác
+        - chỉ số đánh giá
+      - - phân tích lỗi
+      forbidden:
+      - ngoài phạm vi
+    - outcome: FOUND
+      values: *id001
+      sources:
+      - assignments:BTL_PART_1
+      - assignments:BTL_PART_2
+      - assignments:BTL_PART_3
+      - assignments:BTL_PART_4
+      answer_facts:
+      - - grammar
+        - văn phạm
+      - - sinh câu
+      - - parser
+        - phân tích cú pháp
+      - - parse tree
+        - cây cú pháp
+        - cây phân tích
+      - - semantic representation
+        - biểu diễn ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - intent
+        - ý định
+      - - entity
+        - thực thể
+      - - knowledge base
+        - cơ sở tri thức
+      - - answer generation
+        - sinh câu trả lời
+        - hỏi đáp
+      - - ngoài miền
+        - ngoài phạm vi
+      - - không tìm thấy
+        - thiếu thông tin
+      - - test set
+        - tập kiểm thử
+        - tập câu hỏi
+        - bộ kiểm thử
+      - - accuracy
+        - độ chính xác
+        - chỉ số đánh giá
+      - - phân tích lỗi
+      - - ngữ cảnh
+        - context
+      - - mở rộng
+        - tùy chọn
+        - optional
+      forbidden:
+      - ngoài phạm vi
+- id: E119
+  input:
+    query: Bài tập lớn cần thực hiện những yêu cầu nào?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:requirements
+  origin_ids:
+  - C43
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: Nêu đủ yêu cầu bắt buộc về văn phạm và parser, ngữ nghĩa và hỏi đáp, cùng đánh giá.
+    Nếu có nêu phần ngữ cảnh thì phân biệt đó là mục mở rộng trong dữ liệu mẫu.
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - xây dựng grammar cho miền Course Assistant
+      - sinh câu hợp lệ từ grammar
+      - xây dựng parser
+      - xuất parse tree
+      - xử lý câu không hợp lệ
+      - semantic representation
+      - intent identification
+      - entity extraction
+      - query to knowledge base
+      - answer generation
+      - xử lý câu hỏi ngoài miền
+      - xử lý trường hợp không tìm thấy thông tin
+      - tạo test set
+      - đo accuracy hoặc metric phù hợp
+      - phân tích lỗi
+      - trình bày các trường hợp hệ thống không trả lời đúng
+      sources:
+      - assignments:BTL_PART_1
+      - assignments:BTL_PART_2
+      - assignments:BTL_PART_4
+      answer_facts:
+      - - grammar
+        - văn phạm
+      - - sinh câu
+      - - parser
+        - phân tích cú pháp
+      - - parse tree
+        - cây cú pháp
+        - cây phân tích
+      - - semantic representation
+        - biểu diễn ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - intent
+        - ý định
+      - - entity
+        - thực thể
+      - - knowledge base
+        - cơ sở tri thức
+      - - answer generation
+        - sinh câu trả lời
+        - hỏi đáp
+      - - ngoài miền
+        - ngoài phạm vi
+      - - không tìm thấy
+        - thiếu thông tin
+      - - test set
+        - tập kiểm thử
+        - tập câu hỏi
+        - bộ kiểm thử
+      - - accuracy
+        - độ chính xác
+        - chỉ số đánh giá
+      - - phân tích lỗi
+      forbidden:
+      - ngoài phạm vi
+    - outcome: FOUND
+      values: *id001
+      sources:
+      - assignments:BTL_PART_1
+      - assignments:BTL_PART_2
+      - assignments:BTL_PART_3
+      - assignments:BTL_PART_4
+      answer_facts:
+      - - grammar
+        - văn phạm
+      - - sinh câu
+      - - parser
+        - phân tích cú pháp
+      - - parse tree
+        - cây cú pháp
+        - cây phân tích
+      - - semantic representation
+        - biểu diễn ngữ nghĩa
+        - diễn giải ngữ nghĩa
+      - - intent
+        - ý định
+      - - entity
+        - thực thể
+      - - knowledge base
+        - cơ sở tri thức
+      - - answer generation
+        - sinh câu trả lời
+        - hỏi đáp
+      - - ngoài miền
+        - ngoài phạm vi
+      - - không tìm thấy
+        - thiếu thông tin
+      - - test set
+        - tập kiểm thử
+        - tập câu hỏi
+        - bộ kiểm thử
+      - - accuracy
+        - độ chính xác
+        - chỉ số đánh giá
+      - - phân tích lỗi
+      - - ngữ cảnh
+        - context
+      - - mở rộng
+        - tùy chọn
+        - optional
+      forbidden:
+      - ngoài phạm vi
+- id: E120
+  input:
+    query: Ai là giảng viên dạy môn NLP?
+    history: []
+  category: giảng viên
+  task: GET_INSTRUCTOR:name
+  origin_ids:
+  - C45
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E121
+  input:
+    query: Tên giảng viên môn NLP là gì?
+    history: []
+  category: giảng viên
+  task: GET_INSTRUCTOR:name
+  origin_ids:
+  - C46
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E122
+  input:
+    query: Khi nào phải nộp bài tập lớn?
+    history: []
+  category: hạn nộp
+  task: GET_DEADLINE:date
+  origin_ids:
+  - C48
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E123
+  input:
+    query: Hạn nộp bài tập lớn là ngày nào?
+    history: []
+  category: hạn nộp
+  task: GET_DEADLINE:date
+  origin_ids:
+  - C49
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E124
+  input:
+    query: Tài liệu nào liên quan đến CFG?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - C50
+  provenance:
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'FOUND: Natural Language Processing with Python'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Natural Language Processing with Python
+      sources:
+      - annotation:resource_topics:RES05
+      - resources:RES05
+      answer_facts:
+      - - Natural Language Processing with Python
+      forbidden:
+      - ngoài phạm vi
+- id: E125
+  input:
+    query: Có tài liệu tham khảo nào về CFG?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - C51
+  provenance:
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'FOUND: Natural Language Processing with Python'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Natural Language Processing with Python
+      sources:
+      - annotation:resource_topics:RES05
+      - resources:RES05
+      answer_facts:
+      - - Natural Language Processing with Python
+      forbidden:
+      - ngoài phạm vi
+- id: E126
+  input:
+    query: Tôi có thể đọc tài liệu nào về CFG?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - C52
+  provenance:
+  - data/annotations/resource_topics.yaml
+  expectation_note: 'FOUND: Natural Language Processing with Python'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Natural Language Processing with Python
+      sources:
+      - annotation:resource_topics:RES05
+      - resources:RES05
+      answer_facts:
+      - - Natural Language Processing with Python
+      forbidden:
+      - ngoài phạm vi
+- id: E127
+  input:
+    query: Ngày mai thời tiết thế nào?
+    history: []
+  category: ngoài phạm vi
+  task: UNKNOWN:None
+  origin_ids:
+  - C53
+  provenance:
+  - data/raw/00_README.txt
+  expectation_note: 'OUT_OF_SCOPE: ngoài phạm vi / không hỗ trợ yêu cầu'
+  expected:
+    alternatives:
+    - outcome: OUT_OF_SCOPE
+      values: []
+      sources: []
+      answer_facts:
+      - - ngoài phạm vi
+        - không hỗ trợ yêu cầu
+      forbidden: []
+- id: E128
+  input:
+    query: Tài liệu cho chương này là gì?
+    history:
+    - Tuần 5 học gì?
+  category: hội thoại
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - C55
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E129
+  input:
+    query: Chương này có tài liệu nào?
+    history:
+    - Tuần 5 học gì?
+  category: hội thoại
+  task: GET_RESOURCE:resource
+  origin_ids:
+  - C56
+  provenance:
+  - data/raw/schedule.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E130
+  input:
+    query: Bài thi giữa kỳ diễn ra trong bao lâu?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:duration
+  origin_ids:
+  - C64
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 60 / sáu mươi; phút'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 60
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '60'
+        - sáu mươi
+      - - phút
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 60
+      - phút
+- id: E131
+  input:
+    query: Bài thi cuối kỳ kéo dài mấy phút?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:duration
+  origin_ids:
+  - C65
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 90 / chín mươi; phút'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 90
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '90'
+        - chín mươi
+      - - phút
+      forbidden:
+      - ngoài phạm vi
+      quantity:
+      - 90
+      - phút
+- id: E132
+  input:
+    query: LO2.5 nói về nội dung gì?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:description
+  origin_ids:
+  - C66
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu.
+      sources:
+      - course_info:LO2.5
+      answer_facts:
+      - - Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+      forbidden:
+      - ngoài phạm vi
+- id: E133
+  input:
+    query: Chuẩn đầu ra LO2.5 là gì?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:description
+  origin_ids:
+  - C67
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu.
+      sources:
+      - course_info:LO2.5
+      answer_facts:
+      - - Kiến thức xác suất để giải quyết nhập nhằng từ ở mức câu
+      forbidden:
+      - ngoài phạm vi
+- id: E134
+  input:
+    query: LO2.5 thuộc chương nào?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:chapter
+  origin_ids:
+  - C68
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E135
+  input:
+    query: Chuẩn đầu ra LO2.5 được học trong chương nào?
+    history: []
+  category: chuẩn đầu ra
+  task: GET_LO:chapter
+  origin_ids:
+  - C69
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'MISSING: không tìm thấy / không có / chưa có / chưa được cung cấp'
+  expected:
+    alternatives:
+    - outcome: MISSING
+      values: []
+      sources: []
+      answer_facts:
+      - - không tìm thấy
+        - không có
+        - chưa có
+        - chưa được cung cấp
+      forbidden:
+      - ngoài phạm vi
+- id: E136
+  input:
+    query: Phần I của bài tập lớn phải nộp các file nào?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:outputs
+  origin_ids:
+  - C70
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - output/grammar.txt
+      - output/samples.txt
+      - output/parse-results.txt
+      sources:
+      - assignments:BTL_PART_1
+      answer_facts:
+      - - output/grammar.txt
+      - - output/samples.txt
+      - - output/parse-results.txt
+      forbidden:
+      - ngoài phạm vi
+- id: E137
+  input:
+    query: Đầu ra của phần I gồm những tệp gì?
+    history: []
+  category: bài tập lớn
+  task: GET_ASSIGNMENT:outputs
+  origin_ids:
+  - C71
+  provenance:
+  - data/raw/assignments.txt
+  expectation_note: 'FOUND: output/grammar.txt; output/samples.txt; output/parse-results.txt'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - output/grammar.txt
+      - output/samples.txt
+      - output/parse-results.txt
+      sources:
+      - assignments:BTL_PART_1
+      answer_facts:
+      - - output/grammar.txt
+      - - output/samples.txt
+      - - output/parse-results.txt
+      forbidden:
+      - ngoài phạm vi
+- id: E138
+  input:
+    query: Môn NLP thuộc khoa nào?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:department
+  origin_ids:
+  - R01
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: Khoa Khoa học và Kỹ thuật Máy tính'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Khoa Khoa học và Kỹ thuật Máy tính
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - Khoa Khoa học và Kỹ thuật Máy tính
+      forbidden:
+      - ngoài phạm vi
+- id: E139
+  input:
+    query: Môn NLP học trong học kỳ nào?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:semester
+  origin_ids:
+  - R02
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: HK261'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - HK261
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - HK261
+      forbidden:
+      - ngoài phạm vi
+- id: E140
+  input:
+    query: Môn NLP cần bao nhiêu giờ tự học?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:self_study_hours
+  origin_ids:
+  - R03
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 60 giờ'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 60
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - 60 giờ
+      forbidden:
+      - ngoài phạm vi
+- id: E141
+  input:
+    query: Midterm chiếm bao nhiêu phần trăm?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:weight
+  origin_ids:
+  - R04
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 30% / 30 phần trăm / 30'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 30
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '30'
+      - - '%'
+        - phần trăm
+        - percent
+      forbidden:
+      - ngoài phạm vi
+    - outcome: FOUND
+      values:
+      - 30 percent
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '30'
+      - - '%'
+        - phần trăm
+        - percent
+      forbidden:
+      - ngoài phạm vi
+- id: E142
+  input:
+    query: Final chiếm bao nhiêu phần trăm?
+    history: []
+  category: thông tin môn học và thi
+  task: GET_COURSE_INFO:weight
+  origin_ids:
+  - R05
+  provenance:
+  - data/raw/course_info.txt
+  expectation_note: 'FOUND: 40% / 40 phần trăm / 40'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - 40
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '40'
+      - - '%'
+        - phần trăm
+        - percent
+      forbidden:
+      - ngoài phạm vi
+    - outcome: FOUND
+      values:
+      - 40 percent
+      sources:
+      - course_info:CO3085
+      answer_facts:
+      - - '40'
+      - - '%'
+        - phần trăm
+        - percent
+      forbidden:
+      - ngoài phạm vi
+- id: E143
+  input:
+    query: Có được dùng thư viện ngoài không?
+    history: []
+  category: quy định
+  task: GET_RULE:permission
+  origin_ids:
+  - R06
+  provenance:
+  - data/raw/regulations.txt
+  expectation_note: 'FOUND: có / được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - true
+      sources:
+      - regulations:EXTERNAL_LIBRARIES
+      answer_facts:
+      - - có
+        - được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E144
+  input:
+    query: Có được chia sẻ bài làm giữa các nhóm không?
+    history: []
+  category: quy định
+  task: GET_RULE:permission
+  origin_ids:
+  - R07
+  provenance:
+  - data/raw/regulations.txt
+  expectation_note: 'FOUND: không / không được phép'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - false
+      sources:
+      - regulations:ASSIGNMENT_SHARING
+      answer_facts:
+      - - không
+        - không được phép
+      forbidden:
+      - ngoài phạm vi
+- id: E145
+  input:
+    query: Ai là tác giả của Natural Language Processing with Python?
+    history: []
+  category: tài liệu
+  task: GET_RESOURCE:authors
+  origin_ids:
+  - R08
+  provenance:
+  - data/raw/resources.txt
+  expectation_note: 'FOUND: Steven Bird; Ewan Klein; Edward Loper'
+  expected:
+    alternatives:
+    - outcome: FOUND
+      values:
+      - Steven Bird
+      - Ewan Klein
+      - Edward Loper
+      sources:
+      - resources:RES05
+      answer_facts:
+      - - Steven Bird
+      - - Ewan Klein
+      - - Edward Loper
+      forbidden:
+      - ngoài phạm vi
+    - outcome: FOUND
+      values:
+      - Steven Bird; Ewan Klein; Edward Loper
+      sources:
+      - resources:RES05
+      answer_facts:
+      - - Steven Bird
+      - - Ewan Klein
+      - - Edward Loper
+      forbidden:
+      - ngoài phạm vi
+- id: E146
+  input:
+    query: Tài liệu của chương này là gì?
+    history: []
+  category: thông tin môn học và thi
+  task: CLARIFY:None
+  origin_ids:
+  - RCTX1
+  provenance:
+  - data/raw/topics.txt
+  - data/raw/assignments.txt
+  expectation_note: Chưa có lượt hỏi trước để xác định chương; cần hỏi rõ chương.
+  expected:
+    alternatives:
+    - outcome: CLARIFY
+      values: []
+      sources: []
+      answer_facts:
+      - - bạn muốn
+        - bạn đang hỏi
+        - ý bạn
+        - bạn có thể
+        - cần làm rõ
+      - - chương
+        - phần
+        - nội dung
+        - câu hỏi
+        - môn học
+      forbidden:
+      - ngoài phạm vi
+- id: E147
+  input:
+    query: Tài liệu của chương này là gì?
+    history:
+    - Chương 3 và Chương 6 học vào tuần nào?
+  category: hội thoại
+  task: CLARIFY:None
+  origin_ids:
+  - RCTX2
+  provenance:
+  - data/raw/topics.txt
+  - data/raw/assignments.txt
+  expectation_note: Có nhiều chương đang được nói đến; cần làm rõ chương cần tìm tài liệu.
+  expected:
+    alternatives:
+    - outcome: CLARIFY
+      values: []
+      sources: []
+      answer_facts:
+      - - bạn muốn
+        - bạn đang hỏi
+        - ý bạn
+        - bạn có thể
+        - cần làm rõ
+      - - chương
+        - phần
+        - nội dung
+        - câu hỏi
+        - môn học
+      forbidden:
+      - ngoài phạm vi
+- id: E148
+  input:
+    query: Phần này cần xuất file gì?
+    history:
+    - Chương 4 nói về gì?
+  category: hội thoại
+  task: CLARIFY:None
+  origin_ids:
+  - RCTX3
+  provenance:
+  - data/raw/topics.txt
+  - data/raw/assignments.txt
+  expectation_note: Ngữ cảnh đang nói về chương học, chưa xác định phần BTL; cần hỏi lại.
+  expected:
+    alternatives:
+    - outcome: CLARIFY
+      values: []
+      sources: []
+      answer_facts:
+      - - bạn muốn
+        - bạn đang hỏi
+        - ý bạn
+        - bạn có thể
+        - cần làm rõ
+      - - chương
+        - phần
+        - nội dung
+        - câu hỏi
+        - môn học
+      forbidden:
+      - ngoài phạm vi
