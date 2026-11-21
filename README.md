@@ -1,8 +1,8 @@
 # NLP Course Assistant — CO3085
 
-Course Assistant cho một môn CO3085, theo lựa chọn Classical/Statistical NLP.
-Dữ liệu lịch học, quy định và bài tập là sample data phục vụ BTL, không phải
-thông báo hành chính chính thức.
+Course Assistant hỗ trợ sinh viên tra cứu thông tin về môn Xử lý ngôn ngữ tự
+nhiên (CO3085) bằng các câu hỏi tiếng Việt. Hệ thống sử dụng phương pháp xử lý
+ngôn ngữ dựa trên luật và trả lời dựa trên dữ liệu môn học mẫu.
 
 ## Thành viên
 
